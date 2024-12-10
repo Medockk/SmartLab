@@ -8,5 +8,11 @@ class OnBoardViewModel: ViewModel() {
     private val _state = mutableStateOf(OnBoardState())
     val state: State<OnBoardState> = _state
 
+    fun onEvent(event: OnBoardEvent){
+        when (event){
+            is OnBoardEvent.NextPage -> {
 
+            }
+        }
+    }
 }
