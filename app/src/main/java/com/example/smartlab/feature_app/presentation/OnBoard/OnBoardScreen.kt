@@ -1,4 +1,4 @@
-package com.example.smartlab.OnBoard
+package com.example.smartlab.feature_app.presentation.OnBoard
 
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -7,6 +7,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartlab.OnBoard.Components.OnBoardPage
+import com.example.smartlab.OnBoard.OnBoardItem
+import com.example.smartlab.OnBoard.OnBoardViewModel
 import com.example.smartlab.R
 
 @Preview(showBackground = true, showSystemUi = true)

@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.smartlab.CustomView.CustomButton
+import com.example.smartlab.core.CustomButton
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
