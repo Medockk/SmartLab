@@ -2,6 +2,7 @@ package com.example.smartlab.ui.theme
 
 import androidx.compose.foundation.R
 import androidx.compose.material3.Typography
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -53,4 +54,10 @@ val SF40014_939396 = TextStyle(
     fontWeight = FontWeight(400),
     fontSize = 14.sp,
     color = _939396
+)
+val SF60017White = TextStyle(
+    fontFamily = fontFamilySF,
+    fontWeight = FontWeight(600),
+    fontSize = 17.sp,
+    color = Color.White
 )
