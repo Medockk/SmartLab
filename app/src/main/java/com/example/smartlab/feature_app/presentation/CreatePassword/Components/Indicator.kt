@@ -1,4 +1,4 @@
-package com.example.smartlab.OnBoard.Components
+package com.example.smartlab.feature_app.presentation.CreatePassword.Components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -11,16 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartlab.ui.theme._57A9FF
-
-
 
 @Composable
 fun Indicator(
     count: Int,
-    currentPage: Int = 0,
+    currentIndicator: Int = -1,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -29,14 +26,13 @@ fun Indicator(
         modifier = modifier
     ) {
         repeat(count){
-            val isSelected = currentPage == it
             Box(
                 modifier = Modifier
                     .size(12.dp)
-                    .background(if (isSelected) _57A9FF else Color.White, CircleShape)
+                    .background(if (currentIndicator in 0..3) _57A9FF else Color.White, CircleShape)
                     .border(1.dp, _57A9FF, CircleShape)
             )
-            if (currentPage != 2){
+            if (currentIndicator != 2){
 
             }
         }
