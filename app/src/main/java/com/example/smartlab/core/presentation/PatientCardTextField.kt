@@ -4,9 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,20 +25,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartlab.ui.theme.SF40015Black
 import com.example.smartlab.ui.theme.SF40015_939396
 import com.example.smartlab.ui.theme._EBEBEB
 import com.example.smartlab.ui.theme._F5F5F9
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-private fun prev() {
-    PatientCardTextField(
-        "text", {}, "text", true
-    )
-}
 
 @Composable
 fun PatientCardTextField(
@@ -53,9 +45,7 @@ fun PatientCardTextField(
         onValueChange = onValueChanged,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 100.dp)
             .clip(RoundedCornerShape(10.dp))
-            .height(50.dp)
             .background(_F5F5F9, RoundedCornerShape(10.dp))
             .border(1.dp, _EBEBEB)
             .then(modifier),
@@ -66,9 +56,14 @@ fun PatientCardTextField(
                 modifier = Modifier.fillMaxWidth()
                     .padding(horizontal = 14.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(hintText, style = SF40015_939396)
+                Box{
+                    if (value.isEmpty()){
+                        Text(hintText, style = SF40015_939396)
+                    }
+                    it()
+                }
+                Spacer(Modifier.weight(1f))
                 if (isGender){
                     Column {
                         val r = remember { mutableStateOf(false) }

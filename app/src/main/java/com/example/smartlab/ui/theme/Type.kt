@@ -66,9 +66,21 @@ val SF40015Black = TextStyle(
     fontSize = 15.sp,
     color = Color.Black
 )
+val SF70024Black = TextStyle(
+    fontFamily = fontFamilySF,
+    fontWeight = FontWeight(700),
+    fontSize = 24.sp,
+    color = Color.Black
+)
 val SF40015_939396 = TextStyle(
     fontFamily = fontFamilySF,
     fontWeight = FontWeight(400),
     fontSize = 15.sp,
     color = _939396
+)
+val SF40015_1A6FEE = TextStyle(
+    fontFamily = fontFamilySF,
+    fontWeight = FontWeight(400),
+    fontSize = 15.sp,
+    color = _1A6FEE
 )

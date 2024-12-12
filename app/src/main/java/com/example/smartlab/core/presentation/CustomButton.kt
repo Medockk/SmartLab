@@ -14,6 +14,7 @@ import com.example.smartlab.ui.theme._1A6FEE
 @Composable
 fun CustomButton(
     title: String,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     Button(
@@ -23,6 +24,7 @@ fun CustomButton(
             containerColor = _1A6FEE
         ),
         modifier = Modifier.fillMaxWidth()
+            .then(modifier)
     ) {
         Text(
             text = title,

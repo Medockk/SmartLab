@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 
 class CreateCardViewModel: ViewModel() {
     private val _state =
-        mutableStateOf(CreateCardState("", "","","",""))
+        mutableStateOf(CreateCardState())
     val state: State<CreateCardState> = _state
 
     fun onEvent(event: CreateCardEvent){
