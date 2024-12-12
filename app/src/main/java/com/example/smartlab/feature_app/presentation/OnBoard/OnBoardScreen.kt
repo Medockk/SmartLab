@@ -16,7 +16,6 @@ private fun SplashScreenPreview() {
     OnBoardPage(OnBoardItem(0, "werr","dfdwff"))
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnBoardScreen(viewModel: OnBoardViewModel = viewModel()) {
     val state = viewModel.state.value

@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    id("kotlin-kapt")
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -40,7 +43,39 @@ android {
 }
 
 dependencies {
+    //viewModel
     implementation(libs.view.model)
+
+    //supabase
+    implementation(libs.supabase.auth)
+    implementation(libs.supabase.postgrest)
+    implementation(libs.supabase.gotrue)
+    implementation(libs.supabase.storage)
+    implementation(libs.supabase.realtime)
+    implementation(libs.supabase.serialization.json)
+
+    //ktor-client
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+
+    //gson
+    implementation(libs.gson)
+
+    //koin
+    implementation(libs.io.koin.android)
+    implementation(libs.io.koin.compose)
+    implementation(libs.io.koin.core)
+
+    //navigation
+    implementation(libs.androidx.navigation)
+
+    //coil
+    implementation(libs.io.coil.compose)
+
+    //room
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
