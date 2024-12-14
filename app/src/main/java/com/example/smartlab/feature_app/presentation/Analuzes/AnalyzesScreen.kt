@@ -1,5 +1,7 @@
 package com.example.smartlab.feature_app.presentation.Analuzes
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,8 +20,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -238,7 +242,7 @@ fun AnalyzesScreen(
                     data = "2 дня",
                     price = "1800 ₽"
                 ){
-                    viewModel.onEvent(AnalyzesEvent.AnalyzesAddClick(!state.addProcedure))
+                    viewModel.onEvent(AnalyzesEvent.AnalyzesAddClick(true))
                 }
             }
             item {
@@ -310,24 +314,41 @@ fun AnalyzesScreen(
         }
     }
 
+    if (!state.addProcedure){
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter
+        ){
+            BottomNavigation(
+                Modifier.fillMaxWidth()
+                    .background(Color.White),
+                {},{},{},{},
+                selectedAnalyzes = true
+            )
+        }
+    }
+
     if (state.addProcedure){
+        val paddingBottom = (LocalConfiguration.current.screenHeightDp / 2.3).toInt()
+
+        val startOffset = (LocalConfiguration.current.screenHeightDp)
+        val endOffset = LocalConfiguration.current.screenWidthDp - paddingBottom
+
+        var boxState by remember { mutableStateOf(startOffset) }
+
+        val offset by animateDpAsState(
+            targetValue = boxState.dp,
+            animationSpec = tween(1500)
+        )
+
+        boxState = endOffset
         MoreInformationAboutProcedure(
             closeClick = {
                 viewModel.onEvent(AnalyzesEvent.AnalyzesAddClick(false))
-            }, addClick = {},
-            "Клинический анализ крови\nс лейкоцитарной формулой",
-            "Добавить за 690 ₽")
-    }
-
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
-    ){
-        BottomNavigation(
-            Modifier.fillMaxWidth()
-                .background(Color.White),
-            {},{},{},{},
-            selectedAnalyzes = true
-        )
+            }, addClick = {}, modifier = Modifier
+                .padding(bottom = paddingTop.dp)
+                .offset(y = offset),
+            title = "Клинический анализ крови\nс лейкоцитарной формулой",
+            price = "Добавить за 690 ₽")
     }
 }

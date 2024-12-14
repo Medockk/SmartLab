@@ -65,34 +65,31 @@ fun MoreInformationAboutProcedure(
 ) {
 
     val paddingTop = LocalConfiguration.current.screenHeightDp / 4
+    val paddingBottom = (LocalConfiguration.current.screenHeightDp / 2.3).toInt()
 
-    val boxHeight = (LocalConfiguration.current.screenHeightDp) // ширина компонента
-    val startOffset = -(LocalConfiguration.current.screenHeightDp)   // начальная позиция
-    val endOffset = LocalConfiguration.current.screenWidthDp - boxHeight // конечная позиция
+    val startOffset = (LocalConfiguration.current.screenHeightDp)
+    val endOffset = LocalConfiguration.current.screenWidthDp - paddingBottom
 
     var boxState by remember { mutableStateOf(startOffset) }
 
     val offset by animateDpAsState(
         targetValue = boxState.dp,
-        animationSpec = tween(durationMillis = 5000) // анимация длится 5 секунд
+        animationSpec = tween(1500)
     )
 
-    Column(Modifier.fillMaxWidth()) {
-        Button({boxState = if (boxState==startOffset) {endOffset} else {startOffset} },
-            Modifier.padding(10.dp)) {
-            Text("Move", fontSize = 25.sp)
-        }
-    }
+    boxState = endOffset
 
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(top = paddingTop.dp, bottom = offset)
-            .background(Color.Red, RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)),
+            .padding(top = paddingTop.dp)
+            .offset(y = offset)
+            .background(Color.White, RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)),
         contentAlignment = Alignment.BottomCenter
     ){
         Column (
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(20.dp),
             verticalArrangement = Arrangement.SpaceAround
         ){
@@ -107,13 +104,15 @@ fun MoreInformationAboutProcedure(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .background(
-                            Brush.verticalGradient(listOf(_818C99,_818C99)),
-                            CircleShape, 0.12f)
+                            Brush.verticalGradient(listOf(_818C99, _818C99)),
+                            CircleShape, 0.12f
+                        )
                         .clip(CircleShape)
                         .clickable(
                             remember { MutableInteractionSource() },
                             rememberRipple()
-                        ){
+                        ) {
+                            boxState = startOffset
                             closeClick(false)
                         }
                 ){
@@ -157,7 +156,8 @@ fun MoreInformationAboutProcedure(
 
 
             Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .fillMaxHeight(0.5f),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween
@@ -178,9 +178,13 @@ fun MoreInformationAboutProcedure(
 
                 CustomButton(
                     title = price,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .fillMaxHeight(0.6f)
-                ) { addClick() }
+                ) {
+                    boxState = startOffset
+                    addClick()
+                }
             }
         }
     }

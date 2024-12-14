@@ -1,6 +1,9 @@
 
 package com.example.smartlab.feature_app.domain.repository
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class UserData(
     val name: String,
     val surname: String,
