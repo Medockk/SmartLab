@@ -1,4 +1,4 @@
-package com.example.smartlab.OnBoard.Components
+package com.example.smartlab.OnBoard.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartlab.OnBoard.OnBoardItem
 import com.example.smartlab.ui.theme.Lato60020_00B712

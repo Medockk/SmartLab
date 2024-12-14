@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core.presentation.CustomButton
-import com.example.smartlab.core.presentation.PatientCardTextField
+import com.example.smartlab.core.presentation.CustomTextField
 import com.example.smartlab.ui.theme.SF40014_939396
 import com.example.smartlab.ui.theme.SF40015_1A6FEE
 import com.example.smartlab.ui.theme.SF70024Black
@@ -67,7 +67,7 @@ fun CreateCardScreen(
                 .fillMaxHeight(0.75f)
         ){
             item{
-                PatientCardTextField(
+                CustomTextField(
                     value = state.name,
                     onValueChanged = {
                         viewModel.onEvent(CreateCardEvent.EnteredName(it))
@@ -78,7 +78,7 @@ fun CreateCardScreen(
                 )
             }
             item{
-                PatientCardTextField(
+                CustomTextField(
                     value = state.patronymic,
                     onValueChanged = {
                         viewModel.onEvent(CreateCardEvent.EnteredPatronymic(it))
@@ -89,7 +89,7 @@ fun CreateCardScreen(
                 )
             }
             item{
-                PatientCardTextField(
+                CustomTextField(
                     value = state.surname,
                     onValueChanged = {
                         viewModel.onEvent(CreateCardEvent.EnteredSurname(it))
@@ -100,7 +100,7 @@ fun CreateCardScreen(
                 )
             }
             item{
-                PatientCardTextField(
+                CustomTextField(
                     value = state.birthdayData,
                     onValueChanged = {
                         viewModel.onEvent(CreateCardEvent.EnteredBirthdayData(it))
@@ -111,7 +111,7 @@ fun CreateCardScreen(
                 )
             }
             item{
-                PatientCardTextField(
+                CustomTextField(
                     value = state.gender,
                     onValueChanged = {
                         viewModel.onEvent(CreateCardEvent.EnteredGender(it))
@@ -125,7 +125,9 @@ fun CreateCardScreen(
         }
         CustomButton(
             title = "Создать",
-            modifier = Modifier.fillMaxHeight(0.375f)
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.375f)
         ) {
 
         }

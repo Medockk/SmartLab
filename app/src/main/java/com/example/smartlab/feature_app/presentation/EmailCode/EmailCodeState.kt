@@ -1,5 +1,6 @@
 package com.example.smartlab.EmailCode
 
 data class EmailCodeState(
-    val title: String
+    val code: String = "",
+    val timer: String = "60",
 )

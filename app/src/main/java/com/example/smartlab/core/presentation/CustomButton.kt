@@ -1,6 +1,5 @@
 package com.example.core.presentation
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -23,8 +22,7 @@ fun CustomButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = _1A6FEE
         ),
-        modifier = Modifier.fillMaxWidth()
-            .then(modifier)
+        modifier = modifier
     ) {
         Text(
             text = title,

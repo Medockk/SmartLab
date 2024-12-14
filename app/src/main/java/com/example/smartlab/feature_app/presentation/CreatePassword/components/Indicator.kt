@@ -1,4 +1,4 @@
-package com.example.smartlab.feature_app.presentation.CreatePassword.Components
+package com.example.smartlab.feature_app.presentation.CreatePassword.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

@@ -21,8 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.smartlab.feature_app.presentation.CreatePassword.Components.Indicator
-import com.example.smartlab.feature_app.presentation.CreatePassword.Components.NumberPad
+import com.example.smartlab.feature_app.presentation.CreatePassword.components.Indicator
+import com.example.smartlab.feature_app.presentation.CreatePassword.components.NumberPad
 import com.example.smartlab.ui.theme.SF40015_1A6FEE
 import com.example.smartlab.ui.theme.SF40015_939396
 import com.example.smartlab.ui.theme.SF70024Black

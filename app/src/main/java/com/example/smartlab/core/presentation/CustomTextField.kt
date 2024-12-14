@@ -25,14 +25,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartlab.ui.theme.SF40015Black
 import com.example.smartlab.ui.theme.SF40015_939396
 import com.example.smartlab.ui.theme._EBEBEB
 import com.example.smartlab.ui.theme._F5F5F9
 
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PatientCardTextField(
+private fun prev() {
+
+}
+
+@Composable
+fun CustomTextField(
     value: String,
     onValueChanged: (String) -> Unit,
     hintText: String,
@@ -43,17 +50,17 @@ fun PatientCardTextField(
     BasicTextField(
         value = value,
         onValueChange = onValueChanged,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
             .background(_F5F5F9, RoundedCornerShape(10.dp))
-            .border(1.dp, _EBEBEB)
-            .then(modifier),
+            .border(1.dp, _EBEBEB),
         singleLine = true,
         textStyle = SF40015Black,
         decorationBox = {
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 14.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -83,21 +90,23 @@ fun PatientCardTextField(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ){
                                 Text("male",
-                                    modifier = Modifier.padding(5.dp)
+                                    modifier = Modifier
+                                        .padding(5.dp)
                                         .clickable(
                                             interactionSource = remember { MutableInteractionSource() },
                                             indication = rememberRipple()
-                                        ){
+                                        ) {
                                             onValueChanged("male")
                                             r.value = !r.value
                                         }
                                 )
                                 Text("female",
-                                    modifier = Modifier.padding(5.dp)
+                                    modifier = Modifier
+                                        .padding(5.dp)
                                         .clickable(
                                             interactionSource = remember { MutableInteractionSource() },
                                             indication = rememberRipple()
-                                        ){
+                                        ) {
                                             onValueChanged("female")
                                             r.value = !r.value
                                         })
