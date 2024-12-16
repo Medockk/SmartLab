@@ -27,7 +27,9 @@ class AnalyzesViewModel : ViewModel() {
                     selectedCategory = event.value
                 )
             }
-            AnalyzesEvent.AnalyzesRemoveClick -> TODO()
+            AnalyzesEvent.AnalyzesRemoveClick -> {
+
+            }
             AnalyzesEvent.ProfileClick ->  {
 
             }

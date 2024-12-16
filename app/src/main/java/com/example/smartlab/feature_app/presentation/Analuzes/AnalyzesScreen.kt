@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,10 +34,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartlab.R
+import com.example.smartlab.core.presentation.AnalyzesCatalog
+import com.example.smartlab.core.presentation.AnalyzesFindTextField
 import com.example.smartlab.core.presentation.BottomNavigation
 import com.example.smartlab.core.presentation.MoreInformationAboutProcedure
-import com.example.smartlab.feature_app.presentation.Analuzes.components.AnalyzesCatalog
-import com.example.smartlab.feature_app.presentation.Analuzes.components.AnalyzesFindTextField
 import com.example.smartlab.ui.theme.SF40014White
 import com.example.smartlab.ui.theme.SF50015White
 import com.example.smartlab.ui.theme.SF50015_7E7E9A

@@ -38,7 +38,7 @@ private fun prev() {
 
 @Composable
 fun PatientCardScreen(
-    viewModel: PatientCardViewModel = koinViewModel()
+    viewModel: PatientCardViewModel = viewModel()
 ) {
 
     val state = viewModel.state.value

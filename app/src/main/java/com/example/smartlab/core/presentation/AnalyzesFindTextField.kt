@@ -1,4 +1,4 @@
-package com.example.smartlab.feature_app.presentation.Analuzes.components
+package com.example.smartlab.core.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
