@@ -11,12 +11,24 @@ class CartViewModel: ViewModel() {
 
     fun onEvent(event: CartEvent){
         when (event){
-            CartEvent.AddItem -> TODO()
-            CartEvent.BackClick -> TODO()
-            CartEvent.ClearCart -> TODO()
-            CartEvent.DeleteItem -> TODO()
-            CartEvent.RegistrationClick -> TODO()
-            CartEvent.RemoveItem -> TODO()
+            CartEvent.AddItem -> {
+
+            }
+            CartEvent.BackClick -> {
+
+            }
+            CartEvent.ClearCart -> {
+
+            }
+            CartEvent.DeleteItem -> {
+
+            }
+            CartEvent.RegistrationClick -> {
+
+            }
+            CartEvent.RemoveItem -> {
+
+            }
         }
     }
 }

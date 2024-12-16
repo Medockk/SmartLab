@@ -1,6 +1,7 @@
 package com.example.smartlab.core.presentation
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,9 +9,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -34,7 +38,9 @@ import com.example.smartlab.ui.theme.SF50017Black
 import com.example.smartlab.ui.theme._7E7E9A
 import com.example.smartlab.ui.theme._939396
 import com.example.smartlab.ui.theme._B8C1CC
+import com.example.smartlab.ui.theme._EBEBEB
 import com.example.smartlab.ui.theme._F4F4F4
+import com.example.smartlab.ui.theme._F5F5F9
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -50,20 +56,22 @@ private fun prev() {
 fun CustomCart(
     title: String,
     price: String,
-    deleteClick: () -> Unit,
+    clearCartClick: () -> Unit,
     onPlusClick: () -> Unit,
     onMinusClick: () -> Unit,
+    cardModifier: Modifier = Modifier,
     modifier: Modifier = Modifier
 ) {
     Card(
         elevation = CardDefaults.elevatedCardElevation(1.dp),
         border = BorderStroke(1.dp, _F4F4F4),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        modifier = modifier,
+        modifier = cardModifier,
         shape = RoundedCornerShape(12.dp)
     ) {
         Column (
-            modifier = Modifier.padding(16.dp)
+            modifier = modifier.padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ){
             Row {
                 Text(title, style = SF50016Black)
@@ -72,29 +80,41 @@ fun CustomCart(
                     imageVector = Icons.Default.Close,
                     contentDescription = "delete item",
                     tint = _7E7E9A,
-                    modifier = Modifier.clickable { deleteClick() }
+                    modifier = Modifier.clickable { clearCartClick() }
                 )
             }
-            Row {
+            Row (
+                verticalAlignment = Alignment.CenterVertically
+            ){
                 Text(price, style = SF50017Black)
                 Spacer(Modifier.weight(1f))
                 Row (
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ){
                     Text("1 patient")
                     Row (
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.height(32.dp)
+                            .padding(start = 15.dp)
+                            .background(_F5F5F9, RoundedCornerShape(8.dp))
                     ){
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.minus),
                             contentDescription = "remove",
-                            tint = _B8C1CC
+                            tint = _B8C1CC,
+                            modifier = Modifier.clickable { onMinusClick() }
                         )
-                        VerticalDivider(Modifier.height(IntrinsicSize.Max))
+                        VerticalDivider(Modifier
+                            .width(1.dp).background(_EBEBEB)
+                            .height(15.dp)
+                        )
                         Icon(
                             imageVector = Icons.Default.Add,
                             contentDescription = "add",
-                            tint = _939396
+                            tint = _939396,
+                            modifier = Modifier.clickable { onPlusClick() }
                         )
                     }
                 }
