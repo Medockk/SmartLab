@@ -6,7 +6,7 @@ import com.example.smartlab.feature_app.domain.usecase.Auth.SignInUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignUpUseCase
 import org.koin.dsl.module
 
-val createCardModule = module {
+val moduleAuth = module {
 
     single<AuthRepository>{
         AuthRepositoryImpl()

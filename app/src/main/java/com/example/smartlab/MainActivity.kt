@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smartlab.feature_app.presentation.Cart.CartScreen
+import com.example.smartlab.feature_app.presentation.PatientCard.PatientCardScreen
 import com.example.smartlab.ui.theme.SmartLabTheme
 
 class MainActivity : ComponentActivity() {
@@ -15,7 +16,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val viewModel: MainActivityViewModel = viewModel()
             SmartLabTheme{
-                CartScreen()
+                PatientCardScreen()
             }
         }
     }

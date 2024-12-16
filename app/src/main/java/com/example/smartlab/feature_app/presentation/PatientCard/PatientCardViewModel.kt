@@ -9,7 +9,7 @@ import com.example.smartlab.feature_app.domain.usecase.Auth.SignUpUseCase
 import kotlinx.coroutines.launch
 
 class PatientCardViewModel(
-//    private val useCase: SignUpUseCase
+    private val useCase: SignUpUseCase
 ): ViewModel() {
 
     private val _state = mutableStateOf(PatientCardState())
@@ -47,21 +47,21 @@ class PatientCardViewModel(
             PatientCardOnEvent.AnalyzesClick -> TODO()
             PatientCardOnEvent.ResultsClick -> TODO()
             PatientCardOnEvent.SaveClick -> {
-//                viewModelScope.launch{
-//                    try {
-//                        useCase(
-//                            state.value.email,
-//                            state.value.password,
-//                            UserData(
-//                                state.value.name,state.value.surname,
-//                                state.value.patronymic, state.value.birthdayData,
-//                                state.value.gender
-//                            )
-//                        )
-//                    } catch (_: Exception) {
-//
-//                    }
-//                }
+                viewModelScope.launch{
+                    try {
+                        useCase(
+                            state.value.email,
+                            state.value.password,
+                            UserData(
+                                state.value.name,state.value.surname,
+                                state.value.patronymic, state.value.birthdayData,
+                                state.value.gender
+                            )
+                        )
+                    } catch (_: Exception) {
+
+                    }
+                }
             }
             PatientCardOnEvent.SupportsClick -> TODO()
         }
