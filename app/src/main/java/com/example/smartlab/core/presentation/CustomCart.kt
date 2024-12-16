@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -77,7 +78,9 @@ fun CustomCart(
             Row {
                 Text(price, style = SF50017Black)
                 Spacer(Modifier.weight(1f))
-                Row {
+                Row (
+                    verticalAlignment = Alignment.CenterVertically
+                ){
                     Text("1 patient")
                     Row (
                         horizontalArrangement = Arrangement.Center
