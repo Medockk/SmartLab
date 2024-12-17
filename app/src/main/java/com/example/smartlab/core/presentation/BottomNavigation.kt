@@ -5,6 +5,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.smartlab.R
 import com.example.smartlab.ui.theme.SF40012_1A6FEE
 import com.example.smartlab.ui.theme.SF40012_B8C1CC
@@ -24,8 +26,9 @@ import com.example.smartlab.ui.theme._B8C1CC
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun prev() {
-    BottomNavigation(Modifier.fillMaxWidth(), {},{},{},{}, true)
+private fun Prev() {
+    BottomNavigation(Modifier.fillMaxWidth()
+        .padding(top = 100.dp), {},{},{},{}, true)
 }
 
 @Composable

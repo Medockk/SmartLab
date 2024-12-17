@@ -27,7 +27,7 @@ import com.example.smartlab.ui.theme._F4F4F4
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun prev() {
+private fun Prev() {
     AnalyzesCatalog(Modifier, "ПЦР-тест на определение РНК\nкоронавируса стандартный", "", "") {}
 }
 

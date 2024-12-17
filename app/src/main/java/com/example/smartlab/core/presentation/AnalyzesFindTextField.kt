@@ -23,7 +23,7 @@ import com.example.smartlab.ui.theme._F5F5F9
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun prev() {
+private fun Prev() {
     AnalyzesFindTextField(
         "", {}, ""
     )
