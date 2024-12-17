@@ -19,7 +19,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.core.presentation.CustomButton
+import com.example.smartlab.navGraph.Route
 import com.example.smartlab.R
 import com.example.smartlab.core.presentation.CustomTextField
 import com.example.smartlab.feature_app.presentation.SignIn.components.EnterWithYandexButton
@@ -30,12 +33,14 @@ import com.example.smartlab.ui.theme.SF70024Black
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun prev() {
-    SignInScreen()
+private fun Prev() {
+    val nav = rememberNavController()
+SignInScreen(nav)
 }
 
 @Composable
 fun SignInScreen(
+    navController: NavController,
     viewModel: SignInViewModel = viewModel()
 ) {
 
@@ -95,7 +100,7 @@ fun SignInScreen(
                     .fillMaxWidth()
                     .fillMaxHeight(0.23f)
             ) {
-                viewModel.onEvent(SignInEvent.NextClick)
+                navController.navigate(Route.EmailCodeScreen.route)
             }
         }
 

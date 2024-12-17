@@ -23,10 +23,12 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.smartlab.core.presentation.AnalyzesCatalog
 import com.example.smartlab.core.presentation.AnalyzesFindTextField
 import com.example.smartlab.core.presentation.BottomNavigation
-import com.example.smartlab.feature_app.presentation.Analuzes.AnalyzesEvent
+import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF50015White
 import com.example.smartlab.ui.theme.SF50015_7E7E9A
 import com.example.smartlab.ui.theme._1A6FEE
@@ -34,12 +36,14 @@ import com.example.smartlab.ui.theme._F5F5F9
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun prev() {
-    AnalyzesCategoryScreen()
+private fun Prev() {
+    val nav = rememberNavController()
+    AnalyzesCategoryScreen(nav)
 }
 
 @Composable
 fun AnalyzesCategoryScreen(
+    navController: NavController,
     viewModel: AnalyzesCategoryViewModel = viewModel()
 ) {
     val state = viewModel.state.value
@@ -199,9 +203,21 @@ fun AnalyzesCategoryScreen(
     ) {
         BottomNavigation(
             Modifier.fillMaxWidth(),
-            {}, resultsClick = { viewModel.onEvent(AnalyzesCategoryEvent.ResultsClick) },
-            supportsClick = { viewModel.onEvent(AnalyzesCategoryEvent.SupportsClick) },
-            profileClick = { viewModel.onEvent(AnalyzesCategoryEvent.ProfileClick) },
+            analyzesClick = {
+                navController.navigate(Route.AnalyzesScreen.route){
+                    popUpTo(Route.AnalyzesCategoryScreen.route){
+                        inclusive = true
+                    }
+                }
+            },
+            {},{},
+            profileClick = {
+                navController.navigate(Route.PatientCardScreen.route){
+                    popUpTo(Route.AnalyzesCategoryScreen.route){
+                        inclusive = true
+                    }
+                }
+            },
             selectedAnalyzes = true
         )
     }

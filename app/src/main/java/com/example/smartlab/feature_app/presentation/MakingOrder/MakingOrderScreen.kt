@@ -1,6 +1,5 @@
 package com.example.smartlab.feature_app.presentation.MakingOrder
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,47 +11,58 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.core.presentation.CustomButton
 import com.example.smartlab.R
 import com.example.smartlab.core.presentation.CustomBackIcon
+import com.example.smartlab.core.presentation.CustomEmptyButton
 import com.example.smartlab.core.presentation.CustomTextField
+import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF40014_939396
-import com.example.smartlab.ui.theme.SF40015_1A6FEE
 import com.example.smartlab.ui.theme.SF50015Black
 import com.example.smartlab.ui.theme.SF50015_939396
 import com.example.smartlab.ui.theme.SF50017Black
 import com.example.smartlab.ui.theme.SF70024Black
-import com.example.smartlab.ui.theme._1A6FEE
 import com.example.smartlab.ui.theme._B8C1CC
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun prev() {
-    MakingOrderScreen()
+private fun Prev() {
+    val nav = rememberNavController()
+    MakingOrderScreen(nav)
 }
 
 @Composable
 fun MakingOrderScreen(
+    navController: NavController,
     viewModel: MakingOrderViewModel = viewModel()
 ) {
     val state = viewModel.state.value
     val paddingTop = LocalConfiguration.current.screenHeightDp / 15
+
+    LaunchedEffect(key1 = !state.isComplete) {
+        if (state.isComplete){
+            navController.navigate(Route.PaymentScreen.route){
+                popUpTo(Route.MakingOrderScreen.route){
+                    inclusive = true
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -69,7 +79,11 @@ fun MakingOrderScreen(
                 Modifier.fillMaxWidth(0.07f)
                     .fillMaxHeight(0.4f)
             ) {
-                viewModel.onEvent(MakingOrderEvent.BackClick)
+                navController.navigate(Route.CartScreen.route){
+                    popUpTo(Route.MakingOrderScreen.route){
+                        inclusive = true
+                    }
+                }
             }
             Text("Оформление заказа", style = SF70024Black)
         }
@@ -120,14 +134,11 @@ fun MakingOrderScreen(
                         hintText = "Тицкий Эдуард",
                         modifier = Modifier.fillParentMaxHeight(0.07f)
                     )
-                    Button(
-                        onClick = {viewModel.onEvent(MakingOrderEvent.AddOnMorePatient)},
-                        modifier = Modifier.fillParentMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                        shape = RoundedCornerShape(8.dp),
-                        border = BorderStroke(1.dp, _1A6FEE)
+                    CustomEmptyButton(
+                        Modifier.fillParentMaxWidth(),
+                        "Добавить еще пациента"
                     ) {
-                        Text("Добавить еще пациента", style = SF40015_1A6FEE)
+                        viewModel.onEvent(MakingOrderEvent.AddOnMorePatient)
                     }
                 }
             }

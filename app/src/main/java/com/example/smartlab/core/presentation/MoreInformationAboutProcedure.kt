@@ -15,13 +15,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,7 +35,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.core.presentation.CustomButton
 import com.example.smartlab.ui.theme.SF40015Black
 import com.example.smartlab.ui.theme.SF50016Black
@@ -49,7 +46,7 @@ import com.example.smartlab.ui.theme._818C99
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun prev() {
+private fun Prev() {
     MoreInformationAboutProcedure({},{},
         "Клинический анализ крови\nс лейкоцитарной формулой",
         "Добавить за 690 ₽")
@@ -131,7 +128,7 @@ fun MoreInformationAboutProcedure(
             ) {
                 Column(
                     verticalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxHeight(0.45f)
+                    modifier = Modifier.fillMaxHeight(0.48f)
                 ) {
                     Text("Описание", style = SF50016_939396)
                     Text("Клинический анализ крови – это самое важное" +
@@ -142,7 +139,7 @@ fun MoreInformationAboutProcedure(
                 }
                 Column (
                     verticalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxHeight(0.85f)
+                    modifier = Modifier.fillMaxHeight(0.88f)
                 ){
                     Text("Подготовка", style = SF50016_939396)
                     Text("Кровь следует сдавать утром натощак, днем " +

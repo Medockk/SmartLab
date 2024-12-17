@@ -16,13 +16,15 @@ class EmailCodeViewModel: ViewModel() {
 
     fun onEvent(event: EmailCodeEvent){
         when (event){
-            EmailCodeEvent.BackClick -> {
-
-            }
             is EmailCodeEvent.EnteredCode -> {
                 _state.value = state.value.copy(
                     code = event.value
                 )
+                if (state.value.code.length == 4){
+                    _state.value = state.value.copy(
+                        isComplete = true
+                    )
+                }
             }
             EmailCodeEvent.ResetTimer -> {
                 timer()

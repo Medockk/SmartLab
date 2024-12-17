@@ -17,8 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme._2254F5
 import com.example.smartlab.ui.theme._3740F5A6
 import com.example.smartlab.ui.theme._4D9CFF
@@ -29,10 +30,14 @@ import com.example.smartlab.ui.theme._A1CAFF
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(nextPage: () -> Unit) {
+fun SplashScreen(navController: NavController) {
     LaunchedEffect(key1 = true) {
         delay(3000)
-        nextPage()
+        navController.navigate(Route.OnBoardScreen.route){
+            popUpTo(Route.SplashScreen.route){
+                inclusive = true
+            }
+        }
     }
     val firstBrush = Brush.verticalGradient(
         listOf(_A1CAFF, _4D9CFF, _A1CAFF)

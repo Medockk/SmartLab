@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,11 +34,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.smartlab.R
 import com.example.smartlab.core.presentation.AnalyzesCatalog
 import com.example.smartlab.core.presentation.AnalyzesFindTextField
 import com.example.smartlab.core.presentation.BottomNavigation
 import com.example.smartlab.core.presentation.MoreInformationAboutProcedure
+import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF40014White
 import com.example.smartlab.ui.theme.SF50015White
 import com.example.smartlab.ui.theme.SF50015_7E7E9A
@@ -52,17 +56,27 @@ import com.example.smartlab.ui.theme._F5F5F9
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun prev() {
-    AnalyzesScreen()
+private fun Prev() {
+    val nav = rememberNavController()
+    AnalyzesScreen(nav)
 }
 
 @Composable
 fun AnalyzesScreen(
+    navController: NavController,
     viewModel: AnalyzesViewModel = viewModel()
 ) {
 
     val state = viewModel.state.value
     val paddingTop = LocalConfiguration.current.screenHeightDp / 15
+
+    LaunchedEffect(key1 = !state.isComplete) {
+        if (state.isComplete){
+            viewModel.onEvent(AnalyzesEvent.CompleteChanges)
+            navController.navigate(Route.AnalyzesCategoryScreen.route)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -321,7 +335,12 @@ fun AnalyzesScreen(
             BottomNavigation(
                 Modifier.fillMaxWidth()
                     .background(Color.White),
-                {},{},{},{},
+                {},{},{},
+                profileClick = {navController.navigate(Route.PatientCardScreen.route){
+                    popUpTo(Route.AnalyzesScreen.route){
+                        inclusive = true
+                    }
+                } },
                 selectedAnalyzes = true
             )
         }

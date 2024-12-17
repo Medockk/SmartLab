@@ -24,20 +24,18 @@ class AnalyzesViewModel : ViewModel() {
             }
             is AnalyzesEvent.AnalyzesCatalogClick -> {
                 _state.value = state.value.copy(
-                    selectedCategory = event.value
+                    selectedCategory = event.value,
+                    isComplete = true
                 )
             }
             AnalyzesEvent.AnalyzesRemoveClick -> {
 
             }
-            AnalyzesEvent.ProfileClick ->  {
 
-            }
-            AnalyzesEvent.ResultsClick -> {
-
-            }
-            AnalyzesEvent.SupportsClick ->  {
-
+            AnalyzesEvent.CompleteChanges -> {
+                _state.value = state.value.copy(
+                    isComplete = !state.value.isComplete
+                )
             }
         }
     }

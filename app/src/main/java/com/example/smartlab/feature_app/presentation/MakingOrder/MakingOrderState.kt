@@ -6,4 +6,5 @@ data class MakingOrderState(
     val person: String = "",
     val phone: String = "",
     val comment: String = "",
+    val isComplete: Boolean = false,
 )

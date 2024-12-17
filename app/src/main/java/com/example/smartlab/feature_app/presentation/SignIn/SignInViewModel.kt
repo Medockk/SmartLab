@@ -19,9 +19,6 @@ class SignInViewModel: ViewModel() {
                     email = event.value
                 )
             }
-            SignInEvent.NextClick -> {
-
-            }
         }
     }
 }

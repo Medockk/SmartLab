@@ -5,4 +5,5 @@ data class AnalyzesState(
     val procedureTitle: String = "",
     val selectedCategory: Boolean = false,
     val addProcedure: Boolean = false,
+    val isComplete: Boolean = false,
 )

@@ -1,5 +1,6 @@
 package com.example.smartlab.CreateCard
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,31 +11,39 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.core.presentation.CustomButton
 import com.example.smartlab.core.presentation.CustomTextField
+import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF40014_939396
 import com.example.smartlab.ui.theme.SF40015_1A6FEE
 import com.example.smartlab.ui.theme.SF70024Black
 
-@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun CreateCardScreen(
+    navController: NavController,
     viewModel: CreateCardViewModel = viewModel()
 ){
 
     val state = viewModel.state.value
     val paddingTop = LocalConfiguration.current.screenHeightDp / 14
     val paddingBottom = LocalConfiguration.current.screenHeightDp / 7
+
+    LaunchedEffect(key1 = !state.isComplete) {
+        if (state.isComplete){
+            navController.navigate(Route.AnalyzesScreen.route){
+                popUpTo(Route.CreateCardScreen.route){
+                    inclusive = true
+                }
+            }
+        }
+    }
 
     Column (
         modifier = Modifier
@@ -53,7 +62,14 @@ fun CreateCardScreen(
                 verticalAlignment = Alignment.Top
             ){
                 Text("Создание карты\nпациента", style = SF70024Black)
-                Text("Пропустить", style = SF40015_1A6FEE)
+                Text("Пропустить", style = SF40015_1A6FEE,
+                    modifier = Modifier.clickable {
+                        navController.navigate(Route.AnalyzesScreen.route){
+                            popUpTo(Route.CreateCardScreen.route){
+                                inclusive = true
+                            }
+                        }
+                    })
             }
             Text("Без карты пациента вы не сможете заказать анализы.",
                 style = SF40014_939396)

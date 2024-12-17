@@ -11,11 +11,12 @@ class AnalyzesCategoryViewModel: ViewModel() {
 
     fun onEvent(event: AnalyzesCategoryEvent){
         when (event){
-            is AnalyzesCategoryEvent.FindText -> TODO()
+            is AnalyzesCategoryEvent.FindText -> {
+                _state.value = state.value.copy(
+                    findText = event.value
+                )
+            }
 
-            AnalyzesCategoryEvent.ProfileClick -> TODO()
-            AnalyzesCategoryEvent.ResultsClick -> TODO()
-            AnalyzesCategoryEvent.SupportsClick -> TODO()
             is AnalyzesCategoryEvent.AnalyzesCatalogClick -> {
                 _state.value = state.value.copy(
                     selectedCategory = event.value

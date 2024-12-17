@@ -37,7 +37,9 @@ class CreateCardViewModel: ViewModel() {
                 )
             }
             CreateCardEvent.CreateCard -> {
-
+                _state.value = state.value.copy(
+                    isComplete = true
+                )
             }
         }
     }

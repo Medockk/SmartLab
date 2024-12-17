@@ -43,9 +43,6 @@ class PatientCardViewModel(
                     surname = event.value
                 )
             }
-
-            PatientCardOnEvent.AnalyzesClick -> TODO()
-            PatientCardOnEvent.ResultsClick -> TODO()
             PatientCardOnEvent.SaveClick -> {
                 viewModelScope.launch{
                     try {
@@ -63,7 +60,6 @@ class PatientCardViewModel(
                     }
                 }
             }
-            PatientCardOnEvent.SupportsClick -> TODO()
         }
     }
 }

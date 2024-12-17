@@ -20,11 +20,13 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.core.presentation.CustomButton
 import com.example.smartlab.R
 import com.example.smartlab.core.presentation.BottomNavigation
 import com.example.smartlab.core.presentation.CustomTextField
+import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF40014_939396
 import com.example.smartlab.ui.theme.SF70024Black
 import com.example.smartlab.ui.theme._D9D9D980
@@ -32,12 +34,14 @@ import org.koin.androidx.compose.koinViewModel
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun prev() {
-    PatientCardScreen()
+private fun Prev() {
+    val nav = rememberNavController()
+    PatientCardScreen(nav)
 }
 
 @Composable
 fun PatientCardScreen(
+    navController: NavController,
     viewModel: PatientCardViewModel = koinViewModel()
 ) {
 
@@ -143,14 +147,13 @@ fun PatientCardScreen(
         BottomNavigation(
             Modifier.fillMaxWidth(),
             analyzesClick = {
-                viewModel.onEvent(PatientCardOnEvent.AnalyzesClick)
+                navController.navigate(Route.AnalyzesScreen.route){
+                    popUpTo(Route.PatientCardScreen.route){
+                        inclusive = true
+                    }
+                }
             },
-            resultsClick = {
-                viewModel.onEvent(PatientCardOnEvent.ResultsClick)
-            },
-            supportsClick = {
-                viewModel.onEvent(PatientCardOnEvent.SupportsClick)
-            },{},
+            {},{},{},
             selectedProfile = true
         )
     }

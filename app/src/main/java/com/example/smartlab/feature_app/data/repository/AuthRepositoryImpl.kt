@@ -22,6 +22,12 @@ class AuthRepositoryImpl : AuthRepository {
             email = mail
             password = pass
         }
-        client.postgrest["Users"].insert(mapOf("userData" to userData))
+        client.postgrest["Users"].insert(mapOf(
+            "name" to userData.name,
+            "surname" to userData.surname,
+            "patronymic" to userData.patronymic,
+            "birthdayData" to userData.birthdayData,
+            "gender" to userData.gender,
+        ))
     }
 }

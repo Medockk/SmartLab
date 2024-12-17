@@ -14,11 +14,10 @@ class MakingOrderViewModel: ViewModel() {
             MakingOrderEvent.AddOnMorePatient -> {
 
             }
-            MakingOrderEvent.BackClick -> {
-
-            }
             MakingOrderEvent.MakeOrder -> {
-
+                _state.value = state.value.copy(
+                    isComplete = true
+                )
             }
             is MakingOrderEvent.EnteredComment -> {
                 _state.value = state.value.copy(
@@ -43,6 +42,12 @@ class MakingOrderViewModel: ViewModel() {
             is MakingOrderEvent.EnteredPhone -> {
                 _state.value = state.value.copy(
                     phone = event.value
+                )
+            }
+
+            MakingOrderEvent.CompleteChanges -> {
+                _state.value = state.value.copy(
+                    isComplete = !state.value.isComplete
                 )
             }
         }

@@ -10,5 +10,5 @@ sealed class MakingOrderEvent {
 
     data object AddOnMorePatient : MakingOrderEvent()
     data object MakeOrder : MakingOrderEvent()
-    data object BackClick : MakingOrderEvent()
+    data object CompleteChanges : MakingOrderEvent()
 }
