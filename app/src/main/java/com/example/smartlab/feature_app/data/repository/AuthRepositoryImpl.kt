@@ -12,8 +12,8 @@ import io.github.jan.supabase.postgrest.postgrest
 class AuthRepositoryImpl : AuthRepository {
     override suspend fun signIn(mail: String, pass: String) {
         client.auth.signInWith(Email){
-            email = mail
-            password = pass + "00"
+            this.email = mail
+            this.password = pass + "00"
         }
     }
 

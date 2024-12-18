@@ -16,15 +16,19 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -35,6 +39,7 @@ import com.example.smartlab.OnBoard.OnBoardScreen
 import com.example.smartlab.SignIn.SignInScreen
 import com.example.smartlab.SplashScreen.SplashScreen
 import com.example.smartlab.data.network.SupabaseInit.client
+import com.example.smartlab.feature_app.domain.usecase.Auth.SignInUseCase
 import com.example.smartlab.feature_app.presentation.Analuzes.AnalyzesScreen
 import com.example.smartlab.feature_app.presentation.AnalyzesCategory.AnalyzesCategoryScreen
 import com.example.smartlab.feature_app.presentation.Cart.CartScreen
@@ -58,45 +63,48 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(key1 = true) {
                 viewModel.checkRoute()
             }
-            SmartLabTheme{
-                NavHost(navController, startDestination = "q"){
-                    composable("q"){
-                        q()
+            SmartLabTheme {
+                NavHost(navController, startDestination = "q") {
+                    composable("q") {
+                        q(navController)
                     }
-                    composable(Route.SplashScreen.route){
+                    composable("q1") {
+                        q1(navController)
+                    }
+                    composable(Route.SplashScreen.route) {
                         SplashScreen(navController)
                     }
-                    composable(Route.OnBoardScreen.route){
+                    composable(Route.OnBoardScreen.route) {
                         OnBoardScreen(navController)
                     }
-                    composable(Route.SignInScreen.route){
+                    composable(Route.SignInScreen.route) {
                         SignInScreen(navController)
                     }
-                    composable(Route.EmailCodeScreen.route){
+                    composable(Route.EmailCodeScreen.route) {
                         EmailCodeScreen(navController)
                     }
-                    composable(Route.CreatePasswordScreen.route){
+                    composable(Route.CreatePasswordScreen.route) {
                         CreatePasswordScreen(navController)
                     }
-                    composable(Route.CreateCardScreen.route){
+                    composable(Route.CreateCardScreen.route) {
                         CreateCardScreen(navController)
                     }
-                    composable(Route.AnalyzesScreen.route){
+                    composable(Route.AnalyzesScreen.route) {
                         AnalyzesScreen(navController)
                     }
-                    composable(Route.AnalyzesCategoryScreen.route){
+                    composable(Route.AnalyzesCategoryScreen.route) {
                         AnalyzesCategoryScreen(navController)
                     }
-                    composable(Route.PatientCardScreen.route){
+                    composable(Route.PatientCardScreen.route) {
                         PatientCardScreen(navController)
                     }
-                    composable(Route.CartScreen.route){
+                    composable(Route.CartScreen.route) {
                         CartScreen(navController)
                     }
-                    composable(Route.MakingOrderScreen.route){
+                    composable(Route.MakingOrderScreen.route) {
                         MakingOrderScreen(navController)
                     }
-                    composable(Route.PaymentScreen.route){
+                    composable(Route.PaymentScreen.route) {
                         PaymentScreen()
                     }
                 }
@@ -106,61 +114,209 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun q() {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-        val coroutineScope = rememberCoroutineScope()
+fun q(
+    navController: NavController,
+    viewModel: qViewModel = koinViewModel()
+) {
+
+    val state = viewModel.state.value
+
+    LaunchedEffect(key1 = !state.isLogged) {
+        if (state.isLogged) {
+            navController.navigate("q1") {
+                popUpTo("q") {
+                    inclusive = true
+                }
+            }
+        }
+    }
+
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         val uid = remember { mutableStateOf("") }
-        var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
-        Column (
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             OutlinedTextField(
-                email, {email = it},
-                modifier = Modifier.fillMaxWidth()
+                state.email, {
+                    viewModel.onEvent(qEvent.EnteredEmail(it))
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 20.dp),
                 label = {
                     Text("email")
-                }
+                },
+                textStyle = TextStyle(
+                    color = Color.Black
+                )
             )
             OutlinedTextField(
-                password, {password = it},
-                modifier = Modifier.fillMaxWidth()
+                state.pass, {
+                    viewModel.onEvent(qEvent.EnteredPassword(it))
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 20.dp),
                 label = {
                     Text("password")
-                }
+                },
+                textStyle = TextStyle(
+                    color = Color.Black
+                )
             )
 
             Button({
-                coroutineScope.launch {
+                viewModel.onEvent(qEvent.SignIn)
+                uid.value = client.auth.currentUserOrNull()?.email.toString()
+            }) {
+                Text("sign in", fontSize = 32.sp)
+            }
+
+            Spacer(Modifier.padding(vertical = 10.dp))
+            Button({
+                viewModel.onEvent(qEvent.SignUp)
+            }) {
+                Text("sign Up")
+            }
+        }
+    }
+}
+
+class qViewModel(
+    private val useCase: SignInUseCase
+) : ViewModel() {
+
+    private val _state = mutableStateOf(qState())
+    val state: State<qState> = _state
+
+    init {
+        _state.value = state.value.copy(
+            isLogged = getCurrentUser()
+        )
+    }
+
+    private fun getCurrentUser(): Boolean {
+        return client.auth.currentUserOrNull() != null
+    }
+
+    fun onEvent(event: qEvent) {
+        when (event) {
+            is qEvent.EnteredEmail -> {
+                _state.value = state.value.copy(
+                    email = event.value
+                )
+            }
+
+            is qEvent.EnteredPassword -> {
+                _state.value = state.value.copy(
+                    pass = event.value
+                )
+            }
+
+            qEvent.SignIn -> {
+                viewModelScope.launch {
                     try {
-                        if (client.auth.currentUserOrNull() != null){
-                            client.auth.signInWith(Email){
-                                this.email = email
-                                this.password = password
-                            }
-                            Log.v("supaIn", "sign in")
-                        }else{
-                            client.auth.signUpWith(Email){
-                                this.email = email
-                                this.password = password
-                            }
-                            Log.v("supaUp", "sign up")
+
+//                        useCase(
+//                           mail = state.value.email,
+//                            pass = state.value.pass
+//                        )
+
+                        client.auth.signInWith(Email) {
+                            this.email = state.value.email
+                            this.password = state.value.pass
                         }
+                        _state.value = state.value.copy(
+                            isLogged = true
+                        )
+                        Log.v("supaIn", "sign in")
                     } catch (e: Exception) {
                         Log.e("supaError", e.message.toString())
                     }
                 }
-                uid.value = client.auth.currentUserOrNull()?.identities
-                    .toString()
-            }) {
-                Text("sign in/sign up", fontSize = 32.sp)
             }
-            Spacer(Modifier.padding(vertical = 10.dp))
-            Text(uid.value)
+
+            qEvent.SignUp -> {
+                viewModelScope.launch {
+                    try {
+                        client.auth.signUpWith(Email){
+                            this.email = _state.value.email
+                            this.password = _state.value.pass
+                        }
+                        _state.value = state.value.copy(
+                            isLogged = true
+                        )
+                        Log.v("supaUp", "sign up")
+                    } catch (e: Exception) {
+                        Log.e("supaUp", e.message.toString())
+                    }
+                }
+            }
         }
     }
 }
+
+sealed class qEvent {
+    data class EnteredEmail(val value: String) : qEvent()
+    data class EnteredPassword(val value: String) : qEvent()
+
+    data object SignUp : qEvent()
+    data object SignIn : qEvent()
+}
+
+data class qState(
+    val isLogged: Boolean = false,
+    val email: String = "",
+    val pass: String = "",
+)
+
+@Composable
+fun q1(
+    navController: NavController,
+    viewModel: q1ViewModel = viewModel()
+) {
+    val state = viewModel.state.value
+
+    LaunchedEffect(key1 = !state.isSignOut) {
+        if (state.isSignOut) {
+            navController.navigate("q") {
+                popUpTo("q1") {
+                    inclusive = true
+                }
+            }
+        }
+    }
+
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column {
+            Text("You are logged")
+            Button(
+                {
+                    viewModel.signOut()
+                }
+            ) { Text("sign out") }
+        }
+    }
+}
+
+class q1ViewModel : ViewModel() {
+
+    private val _state = mutableStateOf(q1State())
+    val state: State<q1State> = _state
+
+    fun signOut() {
+        viewModelScope.launch {
+            client.auth.signOut()
+            _state.value = state.value.copy(
+                isSignOut = true
+            )
+        }
+    }
+}
+
+data class q1State(
+    val isSignOut: Boolean = false,
+)
