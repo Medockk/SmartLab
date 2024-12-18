@@ -5,4 +5,5 @@ data class QueueUseCase(
     val getItemFromQueue: GetItemFromQueue,
     val getQueue: GetQueue,
     val createQueue: CreateQueue,
+    val clearQueue: ClearQueue,
 )

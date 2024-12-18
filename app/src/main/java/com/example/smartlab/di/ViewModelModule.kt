@@ -1,5 +1,6 @@
 package com.example.smartlab.di
 
+import com.example.smartlab.CreateCard.CreateCardViewModel
 import com.example.smartlab.MainActivityViewModel
 import com.example.smartlab.OnBoard.OnBoardViewModel
 import com.example.smartlab.feature_app.presentation.PatientCard.PatientCardViewModel
@@ -18,5 +19,8 @@ val moduleViewModel = module {
         OnBoardViewModel(
             get()
         )
+    }
+    viewModel<CreateCardViewModel>{
+        CreateCardViewModel(get())
     }
 }

@@ -4,7 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartlab.feature_app.domain.repository.UserData
+import com.example.smartlab.feature_app.domain.model.UserData
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignUpUseCase
 import kotlinx.coroutines.launch
 
@@ -50,9 +50,9 @@ class PatientCardViewModel(
                             state.value.email,
                             state.value.password,
                             UserData(
-                                state.value.name,state.value.surname,
-                                state.value.patronymic, state.value.birthdayData,
-                                state.value.gender
+                                name = state.value.name, surname = state.value.surname,
+                                patronymic = state.value.patronymic, birthdayData =  state.value.birthdayData,
+                                gender = state.value.gender
                             )
                         )
                     } catch (_: Exception) {

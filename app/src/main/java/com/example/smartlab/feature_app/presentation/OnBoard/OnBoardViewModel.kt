@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 class OnBoardViewModel(
     private val useCase: QueueUseCase
 ): ViewModel() {
+
     private val _state = mutableStateOf(OnBoardState())
     val state: State<OnBoardState> = _state
 
@@ -19,19 +20,22 @@ class OnBoardViewModel(
             is OnBoardEvent.NextPage -> {
                 viewModelScope.launch{
                     val page = useCase.getItemFromQueue()
-                    if (page != null){
-                        _state.value = state.value.copy(
-                            page = page
-                        )
-                    }else{
+
+                    if (state.value.currentPage == 2){
                         _state.value = state.value.copy(
                             isComplete = true
                         )
                     }
+
+                    if (page != null){
+                        _state.value = state.value.copy(
+                            page = page
+                        )
+                    }
                     _state.value = state.value.copy(
-                        currentPage = if (state.value.currentPage != 2) {
+                        currentPage = if (state.value.currentPage != 3) {
                             state.value.currentPage + 1
-                        } else {2}
+                        } else {3}
                     )
                 }
             }

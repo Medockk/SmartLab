@@ -1,7 +1,7 @@
 package com.example.smartlab.feature_app.domain.usecase.Auth
 
 import com.example.smartlab.feature_app.domain.repository.AuthRepository
-import com.example.smartlab.feature_app.domain.repository.UserData
+import com.example.smartlab.feature_app.domain.model.UserData
 
 class SignUpUseCase(
     private val repository: AuthRepository

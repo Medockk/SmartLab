@@ -9,7 +9,7 @@ class GetItemFromQueue(
 
     suspend operator fun invoke(): OnBoardItem? {
         val queue = manger.getQueue()
-        if (queue != null){
+        if (!queue.isNullOrEmpty()){
             val item = queue.pop()
             manger.saveQueue(queue)
             return item

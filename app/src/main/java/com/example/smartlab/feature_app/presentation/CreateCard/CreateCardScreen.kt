@@ -15,20 +15,31 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.core.presentation.CustomButton
 import com.example.smartlab.core.presentation.CustomTextField
 import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF40014_939396
 import com.example.smartlab.ui.theme.SF40015_1A6FEE
 import com.example.smartlab.ui.theme.SF70024Black
+import org.koin.androidx.compose.koinViewModel
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+private fun Prev() {
+    CreateCardScreen(
+        navController = rememberNavController()
+    )
+}
 
 @Composable
 fun CreateCardScreen(
     navController: NavController,
-    viewModel: CreateCardViewModel = viewModel()
+    viewModel: CreateCardViewModel = koinViewModel()
 ){
 
     val state = viewModel.state.value
@@ -48,8 +59,10 @@ fun CreateCardScreen(
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = paddingTop.dp, bottom = paddingBottom.dp,
-                start = 20.dp, end = 20.dp),
+            .padding(
+                top = paddingTop.dp, bottom = paddingBottom.dp,
+                start = 20.dp, end = 20.dp
+            ),
         verticalArrangement = Arrangement.SpaceBetween
     ){
         Column (
@@ -79,7 +92,8 @@ fun CreateCardScreen(
 
         LazyColumn (
             verticalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .fillMaxHeight(0.75f)
         ){
             item{
@@ -89,7 +103,8 @@ fun CreateCardScreen(
                         viewModel.onEvent(CreateCardEvent.EnteredName(it))
                     },
                     hintText = "Имя",
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .fillParentMaxHeight(0.15f)
                 )
             }
@@ -100,7 +115,8 @@ fun CreateCardScreen(
                         viewModel.onEvent(CreateCardEvent.EnteredPatronymic(it))
                     },
                     hintText = "Отчество",
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .fillParentMaxHeight(0.15f)
                 )
             }
@@ -111,7 +127,8 @@ fun CreateCardScreen(
                         viewModel.onEvent(CreateCardEvent.EnteredSurname(it))
                     },
                     hintText = "Фамилия",
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .fillParentMaxHeight(0.15f)
                 )
             }
@@ -122,7 +139,8 @@ fun CreateCardScreen(
                         viewModel.onEvent(CreateCardEvent.EnteredBirthdayData(it))
                     },
                     hintText = "Дата рождения",
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .fillParentMaxHeight(0.15f)
                 )
             }
@@ -134,7 +152,8 @@ fun CreateCardScreen(
                     },
                     isGender = true,
                     hintText = "Пол",
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .fillParentMaxHeight(0.15f)
                 )
             }
@@ -145,7 +164,7 @@ fun CreateCardScreen(
                 .fillMaxWidth()
                 .fillMaxHeight(0.375f)
         ) {
-
+            viewModel.onEvent(CreateCardEvent.CreateCard)
         }
     }
 }

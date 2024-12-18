@@ -1,5 +1,6 @@
 package com.example.smartlab.CreatePassword
 
 data class CreatePasswordState(
-    val title: String,
+    val password: String = "",
+    val isComplete: Boolean = false
 )

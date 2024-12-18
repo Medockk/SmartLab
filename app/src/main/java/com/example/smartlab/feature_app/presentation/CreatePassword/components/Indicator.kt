@@ -25,16 +25,16 @@ fun Indicator(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
     ) {
-        repeat(count){
+        repeat(count){ index ->
             Box(
                 modifier = Modifier
                     .size(12.dp)
-                    .background(if (currentIndicator in 0..3) _57A9FF else Color.White, CircleShape)
+                    .background(
+                        color = if (currentIndicator == index) _57A9FF
+                                else Color.White, CircleShape
+                    )
                     .border(1.dp, _57A9FF, CircleShape)
             )
-            if (currentIndicator != 2){
-
-            }
         }
     }
 }

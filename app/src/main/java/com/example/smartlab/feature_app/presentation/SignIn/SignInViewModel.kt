@@ -3,6 +3,7 @@ package com.example.smartlab.SignIn
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.smartlab.feature_app.domain.model.UserData
 
 class SignInViewModel: ViewModel() {
 
@@ -18,6 +19,7 @@ class SignInViewModel: ViewModel() {
                 _state.value = state.value.copy(
                     email = event.value
                 )
+                UserData.email = state.value.email
             }
         }
     }

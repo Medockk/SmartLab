@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.example.smartlab.R
 import com.example.smartlab.ui.theme.SF60024Black
+import com.example.smartlab.ui.theme._1A6FEE
 import com.example.smartlab.ui.theme._F5F5F9
 
 @Composable
@@ -35,7 +36,7 @@ fun NumberPad(
             else Color.Transparent, CircleShape)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple()
+                indication = rememberRipple(color = _1A6FEE)
             ){
                 if (currentNumber != null) {
                     numberClick(currentNumber)
