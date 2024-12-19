@@ -13,10 +13,17 @@ import org.koin.dsl.module
 val moduleViewModel = module {
 
     viewModel<PatientCardViewModel>{
-        PatientCardViewModel(get())
+        PatientCardViewModel(
+            get(),
+            get(),
+            get()
+        )
     }
     viewModel<MainActivityViewModel>{
-        MainActivityViewModel(get())
+        MainActivityViewModel(
+            get(),
+            get()
+        )
     }
     viewModel<OnBoardViewModel>{
         OnBoardViewModel(
@@ -24,7 +31,11 @@ val moduleViewModel = module {
         )
     }
     viewModel<CreateCardViewModel>{
-        CreateCardViewModel(get())
+        CreateCardViewModel(
+            get(),
+            get(),
+            get()
+        )
     }
     viewModel<CreatePasswordViewModel>{
         CreatePasswordViewModel(get())
@@ -36,6 +47,9 @@ val moduleViewModel = module {
         )
     }
     viewModel<AnalyzesViewModel>{
-        AnalyzesViewModel(get())
+        AnalyzesViewModel(
+            get(),
+            get()
+        )
     }
 }

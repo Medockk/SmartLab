@@ -10,7 +10,7 @@ import com.example.smartlab.feature_app.domain.usecase.Auth.SignInUseCase
 import kotlinx.coroutines.launch
 
 class CreatePasswordViewModel(
-    private val useCase: SignInUseCase
+    private val signInUseCase: SignInUseCase
 ) : ViewModel() {
 
     private val _state = mutableStateOf(CreatePasswordState())
@@ -28,14 +28,16 @@ class CreatePasswordViewModel(
                 if (state.value.password.length == 4) {
                     viewModelScope.launch {
                         try {
-                            useCase(
+                            signInUseCase(
                                 mail = UserData.email,
                                 pass = "${UserData.password}00"
                             )
+                            Log.v("supaIn", "sign in")
+
                             _state.value = state.value.copy(
                                 isLogged = true
                             )
-                            Log.v("supaIn", "sign in")
+                            return@launch
                         } catch (e: Exception) {
                             Log.e("supaInError", "${e.message.toString()}\n" +
                                     "${UserData.email} ${UserData.password}")
@@ -43,7 +45,7 @@ class CreatePasswordViewModel(
                     }
 
                     _state.value = state.value.copy(
-                        isComplete = !state.value.isComplete
+                        isComplete = !state.value.isLogged,
                     )
                 }
             }

@@ -1,6 +1,6 @@
 package com.example.smartlab.feature_app.presentation.PatientCard
 
-import com.example.smartlab.CreateCard.CreateCardEvent
+import com.example.smartlab.feature_app.domain.model.UserData
 
 data class PatientCardState(
 
@@ -11,6 +11,8 @@ data class PatientCardState(
     val gender: String = "",
     val image: String = "",
 
-    val email: String = "andreev.arsenij2020@gmail.com",
-    val password: String = "password",
+    val email: String = "",
+    val password: String = "",
+
+    val listOfUserData: List<UserData> = emptyList()
 )

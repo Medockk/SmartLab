@@ -24,14 +24,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.smartlab.data.network.SupabaseInit.client
 import com.example.smartlab.feature_app.presentation.CreatePassword.components.Indicator
 import com.example.smartlab.feature_app.presentation.CreatePassword.components.NumberPad
 import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF40015_1A6FEE
 import com.example.smartlab.ui.theme.SF40015_939396
 import com.example.smartlab.ui.theme.SF70024Black
-import io.github.jan.supabase.auth.auth
 import org.koin.androidx.compose.koinViewModel
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -56,27 +54,19 @@ fun CreatePasswordScreen(
     }
 
     LaunchedEffect(key1 = !state.isLogged) {
-        if (state.isLogged){
-            navController.navigate(Route.AnalyzesScreen.route){
-                popUpTo(Route.CreatePasswordScreen.route){
+        if (state.isLogged) {
+            navController.navigate(Route.AnalyzesScreen.route) {
+                popUpTo(Route.CreatePasswordScreen.route) {
                     inclusive = true
                 }
             }
         }
     }
     LaunchedEffect(key1 = !state.isComplete) {
-        if (state.isComplete){
-            if (client.auth.currentUserOrNull() != null){
-                navController.navigate(Route.AnalyzesScreen.route){
-                    popUpTo(Route.CreatePasswordScreen.route){
-                        inclusive = true
-                    }
-                }
-            }else{
-                navController.navigate(Route.CreateCardScreen.route){
-                    popUpTo(Route.CreatePasswordScreen.route){
-                        inclusive = true
-                    }
+        if (state.isComplete) {
+            navController.navigate(Route.CreateCardScreen.route) {
+                popUpTo(Route.CreatePasswordScreen.route) {
+                    inclusive = true
                 }
             }
         }
@@ -92,21 +82,24 @@ fun CreatePasswordScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Box(Modifier.align(Alignment.End)){
+        Box(Modifier.align(Alignment.End)) {
             Text("Пропустить", style = SF40015_1A6FEE)
         }
-        Column (
+        Column(
             modifier = Modifier.fillMaxHeight(0.07f),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             Text("Создайте пароль", style = SF70024Black)
-            Text("Для защиты ваших персональных данных",
-                style = SF40015_939396)
+            Text(
+                "Для защиты ваших персональных данных",
+                style = SF40015_939396
+            )
         }
         Indicator(
             4, currentIndicator = currentIndicator,
-            modifier = Modifier.fillMaxWidth(0.18f))
+            modifier = Modifier.fillMaxWidth(0.18f)
+        )
 
         LazyColumn(
             modifier = Modifier
@@ -114,41 +107,47 @@ fun CreatePasswordScreen(
                 .fillMaxHeight(0.55f),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            item{
+            item {
                 LazyRow(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillParentMaxHeight(0.235f)
-                ){
+                ) {
                     item {
-                        NumberPad(1,
+                        NumberPad(
+                            1,
                             modifier = Modifier
                                 .fillParentMaxWidth(0.31f)
-                                .fillMaxHeight()) {
-                            if (currentIndicator < 3){
+                                .fillMaxHeight()
+                        ) {
+                            if (currentIndicator < 3) {
                                 viewModel.onEvent(CreatePasswordEvent.EnteredPassword("1"))
                                 currentIndicator++
                             }
                         }
                     }
                     item {
-                        NumberPad(2,
+                        NumberPad(
+                            2,
                             modifier = Modifier
                                 .fillParentMaxWidth(0.31f)
-                                .fillMaxHeight()) {
-                            if (currentIndicator < 3){
+                                .fillMaxHeight()
+                        ) {
+                            if (currentIndicator < 3) {
                                 viewModel.onEvent(CreatePasswordEvent.EnteredPassword("2"))
                                 currentIndicator++
                             }
                         }
                     }
                     item {
-                        NumberPad(3,
+                        NumberPad(
+                            3,
                             modifier = Modifier
                                 .fillParentMaxWidth(0.31f)
-                                .fillMaxHeight())  {
-                            if (currentIndicator < 3){
+                                .fillMaxHeight()
+                        ) {
+                            if (currentIndicator < 3) {
                                 viewModel.onEvent(CreatePasswordEvent.EnteredPassword("3"))
                                 currentIndicator++
                             }
@@ -162,35 +161,41 @@ fun CreatePasswordScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillParentMaxHeight(0.235f)
-                ){
+                ) {
                     item {
-                        NumberPad(4,
+                        NumberPad(
+                            4,
                             modifier = Modifier
                                 .fillParentMaxWidth(0.31f)
-                                .fillMaxHeight())  {
-                            if (currentIndicator < 3){
+                                .fillMaxHeight()
+                        ) {
+                            if (currentIndicator < 3) {
                                 viewModel.onEvent(CreatePasswordEvent.EnteredPassword("4"))
                                 currentIndicator++
                             }
                         }
                     }
                     item {
-                        NumberPad(5,
+                        NumberPad(
+                            5,
                             modifier = Modifier
                                 .fillParentMaxWidth(0.31f)
-                                .fillMaxHeight()) {
-                            if (currentIndicator < 3){
+                                .fillMaxHeight()
+                        ) {
+                            if (currentIndicator < 3) {
                                 viewModel.onEvent(CreatePasswordEvent.EnteredPassword("5"))
                                 currentIndicator++
                             }
                         }
                     }
                     item {
-                        NumberPad(6,
+                        NumberPad(
+                            6,
                             modifier = Modifier
                                 .fillParentMaxWidth(0.31f)
-                                .fillMaxHeight()) {
-                            if (currentIndicator < 3){
+                                .fillMaxHeight()
+                        ) {
+                            if (currentIndicator < 3) {
                                 viewModel.onEvent(CreatePasswordEvent.EnteredPassword("6"))
                                 currentIndicator++
                             }
@@ -204,35 +209,41 @@ fun CreatePasswordScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillParentMaxHeight(0.235f)
-                ){
+                ) {
                     item {
-                        NumberPad(7,
+                        NumberPad(
+                            7,
                             modifier = Modifier
                                 .fillParentMaxWidth(0.31f)
-                                .fillMaxHeight()) {
-                            if (currentIndicator < 3){
+                                .fillMaxHeight()
+                        ) {
+                            if (currentIndicator < 3) {
                                 viewModel.onEvent(CreatePasswordEvent.EnteredPassword("7"))
                                 currentIndicator++
                             }
                         }
                     }
                     item {
-                        NumberPad(8,
+                        NumberPad(
+                            8,
                             modifier = Modifier
                                 .fillParentMaxWidth(0.31f)
-                                .fillMaxHeight())  {
-                            if (currentIndicator < 3){
+                                .fillMaxHeight()
+                        ) {
+                            if (currentIndicator < 3) {
                                 viewModel.onEvent(CreatePasswordEvent.EnteredPassword("8"))
                                 currentIndicator++
                             }
                         }
                     }
                     item {
-                        NumberPad(9,
+                        NumberPad(
+                            9,
                             modifier = Modifier
                                 .fillParentMaxWidth(0.31f)
-                                .fillMaxHeight()) {
-                            if (currentIndicator < 3){
+                                .fillMaxHeight()
+                        ) {
+                            if (currentIndicator < 3) {
                                 viewModel.onEvent(CreatePasswordEvent.EnteredPassword("9"))
                                 currentIndicator++
                             }
@@ -246,35 +257,41 @@ fun CreatePasswordScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillParentMaxHeight(0.235f)
-                ){
+                ) {
                     item {
-                        NumberPad(null,
+                        NumberPad(
+                            null,
                             modifier = Modifier
                                 .fillParentMaxWidth(0.31f)
-                                .fillMaxHeight()) {
-                            if (currentIndicator < 4){
+                                .fillMaxHeight()
+                        ) {
+                            if (currentIndicator < 4) {
                                 currentIndicator++
-                        }
+                            }
                         }
                     }
                     item {
-                        NumberPad(0,
+                        NumberPad(
+                            0,
                             modifier = Modifier
                                 .fillParentMaxWidth(0.31f)
-                                .fillMaxHeight()) {
-                            if (currentIndicator < 3){
+                                .fillMaxHeight()
+                        ) {
+                            if (currentIndicator < 3) {
                                 viewModel.onEvent(CreatePasswordEvent.EnteredPassword("0"))
                                 currentIndicator++
                             }
                         }
                     }
                     item {
-                        NumberPad(3,
+                        NumberPad(
+                            3,
                             isDelete = true,
                             modifier = Modifier
                                 .fillParentMaxWidth(0.31f)
-                                .fillMaxHeight()) {
-                            if (currentIndicator >= 0){
+                                .fillMaxHeight()
+                        ) {
+                            if (currentIndicator >= 0) {
                                 viewModel.onEvent(CreatePasswordEvent.RemovePasswordItem)
                                 currentIndicator--
                             }

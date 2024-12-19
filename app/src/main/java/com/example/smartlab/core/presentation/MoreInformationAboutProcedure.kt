@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -49,7 +48,7 @@ import com.example.smartlab.ui.theme._818C99
 private fun Prev() {
     MoreInformationAboutProcedure({},{},
         "Клинический анализ крови\nс лейкоцитарной формулой",
-        "Добавить за 690 ₽")
+        "Добавить за 690 ₽", "")
 }
 
 @Composable
@@ -57,6 +56,7 @@ fun MoreInformationAboutProcedure(
     closeClick: (Boolean) -> Unit,
     addClick: () -> Unit,
     title: String,
+    date: String,
     price: String,
     modifier: Modifier = Modifier,
 ) {
@@ -92,11 +92,14 @@ fun MoreInformationAboutProcedure(
         ){
             Row (
                 modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top
             ){
-                Text(title,
-                    style = SF60020Black)
-                Spacer(Modifier.weight(1f))
+                Text(
+                    title,
+                    style = SF60020Black,
+                    modifier = Modifier.weight(0.8f)
+                )
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
@@ -165,7 +168,7 @@ fun MoreInformationAboutProcedure(
                 ){
                     Column {
                         Text("Результаты через:", style = SF60014_939396)
-                        Text("1 день", style = SF50016Black)
+                        Text(date, style = SF50016Black)
                     }
                     Column {
                         Text("Биоматериал:", style = SF60014_939396)

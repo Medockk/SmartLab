@@ -1,19 +1,33 @@
 package com.example.smartlab
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartlab.OnBoard.OnBoardItem
+import com.example.smartlab.feature_app.domain.usecase.Auth.SignOutUseCase
 import com.example.smartlab.feature_app.domain.usecase.Queue.QueueUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.LinkedList
 
 class MainActivityViewModel(
-    private val useCase: QueueUseCase
+    private val useCase: QueueUseCase,
+    private val signOutUseCase: SignOutUseCase
 ): ViewModel() {
 
     init {
+        viewModelScope.launch {
+            try {
+                signOut()
+            } catch (e: Exception) {
+                Log.e("mainInitEx", e.message.toString())
+            }
+        }
         checkRoute()
+    }
+
+    private suspend fun signOut(){
+        signOutUseCase()
     }
 
     fun checkRoute(){

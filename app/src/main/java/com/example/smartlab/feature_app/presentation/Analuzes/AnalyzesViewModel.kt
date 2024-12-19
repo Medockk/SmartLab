@@ -5,14 +5,16 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartlab.feature_app.domain.model.CategoryData
+
 import com.example.smartlab.feature_app.domain.usecase.Category.GetAllCategoryUseCase
+import com.example.smartlab.feature_app.domain.usecase.Procedure.GetAllProcedure
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AnalyzesViewModel(
-    private val getAllCategoryUseCase: GetAllCategoryUseCase
+    private val getAllCategoryUseCase: GetAllCategoryUseCase,
+    private val getAllProcedureUseCase: GetAllProcedure
 ) : ViewModel() {
 
     private val _state = mutableStateOf(AnalyzesState())
@@ -22,9 +24,20 @@ class AnalyzesViewModel(
         viewModelScope.launch {
             try {
                 getAllCategory()
+                getAllProcedure()
             } catch (e: Exception) {
-                Log.e("categoryEx", e.message.toString())
+                Log.e("initEx", e.message.toString())
             }
+        }
+    }
+
+    private suspend fun getAllProcedure(){
+        val list = getAllProcedureUseCase()
+
+        withContext(Dispatchers.IO){
+            _state.value = state.value.copy(
+                procedureList = list
+            )
         }
     }
 
@@ -68,6 +81,14 @@ class AnalyzesViewModel(
             AnalyzesEvent.CompleteChanges -> {
                 _state.value = state.value.copy(
                     isComplete = !state.value.isComplete
+                )
+            }
+
+            is AnalyzesEvent.AnalyzesInformation -> {
+                _state.value = state.value.copy(
+                    dateProcedure = event.date,
+                    priceProcedure = event.price,
+                    nameProcedure = event.title
                 )
             }
         }

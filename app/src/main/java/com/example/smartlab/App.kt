@@ -3,6 +3,7 @@ package com.example.smartlab
 import android.app.Application
 import com.example.smartlab.di.moduleAuth
 import com.example.smartlab.di.moduleCategory
+import com.example.smartlab.di.moduleProcedure
 import com.example.smartlab.di.moduleQueue
 import com.example.smartlab.di.moduleViewModel
 import org.koin.android.ext.koin.androidContext
@@ -19,7 +20,7 @@ class App: Application() {
             androidContext(applicationContext)
             androidLogger(Level.DEBUG)
             modules(listOf(moduleAuth, moduleViewModel, moduleQueue,
-                moduleCategory))
+                moduleCategory, moduleProcedure))
         }
     }
 }

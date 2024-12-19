@@ -33,7 +33,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.smartlab.R
@@ -241,81 +240,20 @@ fun AnalyzesScreen(
                 .padding(bottom = paddingBottom.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item {
+            items(state.procedureList){ item ->
                 AnalyzesCatalog(
                     modifier = Modifier.fillParentMaxWidth()
                         .padding(bottom = 16.dp),
-                    title = "ПЦР-тест на определение РНК\nкоронавируса стандартный",
-                    data = "2 дня",
-                    price = "1800 ₽"
-                ){
+                    title = item.name,
+                    data = item.time,
+                    price = item.price
+                ) {
+                    viewModel.onEvent(AnalyzesEvent.AnalyzesInformation(
+                        title = item.name,
+                        date = item.time,
+                        price = item.price
+                    ))
                     viewModel.onEvent(AnalyzesEvent.AnalyzesAddClick(true))
-                }
-            }
-            item {
-                AnalyzesCatalog(
-                    modifier = Modifier.fillParentMaxWidth()
-                        .padding(bottom = 16.dp),
-                    title = "Клинический анализ крови с лейкоцитарной формулировкой",
-                    data = "1 день",
-                    price = "690 ₽"
-                ){
-
-                }
-            }
-            item {
-                AnalyzesCatalog(
-                    modifier = Modifier.fillParentMaxWidth()
-                        .padding(bottom = 16.dp),
-                    title = "Биохимический анализ крови, базовый",
-                    data = "1 день",
-                    price = "2440 ₽"
-                ){
-
-                }
-            }
-            item {
-                AnalyzesCatalog(
-                    modifier = Modifier.fillParentMaxWidth()
-                        .padding(bottom = 16.dp),
-                    title = "СОЭ (венозная кровь)",
-                    data = "1 день",
-                    price = "240 ₽"
-                ){
-
-                }
-            }
-            item {
-                AnalyzesCatalog(
-                    modifier = Modifier.fillParentMaxWidth()
-                        .padding(bottom = 16.dp),
-                    title = "Общий анализ мочи",
-                    data = "1 день",
-                    price = "350 ₽"
-                ){
-
-                }
-            }
-            item {
-                AnalyzesCatalog(
-                    modifier = Modifier.fillParentMaxWidth()
-                        .padding(bottom = 16.dp),
-                    title = "Тироксин свободный (Т4 свободный)",
-                    data = "1 день",
-                    price = "680 ₽"
-                ){
-
-                }
-            }
-            item {
-                AnalyzesCatalog(
-                    modifier = Modifier.fillParentMaxWidth()
-                        .padding(bottom = 16.dp),
-                    title = "Группа крови + Резус-фактор",
-                    data = "1 день",
-                    price = "750 ₽"
-                ){
-
                 }
             }
         }
@@ -360,7 +298,9 @@ fun AnalyzesScreen(
             }, addClick = {}, modifier = Modifier
                 .padding(bottom = paddingTop.dp)
                 .offset(y = offset),
-            title = "Клинический анализ крови\nс лейкоцитарной формулой",
-            price = "Добавить за 690 ₽")
+            title = state.nameProcedure,
+            price = "Добавить за ${state.priceProcedure}",
+            date = state.dateProcedure
+        )
     }
 }

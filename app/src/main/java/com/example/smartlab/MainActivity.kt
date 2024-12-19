@@ -52,7 +52,6 @@ import com.example.smartlab.feature_app.presentation.Payment.PaymentScreen
 import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SmartLabTheme
 import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -60,8 +59,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.decorView.apply {
-            systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_FLAG_FULLSCREEN
-
+            systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
         }
         enableEdgeToEdge()
         setContent {
