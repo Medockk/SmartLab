@@ -1,5 +1,6 @@
 package com.example.smartlab.CreatePassword
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,12 +25,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.smartlab.data.network.SupabaseInit.client
 import com.example.smartlab.feature_app.presentation.CreatePassword.components.Indicator
 import com.example.smartlab.feature_app.presentation.CreatePassword.components.NumberPad
 import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF40015_1A6FEE
 import com.example.smartlab.ui.theme.SF40015_939396
 import com.example.smartlab.ui.theme.SF70024Black
+import io.github.jan.supabase.auth.auth
 import org.koin.androidx.compose.koinViewModel
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -53,20 +56,28 @@ fun CreatePasswordScreen(
         mutableStateOf(-1)
     }
 
-    LaunchedEffect(key1 = !state.isComplete) {
-        if (state.isComplete){
-            navController.navigate(Route.CreateCardScreen.route){
+    LaunchedEffect(key1 = !state.isLogged) {
+        if (state.isLogged){
+            navController.navigate(Route.AnalyzesScreen.route){
                 popUpTo(Route.CreatePasswordScreen.route){
                     inclusive = true
                 }
             }
         }
     }
-    LaunchedEffect(key1 = !state.isLogged) {
-        if (state.isLogged){
-            navController.navigate(Route.AnalyzesScreen.route){
-                popUpTo(Route.CreatePasswordScreen.route){
-                    inclusive = true
+    LaunchedEffect(key1 = !state.isComplete) {
+        if (state.isComplete){
+            if (client.auth.currentUserOrNull() != null){
+                navController.navigate(Route.AnalyzesScreen.route){
+                    popUpTo(Route.CreatePasswordScreen.route){
+                        inclusive = true
+                    }
+                }
+            }else{
+                navController.navigate(Route.CreateCardScreen.route){
+                    popUpTo(Route.CreatePasswordScreen.route){
+                        inclusive = true
+                    }
                 }
             }
         }

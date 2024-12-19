@@ -13,7 +13,7 @@ class AuthRepositoryImpl : AuthRepository {
     override suspend fun signIn(mail: String, pass: String) {
         client.auth.signInWith(Email){
             this.email = mail
-            this.password = pass + "00"
+            this.password = pass
         }
     }
 

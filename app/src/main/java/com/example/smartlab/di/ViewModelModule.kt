@@ -29,6 +29,9 @@ val moduleViewModel = module {
         CreatePasswordViewModel(get())
     }
     viewModel<qViewModel>{
-        qViewModel(get())
+        qViewModel(
+            get(),
+            get()
+        )
     }
 }

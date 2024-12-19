@@ -20,30 +20,32 @@ class CreatePasswordViewModel(
         when (event) {
             is CreatePasswordEvent.EnteredPassword -> {
 
-                if (state.value.password.length == 3) {
+                _state.value = state.value.copy(
+                    password = state.value.password + event.value
+                )
+                UserData.password = state.value.password
+
+                if (state.value.password.length == 4) {
                     viewModelScope.launch {
                         try {
                             useCase(
-                                mail = "s@gmail.com",
-                                pass = "1111"
+                                mail = UserData.email,
+                                pass = "${UserData.password}00"
                             )
                             _state.value = state.value.copy(
                                 isLogged = true
                             )
                             Log.v("supaIn", "sign in")
                         } catch (e: Exception) {
-                            Log.e("supaError", e.message.toString())
+                            Log.e("supaInError", "${e.message.toString()}\n" +
+                                    "${UserData.email} ${UserData.password}")
                         }
                     }
 
                     _state.value = state.value.copy(
-                        isComplete = true
+                        isComplete = !state.value.isComplete
                     )
                 }
-                _state.value = state.value.copy(
-                    password = state.value.password + event.value
-                )
-                UserData.password = state.value.password
             }
 
             CreatePasswordEvent.RemovePasswordItem -> {

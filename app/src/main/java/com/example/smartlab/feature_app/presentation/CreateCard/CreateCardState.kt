@@ -7,4 +7,5 @@ data class CreateCardState(
     val birthdayData: String = "",
     val gender: String = "",
     val isComplete: Boolean = false,
+    val isLogged: Boolean = false,
 )

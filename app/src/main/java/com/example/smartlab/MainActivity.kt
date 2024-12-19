@@ -39,7 +39,9 @@ import com.example.smartlab.OnBoard.OnBoardScreen
 import com.example.smartlab.SignIn.SignInScreen
 import com.example.smartlab.SplashScreen.SplashScreen
 import com.example.smartlab.data.network.SupabaseInit.client
+import com.example.smartlab.feature_app.domain.model.UserData
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignInUseCase
+import com.example.smartlab.feature_app.domain.usecase.Auth.SignUpUseCase
 import com.example.smartlab.feature_app.presentation.Analuzes.AnalyzesScreen
 import com.example.smartlab.feature_app.presentation.AnalyzesCategory.AnalyzesCategoryScreen
 import com.example.smartlab.feature_app.presentation.Cart.CartScreen
@@ -64,7 +66,7 @@ class MainActivity : ComponentActivity() {
                 viewModel.checkRoute()
             }
             SmartLabTheme {
-                NavHost(navController, startDestination = "q") {
+                NavHost(navController, startDestination = Route.SplashScreen.route) {
                     composable("q") {
                         q(navController)
                     }
@@ -128,6 +130,7 @@ fun q(
                     inclusive = true
                 }
             }
+            Log.v("signin", "is already sign in")
         }
     }
 
@@ -186,7 +189,8 @@ fun q(
 }
 
 class qViewModel(
-    private val useCase: SignInUseCase
+    private val useCase: SignInUseCase,
+    private val useCase1: SignUpUseCase
 ) : ViewModel() {
 
     private val _state = mutableStateOf(qState())
@@ -219,16 +223,19 @@ class qViewModel(
             qEvent.SignIn -> {
                 viewModelScope.launch {
                     try {
-
+                        useCase(
+                            mail = UserData.email,
+                            pass = UserData.password
+                        )
 //                        useCase(
-//                           mail = state.value.email,
+//                            mail = state.value.email,
 //                            pass = state.value.pass
 //                        )
 
-                        client.auth.signInWith(Email) {
-                            this.email = state.value.email
-                            this.password = state.value.pass
-                        }
+//                        client.auth.signInWith(Email) {
+//                            this.email = state.value.email
+//                            this.password = state.value.pass
+//                        }
                         _state.value = state.value.copy(
                             isLogged = true
                         )
@@ -242,10 +249,21 @@ class qViewModel(
             qEvent.SignUp -> {
                 viewModelScope.launch {
                     try {
-                        client.auth.signUpWith(Email){
-                            this.email = _state.value.email
-                            this.password = _state.value.pass
-                        }
+                        useCase1(
+                            mail = state.value.email,
+                            pass = state.value.pass,
+                            userData = UserData(
+                                name = "name",
+                                surname = "surname",
+                                patronymic = "patronymic",
+                                birthdayData = "birthdayData",
+                                gender = "gender"
+                            )
+                        )
+//                        client.auth.signUpWith(Email){
+//                            this.email = _state.value.email
+//                            this.password = _state.value.pass
+//                        }
                         _state.value = state.value.copy(
                             isLogged = true
                         )

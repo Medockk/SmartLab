@@ -5,8 +5,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartlab.data.network.SupabaseInit.client
 import com.example.smartlab.feature_app.domain.model.UserData
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignUpUseCase
+import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.launch
 
 class CreateCardViewModel (
@@ -16,6 +18,18 @@ class CreateCardViewModel (
     private val _state =
         mutableStateOf(CreateCardState())
     val state: State<CreateCardState> = _state
+
+    init {
+        if (isUserLogged()){
+            _state.value = state.value.copy(
+                isLogged = true
+            )
+        }
+    }
+
+    fun isUserLogged():Boolean{
+        return client.auth.currentUserOrNull() != null
+    }
 
     fun onEvent(event: CreateCardEvent){
         when (event){
@@ -62,8 +76,9 @@ class CreateCardViewModel (
                         _state.value = state.value.copy(
                             isComplete = true
                         )
+                        Log.v("supaUp", "sign up")
                     } catch (e: Exception) {
-                        Log.e("supa", e.message.toString())
+                        Log.e("supaUp", e.message.toString())
                     }
                 }
             }

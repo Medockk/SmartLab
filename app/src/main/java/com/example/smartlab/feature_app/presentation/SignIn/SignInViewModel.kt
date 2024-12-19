@@ -19,7 +19,7 @@ class SignInViewModel: ViewModel() {
                 _state.value = state.value.copy(
                     email = event.value
                 )
-                UserData.email = state.value.email
+                UserData.email = event.value
             }
         }
     }
