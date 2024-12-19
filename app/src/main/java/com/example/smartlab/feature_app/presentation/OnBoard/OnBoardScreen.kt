@@ -106,7 +106,6 @@ fun OnBoardScreen(
             Column (
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxHeight(0.4f)
             ){
                 Text(
                     text = state.page.title,

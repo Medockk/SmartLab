@@ -27,7 +27,7 @@ class CreateCardViewModel (
         }
     }
 
-    fun isUserLogged():Boolean{
+    private fun isUserLogged():Boolean{
         return client.auth.currentUserOrNull() != null
     }
 

@@ -53,6 +53,7 @@ import com.example.smartlab.ui.theme._92E9D4
 import com.example.smartlab.ui.theme._97D9F0
 import com.example.smartlab.ui.theme._CDE3FF
 import com.example.smartlab.ui.theme._F5F5F9
+import org.koin.androidx.compose.koinViewModel
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -64,7 +65,7 @@ private fun Prev() {
 @Composable
 fun AnalyzesScreen(
     navController: NavController,
-    viewModel: AnalyzesViewModel = viewModel()
+    viewModel: AnalyzesViewModel = koinViewModel()
 ) {
 
     val state = viewModel.state.value
@@ -200,13 +201,6 @@ fun AnalyzesScreen(
                 }
             }
         }
-
-        val categoryList = listOf(
-            "Популярные", "Covid", "Комплексные", "Чекапы",
-            "Биохимия", "Гормоны", "Иммунитет", "Витамины",
-            "Аллергены", "Анализ крови", "Анализ мочи",
-            "Анализ кала", "Только в клинике"
-        )
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
@@ -220,7 +214,7 @@ fun AnalyzesScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ){
-                items(categoryList) {text ->
+                items(state.categoryList) {item ->
                     val selectedCategory = remember { mutableStateOf(false) }
                     Box (
                         contentAlignment = Alignment.Center,
@@ -233,7 +227,7 @@ fun AnalyzesScreen(
                                 viewModel.onEvent(AnalyzesEvent.AnalyzesCatalogClick(selectedCategory.value))
                             }
                     ){
-                        Text(text, style = if (selectedCategory.value) SF50015White else SF50015_7E7E9A,
+                        Text(item.name, style = if (selectedCategory.value) SF50015White else SF50015_7E7E9A,
                             modifier = Modifier.padding(horizontal = 20.dp))
                     }
                 }

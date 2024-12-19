@@ -2,6 +2,7 @@ package com.example.smartlab
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -58,6 +59,10 @@ import org.koin.androidx.compose.koinViewModel
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.decorView.apply {
+            systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_FLAG_FULLSCREEN
+
+        }
         enableEdgeToEdge()
         setContent {
             val viewModel: MainActivityViewModel = koinViewModel()
