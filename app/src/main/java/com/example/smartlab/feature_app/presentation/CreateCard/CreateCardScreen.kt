@@ -40,27 +40,29 @@ private fun Prev() {
 fun CreateCardScreen(
     navController: NavController,
     viewModel: CreateCardViewModel = koinViewModel()
-){
+) {
 
     val state = viewModel.state.value
     val paddingTop = LocalConfiguration.current.screenHeightDp / 14
     val paddingBottom = LocalConfiguration.current.screenHeightDp / 7
 
     LaunchedEffect(key1 = !state.isLogged) {
-        if (state.isLogged){
-            navController.navigate(Route.AnalyzesScreen.route){
-                popUpTo(Route.CreateCardScreen.route){
+        val isLogged = viewModel.isUserLogged()
+        if (isLogged) {
+            navController.navigate(Route.AnalyzesScreen.route) {
+                popUpTo(Route.CreateCardScreen.route) {
                     inclusive = true
                 }
             }
             Log.v("isLogged", "isLogged")
         }
+        Log.e("xz", "xz")
     }
 
     LaunchedEffect(key1 = !state.isComplete) {
-        if (state.isComplete){
-            navController.navigate(Route.AnalyzesScreen.route){
-                popUpTo(Route.CreateCardScreen.route){
+        if (state.isComplete) {
+            navController.navigate(Route.AnalyzesScreen.route) {
+                popUpTo(Route.CreateCardScreen.route) {
                     inclusive = true
                 }
             }
@@ -68,7 +70,7 @@ fun CreateCardScreen(
         }
     }
 
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(
@@ -76,39 +78,43 @@ fun CreateCardScreen(
                 start = 20.dp, end = 20.dp
             ),
         verticalArrangement = Arrangement.SpaceBetween
-    ){
-        Column (
+    ) {
+        Column(
             modifier = Modifier.fillMaxHeight(0.2f),
             verticalArrangement = Arrangement.SpaceBetween
-        ){
-            Row (
+        ) {
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top
-            ){
+            ) {
                 Text("Создание карты\nпациента", style = SF70024Black)
                 Text("Пропустить", style = SF40015_1A6FEE,
                     modifier = Modifier.clickable {
-                        navController.navigate(Route.AnalyzesScreen.route){
-                            popUpTo(Route.CreateCardScreen.route){
+                        navController.navigate(Route.AnalyzesScreen.route) {
+                            popUpTo(Route.CreateCardScreen.route) {
                                 inclusive = true
                             }
                         }
                     })
             }
-            Text("Без карты пациента вы не сможете заказать анализы.",
-                style = SF40014_939396)
-            Text("В картах пациентов будут храниться результаты анализов вас и ваших близких.",
-                style = SF40014_939396)
+            Text(
+                "Без карты пациента вы не сможете заказать анализы.",
+                style = SF40014_939396
+            )
+            Text(
+                "В картах пациентов будут храниться результаты анализов вас и ваших близких.",
+                style = SF40014_939396
+            )
         }
 
-        LazyColumn (
+        LazyColumn(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.75f)
-        ){
-            item{
+        ) {
+            item {
                 CustomTextField(
                     value = state.name,
                     onValueChanged = {
@@ -120,7 +126,7 @@ fun CreateCardScreen(
                         .fillParentMaxHeight(0.15f)
                 )
             }
-            item{
+            item {
                 CustomTextField(
                     value = state.patronymic,
                     onValueChanged = {
@@ -132,7 +138,7 @@ fun CreateCardScreen(
                         .fillParentMaxHeight(0.15f)
                 )
             }
-            item{
+            item {
                 CustomTextField(
                     value = state.surname,
                     onValueChanged = {
@@ -144,7 +150,7 @@ fun CreateCardScreen(
                         .fillParentMaxHeight(0.15f)
                 )
             }
-            item{
+            item {
                 CustomTextField(
                     value = state.birthdayData,
                     onValueChanged = {
@@ -156,7 +162,7 @@ fun CreateCardScreen(
                         .fillParentMaxHeight(0.15f)
                 )
             }
-            item{
+            item {
                 CustomTextField(
                     value = state.gender,
                     onValueChanged = {

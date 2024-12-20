@@ -23,8 +23,8 @@ class AnalyzesViewModel(
     init {
         viewModelScope.launch {
             try {
-                getAllCategory()
-                getAllProcedure()
+                launch { getAllCategory() }
+                launch { getAllProcedure() }
             } catch (e: Exception) {
                 Log.e("initEx", e.message.toString())
             }

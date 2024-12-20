@@ -28,25 +28,25 @@ class CreatePasswordViewModel(
                 if (state.value.password.length == 4) {
                     viewModelScope.launch {
                         try {
-                            signInUseCase(
+                            Log.v("startSignInUseCase", "startSignInUseCase")
+                            val signIn = signInUseCase(
                                 mail = UserData.email,
                                 pass = "${UserData.password}00"
                             )
-                            Log.v("supaIn", "sign in")
+                            Log.v("endSignInUseCase", "endSignInUseCase")
 
                             _state.value = state.value.copy(
-                                isLogged = true
+                                isLogged = signIn
                             )
-                            return@launch
                         } catch (e: Exception) {
                             Log.e("supaInError", "${e.message.toString()}\n" +
                                     "${UserData.email} ${UserData.password}")
+
+                            _state.value = state.value.copy(
+                                isComplete = !state.value.isLogged,
+                            )
                         }
                     }
-
-                    _state.value = state.value.copy(
-                        isComplete = !state.value.isLogged,
-                    )
                 }
             }
 

@@ -33,7 +33,6 @@ val moduleViewModel = module {
     viewModel<CreateCardViewModel>{
         CreateCardViewModel(
             get(),
-            get(),
             get()
         )
     }
@@ -42,6 +41,7 @@ val moduleViewModel = module {
     }
     viewModel<qViewModel>{
         qViewModel(
+            get(),
             get(),
             get()
         )

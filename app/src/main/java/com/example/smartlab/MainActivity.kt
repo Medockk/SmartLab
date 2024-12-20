@@ -41,6 +41,7 @@ import com.example.smartlab.SignIn.SignInScreen
 import com.example.smartlab.SplashScreen.SplashScreen
 import com.example.smartlab.data.network.SupabaseInit.client
 import com.example.smartlab.feature_app.domain.model.UserData
+import com.example.smartlab.feature_app.domain.usecase.Auth.GetUserDataUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignInUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignUpUseCase
 import com.example.smartlab.feature_app.presentation.Analuzes.AnalyzesScreen
@@ -59,7 +60,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.decorView.apply {
-            systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+            systemUiVisibility =
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
         }
         enableEdgeToEdge()
         setContent {
@@ -69,7 +71,7 @@ class MainActivity : ComponentActivity() {
                 viewModel.checkRoute()
             }
             SmartLabTheme {
-                NavHost(navController, startDestination = Route.SplashScreen.route) {
+                NavHost(navController, startDestination = Route.SignInScreen.route) {
                     composable("q") {
                         q(navController)
                     }
@@ -136,6 +138,16 @@ fun q(
             Log.v("signin", "is already sign in")
         }
     }
+    LaunchedEffect(key1 = !state.isSignUpped) {
+        if (state.isSignUpped) {
+            navController.navigate("q1") {
+                popUpTo("q") {
+                    inclusive = true
+                }
+            }
+            Log.v("signup", "is already sign up")
+        }
+    }
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         val uid = remember { mutableStateOf("") }
@@ -192,8 +204,9 @@ fun q(
 }
 
 class qViewModel(
-    private val useCase: SignInUseCase,
-    private val useCase1: SignUpUseCase
+    private val signInUseCase: SignInUseCase,
+    private val signUpUseCase: SignUpUseCase,
+    private val getUserDataUseCase: GetUserDataUseCase
 ) : ViewModel() {
 
     private val _state = mutableStateOf(qState())
@@ -215,21 +228,61 @@ class qViewModel(
                 _state.value = state.value.copy(
                     email = event.value
                 )
+                UserData.email = state.value.email
             }
 
             is qEvent.EnteredPassword -> {
                 _state.value = state.value.copy(
                     pass = event.value
                 )
+                UserData.password = state.value.pass
             }
 
             qEvent.SignIn -> {
                 viewModelScope.launch {
                     try {
-                        useCase(
-                            mail = UserData.email,
-                            pass = UserData.password
-                        )
+                        Log.e("clicked", "clicked")
+                        if (UserData.password.length == 4) {
+                            val signIn = signInUseCase.invoke(
+                                mail = UserData.email,
+                                pass = UserData.password + "00"
+                            )
+                            Log.e("sign in use case", "starting sign inning")
+                            _state.value = state.value.copy(
+                                isLogged = signIn
+                            )
+//                            userData.forEach {
+//                                Log.e("foreach", "foreach")
+//                                if (it.userID.isEmpty() && it.userID == ""){
+//                                    Log.e("empty", "empty")
+//                                    signUpUseCase(
+//                                        mail = UserData.email,
+//                                        pass = "${UserData.password}00",
+//                                        userData = UserData(
+//                                            name = "name",
+//                                            surname = "surname",
+//                                            patronymic = "patronymic",
+//                                            birthdayData = "birthdayData",
+//                                            gender = "gender"
+//                                        )
+//                                    )
+//                                    Log.e("sign up use case", "starting sign upping")
+//                                    _state.value = state.value.copy(
+//                                        isSignUpped = true
+//                                    )
+//                                }else{
+//                                    Log.e("not empty", "not empty")
+//                                    signInUseCase(
+//                                        mail = UserData.email,
+//                                        pass = UserData.password + "00"
+//                                    )
+//                                    Log.e("sign in use case", "starting sign inning")
+//                                    _state.value = state.value.copy(
+//                                        isLogged = true
+//                                    )
+//                                }
+//                            }
+                        }
 //                        useCase(
 //                            mail = state.value.email,
 //                            pass = state.value.pass
@@ -239,12 +292,29 @@ class qViewModel(
 //                            this.email = state.value.email
 //                            this.password = state.value.pass
 //                        }
-                        _state.value = state.value.copy(
-                            isLogged = true
-                        )
-                        Log.v("supaIn", "sign in")
+//                        _state.value = state.value.copy(
+//                            isLogged = true
+//                        )
                     } catch (e: Exception) {
-                        Log.e("supaError", e.message.toString())
+                        try {
+                            val signUp = signUpUseCase(
+                                mail = UserData.email,
+                                pass = "${UserData.password}00",
+                                userData = UserData(
+                                    name = "name",
+                                    surname = "surname",
+                                    patronymic = "patronymic",
+                                    birthdayData = "birthdayData",
+                                    gender = "gender"
+                                )
+                            )
+                            _state.value = state.value.copy(
+                                isSignUpped = signUp
+                            )
+                        } catch (e: Exception) {
+                            Log.e("supaUpError", e.message.toString())
+                        }
+                        Log.e("supaInError", e.message.toString())
                     }
                 }
             }
@@ -252,9 +322,9 @@ class qViewModel(
             qEvent.SignUp -> {
                 viewModelScope.launch {
                     try {
-                        useCase1(
-                            mail = state.value.email,
-                            pass = state.value.pass,
+                        signUpUseCase(
+                            mail = UserData.email,
+                            pass = UserData.password,
                             userData = UserData(
                                 name = "name",
                                 surname = "surname",
@@ -290,6 +360,7 @@ sealed class qEvent {
 
 data class qState(
     val isLogged: Boolean = false,
+    val isSignUpped: Boolean = false,
     val email: String = "",
     val pass: String = "",
 )

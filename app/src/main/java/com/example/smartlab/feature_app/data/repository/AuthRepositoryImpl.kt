@@ -1,5 +1,6 @@
 package com.example.smartlab.feature_app.data.repository
 
+import android.util.Log
 import com.example.smartlab.data.network.SupabaseInit.client
 import com.example.smartlab.feature_app.domain.repository.AuthRepository
 import com.example.smartlab.feature_app.domain.model.UserData
@@ -9,17 +10,18 @@ import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 
 class AuthRepositoryImpl : AuthRepository {
-    override suspend fun signIn(mail: String, pass: String) {
+    override suspend fun signIn(mail: String, pass: String): Boolean {
         client.auth.signInWith(Email){
             this.email = mail
             this.password = pass
         }
+        return true
     }
 
-    override suspend fun signUp(mail: String, pass: String, userData: UserData) {
+    override suspend fun signUp(mail: String, pass: String, userData: UserData): Boolean {
         client.auth.signUpWith(Email){
             email = mail
-            password = pass + "00"
+            password = pass
         }
         client.postgrest["Users"].insert(
             mapOf(
@@ -31,11 +33,13 @@ class AuthRepositoryImpl : AuthRepository {
                 "userID" to client.auth.currentUserOrNull()?.id
             )
         )
+        return true
     }
 
     override suspend fun getUserData(): List<UserData> {
         val userId = client.auth.currentUserOrNull()?.id
-        return client.postgrest["Users"].select(columns = Columns.ALL){
+        Log.e("userID", "$userId")
+        return client.postgrest["Users"].select(columns = Columns.list("userID")){
             filter {
                 eq("userID", userId?:"")
             }

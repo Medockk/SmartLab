@@ -9,12 +9,12 @@ import com.example.smartlab.feature_app.domain.model.UserData
 import com.example.smartlab.feature_app.domain.usecase.Auth.GetUserDataUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignOutUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignUpUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class CreateCardViewModel(
     private val useCase: SignUpUseCase,
     private val getUserDataUseCase: GetUserDataUseCase,
-    private val signOutUseCase: SignOutUseCase,
 ) : ViewModel() {
 
     private val _state =
@@ -24,17 +24,27 @@ class CreateCardViewModel(
     init {
         viewModelScope.launch {
             try {
-                _state.value = state.value.copy(
-                    isLogged = isUserLogged()
-                )
+                launch {
+                    val logged = isUserLogged()
+                    _state.value = state.value.copy(
+                        isLogged = logged
+                    )
+                    Log.v("logged", "logged")
+                }
             } catch (e: Exception) {
                 Log.e("initEx", e.message.toString())
             }
         }
     }
 
-    private suspend fun isUserLogged(): Boolean {
-        return getUserDataUseCase().isNotEmpty()
+    suspend fun isUserLogged(): Boolean {
+        val user = getUserDataUseCase()
+        user.forEach {
+            if (it.userID.isNotEmpty() && it.userID != ""){
+                return true
+            }
+        }
+        return false
     }
 
     fun onEvent(event: CreateCardEvent) {
@@ -74,7 +84,7 @@ class CreateCardViewModel(
                     try {
                         useCase(
                             mail = UserData.email,
-                            pass = UserData.password,
+                            pass = UserData.password + "00",
                             userData = UserData(
                                 name = state.value.name,
                                 surname = state.value.surname,
