@@ -37,6 +37,8 @@ fun AnalyzesCatalog(
     title: String,
     data: String,
     price: String,
+    isRemove: Boolean = false,
+    removeClick: () -> Unit = {},
     buttonClick: (Boolean) -> Unit
 ) {
     Card(
@@ -63,7 +65,9 @@ fun AnalyzesCatalog(
                 }
                 Spacer(Modifier.weight(1f))
                 CustomButton(
-                    "Добавить"
+                    title = if (isRemove) "Убрать" else "Добавить",
+                    isRemove = isRemove,
+                    removeClick = removeClick
                 ) {
                     val addProcedure = mutableStateOf(false)
                     val state = !addProcedure.value

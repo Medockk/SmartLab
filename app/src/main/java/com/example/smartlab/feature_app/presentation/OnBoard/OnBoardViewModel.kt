@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.smartlab.feature_app.domain.usecase.Queue.QueueUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.LinkedList
 
 class OnBoardViewModel(
     private val useCase: QueueUseCase
@@ -23,7 +24,8 @@ class OnBoardViewModel(
 
                     if (state.value.currentPage == 2){
                         _state.value = state.value.copy(
-                            isComplete = true
+                            isComplete = true,
+                            page = OnBoardItem(0, "","")
                         )
                     }
 

@@ -15,4 +15,5 @@ sealed class AnalyzesEvent {
     ) : AnalyzesEvent()
     data object AnalyzesRemoveClick : AnalyzesEvent()
     data object CompleteChanges : AnalyzesEvent()
+    data object AddProcedureInCart : AnalyzesEvent()
 }

@@ -180,7 +180,7 @@ fun MoreInformationAboutProcedure(
                     title = price,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight(0.6f)
+                        .fillMaxHeight(0.6f),
                 ) {
                     boxState = startOffset
                     addClick()

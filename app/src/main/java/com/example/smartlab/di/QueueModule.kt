@@ -8,6 +8,7 @@ import com.example.smartlab.feature_app.domain.usecase.Queue.CreateQueue
 import com.example.smartlab.feature_app.domain.usecase.Queue.GetItemFromQueue
 import com.example.smartlab.feature_app.domain.usecase.Queue.GetQueue
 import com.example.smartlab.feature_app.domain.usecase.Queue.QueueUseCase
+import com.example.smartlab.feature_app.domain.usecase.Queue.SaveQueue
 import org.koin.dsl.module
 
 val moduleQueue = module {
@@ -21,7 +22,7 @@ val moduleQueue = module {
             GetItemFromQueue(get()),
             GetQueue(get()),
             CreateQueue(get()),
-            ClearQueue(get())
+            ClearQueue(get()),
         )
     }
 }

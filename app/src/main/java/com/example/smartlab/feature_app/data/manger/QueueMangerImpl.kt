@@ -22,8 +22,10 @@ class QueueMangerImpl(
     }
 
     override suspend fun saveQueue(queue: LinkedList<OnBoardItem>) {
-        sharedPreferences.edit()
-            .clear().putString(key, Gson().toJson(queue))
-            .apply()
+        if (queue.isNotEmpty()){
+            sharedPreferences.edit()
+                .clear().putString(key, Gson().toJson(queue))
+                .apply()
+        }
     }
 }

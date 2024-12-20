@@ -5,6 +5,7 @@ import com.example.smartlab.CreatePassword.CreatePasswordViewModel
 import com.example.smartlab.MainActivityViewModel
 import com.example.smartlab.OnBoard.OnBoardViewModel
 import com.example.smartlab.feature_app.presentation.Analuzes.AnalyzesViewModel
+import com.example.smartlab.feature_app.presentation.Cart.CartViewModel
 import com.example.smartlab.feature_app.presentation.PatientCard.PatientCardViewModel
 import com.example.smartlab.qViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -48,7 +49,13 @@ val moduleViewModel = module {
     viewModel<AnalyzesViewModel>{
         AnalyzesViewModel(
             get(),
+            get(),
+            get(),
+            get(),
             get()
         )
+    }
+    viewModel<CartViewModel>{
+        CartViewModel(get())
     }
 }

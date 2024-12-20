@@ -253,13 +253,19 @@ fun AnalyzesScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(state.procedureList) { item ->
+                val removed = remember { mutableStateOf(false) }
                 AnalyzesCatalog(
                     modifier = Modifier
                         .fillParentMaxWidth()
                         .padding(bottom = 16.dp),
                     title = item.name,
                     data = item.time,
-                    price = item.price
+                    price = item.price,
+                    isRemove = removed.value,
+                    removeClick = {
+                        viewModel.onEvent(AnalyzesEvent.AnalyzesRemoveClick)
+                        removed.value = !removed.value
+                    }
                 ) {
                     viewModel.onEvent(
                         AnalyzesEvent.AnalyzesInformation(
@@ -269,6 +275,7 @@ fun AnalyzesScreen(
                         )
                     )
                     viewModel.onEvent(AnalyzesEvent.AnalyzesAddClick(true))
+                    removed.value = !removed.value
                 }
             }
         }
@@ -283,7 +290,9 @@ fun AnalyzesScreen(
                 Modifier
                     .fillMaxWidth()
                     .background(Color.White),
-                {}, {}, {},
+                {}, {
+                    navController.navigate(Route.CartScreen.route)
+                }, {},
                 profileClick = {
                     navController.navigate(Route.PatientCardScreen.route)
                 },
@@ -309,12 +318,15 @@ fun AnalyzesScreen(
         MoreInformationAboutProcedure(
             closeClick = {
                 viewModel.onEvent(AnalyzesEvent.AnalyzesAddClick(false))
-            }, addClick = {}, modifier = Modifier
+            }, addClick = {
+                viewModel.onEvent(AnalyzesEvent.AnalyzesAddClick(false))
+                viewModel.onEvent(AnalyzesEvent.AddProcedureInCart)
+            }, modifier = Modifier
                 .padding(bottom = paddingTop.dp)
                 .offset(y = offset),
             title = state.nameProcedure,
             price = "Добавить за ${state.priceProcedure}",
-            date = state.dateProcedure
+            date = state.dateProcedure,
         )
     }
 }

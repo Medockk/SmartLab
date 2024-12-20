@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "SmartLab"
 include(":app")
- 
+include(":core")

@@ -5,7 +5,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-
+import com.example.smartlab.feature_app.domain.model.Cart
+import com.example.smartlab.feature_app.domain.usecase.Cart.AddProcedureInCartUseCase
+import com.example.smartlab.feature_app.domain.usecase.Cart.GetAllUserItemFromCartUseCase
+import com.example.smartlab.feature_app.domain.usecase.Cart.RemoveItemFromCartUseCase
 import com.example.smartlab.feature_app.domain.usecase.Category.GetAllCategoryUseCase
 import com.example.smartlab.feature_app.domain.usecase.Procedure.GetAllProcedure
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +17,12 @@ import kotlinx.coroutines.withContext
 
 class AnalyzesViewModel(
     private val getAllCategoryUseCase: GetAllCategoryUseCase,
-    private val getAllProcedureUseCase: GetAllProcedure
+    private val getAllProcedureUseCase: GetAllProcedure,
+
+    private val getAllUserItemFromCartUseCase: GetAllUserItemFromCartUseCase,
+
+    private val addItemInCartUseCase: AddProcedureInCartUseCase,
+    private val removeItemFromCartUseCase: RemoveItemFromCartUseCase
 ) : ViewModel() {
 
     private val _state = mutableStateOf(AnalyzesState())
@@ -25,9 +33,20 @@ class AnalyzesViewModel(
             try {
                 launch { getAllCategory() }
                 launch { getAllProcedure() }
+                launch { getAllUserItemFromCart() }
             } catch (e: Exception) {
                 Log.e("initEx", e.message.toString())
             }
+        }
+    }
+
+    private suspend fun getAllUserItemFromCart(){
+        val userCart = getAllUserItemFromCartUseCase()
+
+        withContext(Dispatchers.IO){
+            _state.value = state.value.copy(
+                userCart = userCart
+            )
         }
     }
 
@@ -75,7 +94,18 @@ class AnalyzesViewModel(
                 )
             }
             AnalyzesEvent.AnalyzesRemoveClick -> {
-
+                viewModelScope.launch {
+                    try {
+                        removeItemFromCartUseCase(
+                            Cart(
+                                procedure = state.value.nameProcedure
+                            )
+                        )
+                        Log.v("removeClick", "remove")
+                    } catch (e: Exception) {
+                        Log.e("removeClickEx", e.message.toString())
+                    }
+                }
             }
 
             AnalyzesEvent.CompleteChanges -> {
@@ -90,6 +120,25 @@ class AnalyzesViewModel(
                     priceProcedure = event.price,
                     nameProcedure = event.title
                 )
+            }
+
+            AnalyzesEvent.AddProcedureInCart -> {
+                viewModelScope.launch {
+                    try {
+                        val successful = addItemInCartUseCase(
+                            Cart(
+                                procedure = state.value.nameProcedure,
+                                price = state.value.priceProcedure
+                            )
+                        )
+                        _state.value = state.value.copy(
+                            isRemoved = successful
+                        )
+                        Log.v("addProcedureInCart", "add")
+                    } catch (e: Exception) {
+                        Log.e("addProcedureInCartEx", e.message.toString())
+                    }
+                }
             }
         }
     }

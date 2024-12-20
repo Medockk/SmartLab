@@ -2,6 +2,7 @@ package com.example.smartlab
 
 import android.app.Application
 import com.example.smartlab.di.moduleAuth
+import com.example.smartlab.di.moduleCart
 import com.example.smartlab.di.moduleCategory
 import com.example.smartlab.di.moduleProcedure
 import com.example.smartlab.di.moduleQueue
@@ -20,7 +21,7 @@ class App: Application() {
             androidContext(applicationContext)
             androidLogger(Level.DEBUG)
             modules(listOf(moduleAuth, moduleViewModel, moduleQueue,
-                moduleCategory, moduleProcedure))
+                moduleCategory, moduleProcedure, moduleCart))
         }
     }
 }

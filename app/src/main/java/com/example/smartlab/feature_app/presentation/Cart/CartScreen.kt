@@ -31,6 +31,7 @@ import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF60020Black
 import com.example.smartlab.ui.theme.SF70024Black
 import com.example.smartlab.ui.theme._B8C1CC
+import org.koin.androidx.compose.koinViewModel
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -42,7 +43,7 @@ private fun Prev() {
 @Composable
 fun CartScreen(
     navController: NavController,
-    viewModel: CartViewModel = viewModel()
+    viewModel: CartViewModel = koinViewModel()
 ) {
 
     val state = viewModel.state.value
@@ -88,18 +89,11 @@ fun CartScreen(
                     )
                 }
             }
-
-            val cartList = listOf(
-                listOf("Клинический анализ крови с\n" +
-                        "лейкоцитарной формулировкой", "690 ₽"),
-                listOf("ПЦР-тест на определение\n" +
-                        "РНК коронавируса стандартный", "1800 ₽")
-            )
             LazyColumn(Modifier.padding(top = 30.dp)){
-                items(cartList) { item ->
+                items(state.userCart) { item ->
                     CustomCart(
-                        item[0],
-                        item[1],
+                        title = item.procedure,
+                        price = item.price,
                         {viewModel.onEvent(CartEvent.ClearCart)},
                         {viewModel.onEvent(CartEvent.AddItem)},
                         {viewModel.onEvent(CartEvent.RemoveItem)},
@@ -109,6 +103,7 @@ fun CartScreen(
                             .padding(bottom = 15.dp),
                         Modifier.fillMaxHeight()
                     )
+                    viewModel.onEvent(CartEvent.CalculateAmount(item.price))
                 }
                 item {
                     Row {
