@@ -39,7 +39,7 @@ class AuthRepositoryImpl : AuthRepository {
     override suspend fun getUserData(): List<UserData> {
         val userId = client.auth.currentUserOrNull()?.id
         Log.e("userID", "$userId")
-        return client.postgrest["Users"].select(columns = Columns.list("userID")){
+        return client.postgrest["Users"].select(columns = Columns.ALL){
             filter {
                 eq("userID", userId?:"")
             }

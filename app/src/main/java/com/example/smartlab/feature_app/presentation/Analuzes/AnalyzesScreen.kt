@@ -71,7 +71,7 @@ fun AnalyzesScreen(
     val paddingTop = LocalConfiguration.current.screenHeightDp / 15
 
     LaunchedEffect(key1 = !state.isComplete) {
-        if (state.isComplete){
+        if (state.isComplete) {
             viewModel.onEvent(AnalyzesEvent.CompleteChanges)
             navController.navigate(Route.AnalyzesCategoryScreen.route)
         }
@@ -174,7 +174,7 @@ fun AnalyzesScreen(
                                     .padding(16.dp)
                             ) {
                                 Text("Подготовка к\nвакцинации", style = SF80020White)
-                                
+
                                 Text(
                                     "Комплексное обследование\n" +
                                             "перед вакцинацией", style = SF40014White
@@ -205,29 +205,40 @@ fun AnalyzesScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.13f)
-        ){
+        ) {
             Text("Каталог анализов", style = SF60017_939396)
-            LazyRow (
-                modifier = Modifier.fillMaxWidth()
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
                     .fillMaxHeight(0.9f),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
-            ){
-                items(state.categoryList) {item ->
+            ) {
+                items(state.categoryList) { item ->
                     val selectedCategory = remember { mutableStateOf(false) }
-                    Box (
+                    Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .fillParentMaxHeight()
                             .padding(end = 16.dp)
-                            .background(if (selectedCategory.value) _1A6FEE else _F5F5F9, RoundedCornerShape(10.dp))
+                            .background(
+                                if (selectedCategory.value) _1A6FEE else _F5F5F9,
+                                RoundedCornerShape(10.dp)
+                            )
                             .clickable {
                                 selectedCategory.value = !selectedCategory.value
-                                viewModel.onEvent(AnalyzesEvent.AnalyzesCatalogClick(selectedCategory.value))
+                                viewModel.onEvent(
+                                    AnalyzesEvent.AnalyzesCatalogClick(
+                                        selectedCategory.value
+                                    )
+                                )
                             }
-                    ){
-                        Text(item.name, style = if (selectedCategory.value) SF50015White else SF50015_7E7E9A,
-                            modifier = Modifier.padding(horizontal = 20.dp))
+                    ) {
+                        Text(
+                            item.name,
+                            style = if (selectedCategory.value) SF50015White else SF50015_7E7E9A,
+                            modifier = Modifier.padding(horizontal = 20.dp)
+                        )
                     }
                 }
             }
@@ -235,50 +246,53 @@ fun AnalyzesScreen(
 
         val paddingBottom = LocalConfiguration.current.screenHeightDp / 15
         LazyColumn(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .fillMaxHeight(0.8f)
                 .padding(bottom = paddingBottom.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(state.procedureList){ item ->
+            items(state.procedureList) { item ->
                 AnalyzesCatalog(
-                    modifier = Modifier.fillParentMaxWidth()
+                    modifier = Modifier
+                        .fillParentMaxWidth()
                         .padding(bottom = 16.dp),
                     title = item.name,
                     data = item.time,
                     price = item.price
                 ) {
-                    viewModel.onEvent(AnalyzesEvent.AnalyzesInformation(
-                        title = item.name,
-                        date = item.time,
-                        price = item.price
-                    ))
+                    viewModel.onEvent(
+                        AnalyzesEvent.AnalyzesInformation(
+                            title = item.name,
+                            date = item.time,
+                            price = item.price
+                        )
+                    )
                     viewModel.onEvent(AnalyzesEvent.AnalyzesAddClick(true))
                 }
             }
         }
     }
 
-    if (!state.addProcedure){
+    if (!state.addProcedure) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.BottomCenter
-        ){
+        ) {
             BottomNavigation(
-                Modifier.fillMaxWidth()
+                Modifier
+                    .fillMaxWidth()
                     .background(Color.White),
-                {},{},{},
-                profileClick = {navController.navigate(Route.PatientCardScreen.route){
-                    popUpTo(Route.AnalyzesScreen.route){
-                        inclusive = true
-                    }
-                } },
+                {}, {}, {},
+                profileClick = {
+                    navController.navigate(Route.PatientCardScreen.route)
+                },
                 selectedAnalyzes = true
             )
         }
     }
 
-    if (state.addProcedure){
+    if (state.addProcedure) {
         val paddingBottom = (LocalConfiguration.current.screenHeightDp / 2.3).toInt()
 
         val startOffset = (LocalConfiguration.current.screenHeightDp)

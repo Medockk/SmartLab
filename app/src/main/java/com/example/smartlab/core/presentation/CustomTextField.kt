@@ -24,8 +24,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.smartlab.feature_app.domain.model.UserData
 import com.example.smartlab.ui.theme.SF40015Black
 import com.example.smartlab.ui.theme.SF40015_939396
 import com.example.smartlab.ui.theme._EBEBEB
@@ -53,7 +55,19 @@ fun CustomTextField(
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
             .background(_F5F5F9, RoundedCornerShape(10.dp))
-            .border(1.dp, _EBEBEB),
+            .border(1.dp, color = if (isGender) {
+                if (value.isNotEmpty()){
+                    if (value != UserData.female && value != UserData.male){
+                        Color.Red
+                    }else{
+                        _EBEBEB
+                    }
+                }else{
+                    _EBEBEB
+                }
+            } else {
+                _EBEBEB
+            }),
         singleLine = true,
         textStyle = SF40015Black,
         decorationBox = {
@@ -72,7 +86,7 @@ fun CustomTextField(
                 Spacer(Modifier.weight(1f))
                 if (isGender){
                     Column {
-                        val r = remember { mutableStateOf(false) }
+                        val expandedMenu = remember { mutableStateOf(false) }
                         Icon(
                             imageVector = Icons.Outlined.KeyboardArrowDown,
                             contentDescription = null,
@@ -80,11 +94,11 @@ fun CustomTextField(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = rememberRipple()
                             ){
-                                r.value = !r.value
+                                expandedMenu.value = !expandedMenu.value
                             }
                         )
                         DropdownMenu(
-                            expanded = r.value, onDismissRequest = {r.value = !r.value}) {
+                            expanded = expandedMenu.value, onDismissRequest = {expandedMenu.value = !expandedMenu.value}) {
                             Column (
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ){
@@ -95,8 +109,8 @@ fun CustomTextField(
                                             interactionSource = remember { MutableInteractionSource() },
                                             indication = rememberRipple()
                                         ) {
-                                            onValueChanged("male")
-                                            r.value = !r.value
+                                            onValueChanged(UserData.male)
+                                            expandedMenu.value = !expandedMenu.value
                                         }
                                 )
                                 Text("female",
@@ -106,8 +120,8 @@ fun CustomTextField(
                                             interactionSource = remember { MutableInteractionSource() },
                                             indication = rememberRipple()
                                         ) {
-                                            onValueChanged("female")
-                                            r.value = !r.value
+                                            onValueChanged(UserData.female)
+                                            expandedMenu.value = !expandedMenu.value
                                         })
                             }
                         }

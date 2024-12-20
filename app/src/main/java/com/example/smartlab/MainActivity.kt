@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
                 viewModel.checkRoute()
             }
             SmartLabTheme {
-                NavHost(navController, startDestination = Route.SignInScreen.route) {
+                NavHost(navController, startDestination = Route.SplashScreen.route) {
                     composable("q") {
                         q(navController)
                     }

@@ -13,7 +13,8 @@ data class UserData(
     val userID: String = "",
 ){
     companion object{
-        val genderList = listOf("Мужской", "Женский")
+        val male = "Мужской"
+        val female = "Женский"
         var password: String = ""
         var email: String = ""
     }

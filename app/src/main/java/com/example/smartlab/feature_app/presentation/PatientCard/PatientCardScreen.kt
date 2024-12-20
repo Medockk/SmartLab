@@ -147,11 +147,7 @@ fun PatientCardScreen(
         BottomNavigation(
             Modifier.fillMaxWidth(),
             analyzesClick = {
-                navController.navigate(Route.AnalyzesScreen.route){
-                    popUpTo(Route.PatientCardScreen.route){
-                        inclusive = true
-                    }
-                }
+                navController.navigate(Route.AnalyzesScreen.route)
             },
             {},{},{},
             selectedProfile = true
