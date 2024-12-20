@@ -32,7 +32,6 @@ val moduleViewModel = module {
     }
     viewModel<CreateCardViewModel>{
         CreateCardViewModel(
-            get(),
             get()
         )
     }

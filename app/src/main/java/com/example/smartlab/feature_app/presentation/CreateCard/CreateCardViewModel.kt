@@ -6,46 +6,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartlab.feature_app.domain.model.UserData
-import com.example.smartlab.feature_app.domain.usecase.Auth.GetUserDataUseCase
-import com.example.smartlab.feature_app.domain.usecase.Auth.SignOutUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignUpUseCase
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class CreateCardViewModel(
     private val useCase: SignUpUseCase,
-    private val getUserDataUseCase: GetUserDataUseCase,
 ) : ViewModel() {
 
     private val _state =
         mutableStateOf(CreateCardState())
     val state: State<CreateCardState> = _state
-
-    init {
-        viewModelScope.launch {
-            try {
-                launch {
-                    val logged = isUserLogged()
-                    _state.value = state.value.copy(
-                        isLogged = logged
-                    )
-                    Log.v("logged", "logged")
-                }
-            } catch (e: Exception) {
-                Log.e("initEx", e.message.toString())
-            }
-        }
-    }
-
-    suspend fun isUserLogged(): Boolean {
-        val user = getUserDataUseCase()
-        user.forEach {
-            if (it.userID.isNotEmpty() && it.userID != ""){
-                return true
-            }
-        }
-        return false
-    }
 
     fun onEvent(event: CreateCardEvent) {
         when (event) {

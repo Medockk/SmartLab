@@ -46,19 +46,6 @@ fun CreateCardScreen(
     val paddingTop = LocalConfiguration.current.screenHeightDp / 14
     val paddingBottom = LocalConfiguration.current.screenHeightDp / 7
 
-    LaunchedEffect(key1 = !state.isLogged) {
-        val isLogged = viewModel.isUserLogged()
-        if (isLogged) {
-            navController.navigate(Route.AnalyzesScreen.route) {
-                popUpTo(Route.CreateCardScreen.route) {
-                    inclusive = true
-                }
-            }
-            Log.v("isLogged", "isLogged")
-        }
-        Log.e("xz", "xz")
-    }
-
     LaunchedEffect(key1 = !state.isComplete) {
         if (state.isComplete) {
             navController.navigate(Route.AnalyzesScreen.route) {
