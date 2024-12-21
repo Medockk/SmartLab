@@ -8,6 +8,10 @@ data class MakingOrderState(
     val phone: String = "",
     val comment: String = "",
 
+    val personClick: Boolean = false,
+    val addressClick: Boolean = false,
+    val dateClick: Boolean = false,
+
     val price: String = "",
     val proceduresCount: Int = 1,
 

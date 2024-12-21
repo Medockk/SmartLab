@@ -54,7 +54,9 @@ class MakingOrderViewModel(
     fun onEvent(event: MakingOrderEvent){
         when (event){
             MakingOrderEvent.AddOnMorePatient -> {
-
+                _state.value = state.value.copy(
+                    personClick = !state.value.personClick
+                )
             }
             MakingOrderEvent.MakeOrder -> {
                 _state.value = state.value.copy(
@@ -90,6 +92,17 @@ class MakingOrderViewModel(
             MakingOrderEvent.CompleteChanges -> {
                 _state.value = state.value.copy(
                     isComplete = !state.value.isComplete
+                )
+            }
+
+            MakingOrderEvent.AddressClick -> {
+                _state.value = state.value.copy(
+                    addressClick = !state.value.addressClick
+                )
+            }
+            MakingOrderEvent.DateClick -> {
+                _state.value = state.value.copy(
+                    dateClick = !state.value.dateClick
                 )
             }
         }

@@ -35,6 +35,7 @@ import com.example.smartlab.core.presentation.CustomBackIcon
 import com.example.smartlab.core.presentation.CustomEmptyButton
 import com.example.smartlab.core.presentation.CustomTextField
 import com.example.smartlab.feature_app.domain.model.UserData
+import com.example.smartlab.feature_app.presentation.MakingOrder.components.CustomMakingOrderMenu
 import com.example.smartlab.feature_app.presentation.MakingOrder.components.CustomTextFieldButton
 import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF40014_939396
@@ -107,21 +108,20 @@ fun MakingOrderScreen(
                         boxModifier = Modifier.fillParentMaxHeight(0.07f),
                         buttonModifier = Modifier.fillMaxWidth().fillMaxHeight()
                     ) {
-
+                        viewModel.onEvent(MakingOrderEvent.AddressClick)
                     }
                 }
             }
             item {
                 Column {
                     Text("Дата и время*", style = SF40014_939396)
-                    CustomTextField(
-                        value = state.data,
-                        onValueChanged = {
-                            viewModel.onEvent(MakingOrderEvent.EnteredData(it))
-                        },
-                        hintText = "Выберите дату и время",
-                        modifier = Modifier.fillParentMaxHeight(0.07f)
-                    )
+                    CustomTextFieldButton(
+                        title = "Выберите дату и время",
+                        boxModifier = Modifier.fillParentMaxHeight(0.07f),
+                        buttonModifier = Modifier.fillMaxWidth().fillMaxHeight()
+                    ){
+                        viewModel.onEvent(MakingOrderEvent.DateClick)
+                    }
                 }
             }
             item {
@@ -244,6 +244,52 @@ fun MakingOrderScreen(
                     Modifier.fillMaxWidth()
                 ) { viewModel.onEvent(MakingOrderEvent.MakeOrder) }
             }
+        }
+    }
+    if (state.addressClick){
+        val addressHeight = LocalConfiguration.current.screenHeightDp / 4
+        CustomMakingOrderMenu(
+            height = addressHeight.dp,
+            icon = ImageVector.vectorResource(R.drawable.map),
+            isAddress = true,
+            title = "Адрес сдачи анализов",
+            value = state.address,
+            onValueChanged = {viewModel.onEvent(MakingOrderEvent.EnteredAddress(it))},
+            selectClick = {}
+        ) {
+            viewModel.onEvent(MakingOrderEvent.AddressClick)
+        }
+    }
+    if (state.dateClick){
+        val dateHeight = LocalConfiguration.current.screenHeightDp / 2
+        CustomMakingOrderMenu(
+            height = dateHeight.dp,
+            icon = ImageVector.vectorResource(R.drawable.cross),
+            isDate = true,
+            title = "Дата и время",
+            value = state.data,
+            onValueChanged = {viewModel.onEvent(MakingOrderEvent.EnteredData(it))},
+            selectClick = {}
+        ) {
+            viewModel.onEvent(MakingOrderEvent.DateClick)
+        }
+    }
+    if (state.personClick){
+        val personHeight = LocalConfiguration.current.screenHeightDp / 2
+        CustomMakingOrderMenu(
+            height = personHeight.dp,
+            icon = ImageVector.vectorResource(R.drawable.cross),
+            isDate = true,
+            title = "Выбор пациента",
+            value = state.person,
+            onValueChanged = {viewModel.onEvent(MakingOrderEvent.EnteredPerson(it))},
+            userData = UserData(
+                name = state.person,
+                surname = "", patronymic = "", birthdayData = "", gender = state.gender
+            ),
+            selectClick = {}
+        ) {
+            viewModel.onEvent(MakingOrderEvent.AddOnMorePatient)
         }
     }
 }

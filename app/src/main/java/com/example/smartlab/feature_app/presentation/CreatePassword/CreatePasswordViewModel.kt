@@ -33,11 +33,11 @@ class CreatePasswordViewModel(
                                 mail = UserData.email,
                                 pass = "${UserData.password}00"
                             )
-                            Log.v("endSignInUseCase", "endSignInUseCase")
 
                             _state.value = state.value.copy(
                                 isLogged = signIn
                             )
+                            Log.v("endSignInUseCase", "endSignInUseCase")
                         } catch (e: Exception) {
                             Log.e("supaInError", "${e.message.toString()}\n" +
                                     "${UserData.email} ${UserData.password}")

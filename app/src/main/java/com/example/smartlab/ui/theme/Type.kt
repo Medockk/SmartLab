@@ -168,6 +168,12 @@ val SF50016Black = TextStyle(
     fontSize = 16.sp,
     color = Color.Black
 )
+val SF50016White = TextStyle(
+    fontFamily = fontFamilySF,
+    fontWeight = FontWeight(500),
+    fontSize = 16.sp,
+    color = Color.White
+)
 val SF50016_939396 = TextStyle(
     fontFamily = fontFamilySF,
     fontWeight = FontWeight(500),
@@ -215,6 +221,18 @@ val SF40016_939396 = TextStyle(
     fontWeight = FontWeight(400),
     fontSize = 16.sp,
     color = _939396
+)
+val SF40016_7E7E9A = TextStyle(
+    fontFamily = fontFamilySF,
+    fontWeight = FontWeight(400),
+    fontSize = 16.sp,
+    color = _7E7E9A
+)
+val SF40016Black = TextStyle(
+    fontFamily = fontFamilySF,
+    fontWeight = FontWeight(400),
+    fontSize = 16.sp,
+    color = Color.Black
 )
 val SF40015_1A6FEE = TextStyle(
     fontFamily = fontFamilySF,
