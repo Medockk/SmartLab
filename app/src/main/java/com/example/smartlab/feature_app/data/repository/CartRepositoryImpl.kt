@@ -42,4 +42,16 @@ class CartRepositoryImpl : CartRepository {
             }
         }.decodeList<Cart>()
     }
+
+    override suspend fun removeAllItemFromCart(): Boolean {
+        val userID = client.auth.currentUserOrNull()?.id
+
+        client.postgrest["Cart"].delete{
+            filter {
+                eq("userID", userID?:"")
+            }
+        }
+
+        return true
+    }
 }

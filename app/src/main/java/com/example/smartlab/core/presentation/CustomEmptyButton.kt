@@ -16,7 +16,7 @@ import com.example.smartlab.ui.theme._1A6FEE
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun Prev() {
-
+    CustomEmptyButton(Modifier, "") { }
 }
 
 @Composable
@@ -29,7 +29,7 @@ fun CustomEmptyButton(
     Button(
         onClick = onClick,
         modifier = modifier,
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+        colors = ButtonDefaults.buttonColors(containerColor = Color.White),
         shape = RoundedCornerShape(8.dp),
         border = BorderStroke(1.dp, _1A6FEE)
     ) {

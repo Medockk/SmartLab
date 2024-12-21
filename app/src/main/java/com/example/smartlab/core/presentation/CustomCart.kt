@@ -29,6 +29,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.smartlab.R
+import com.example.smartlab.ui.theme.SF40015Black
 import com.example.smartlab.ui.theme.SF50016Black
 import com.example.smartlab.ui.theme.SF50017Black
 import com.example.smartlab.ui.theme._7E7E9A
@@ -43,8 +44,8 @@ import com.example.smartlab.ui.theme._F5F5F9
 private fun Prev() {
     CustomCart(
         "Клинический анализ крови с\nлейкоцитарной формулировкой",
-        "690 ₽",
-        {},{},{}, Modifier.fillMaxWidth().padding(top = 100.dp, start = 20.dp, end = 20.dp)
+        "690 ₽", 1, {},
+        {}, Modifier.fillMaxWidth().padding(top = 100.dp, start = 20.dp, end = 20.dp)
     )
 }
 
@@ -52,9 +53,9 @@ private fun Prev() {
 fun CustomCart(
     title: String,
     price: String,
-    clearCartClick: () -> Unit,
-    onPlusClick: () -> Unit,
-    onMinusClick: () -> Unit,
+    patientCount: Int = 1,
+    onPatientCountChanged: (Int) -> Unit,
+    deleteProcedureClick: () -> Unit,
     cardModifier: Modifier = Modifier,
     modifier: Modifier = Modifier
 ) {
@@ -69,14 +70,16 @@ fun CustomCart(
             modifier = modifier.padding(16.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ){
-            Row {
-                Text(title, style = SF50016Black)
-                Spacer(Modifier.weight(1f))
+            Row (
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(title, style = SF50016Black,
+                    modifier = Modifier.weight(0.8f))
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "delete item",
                     tint = _7E7E9A,
-                    modifier = Modifier.clickable { clearCartClick() }
+                    modifier = Modifier.clickable { deleteProcedureClick() }
                 )
             }
             Row (
@@ -88,7 +91,7 @@ fun CustomCart(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ){
-                    Text("1 patient")
+                    Text("$patientCount patient", style = SF40015Black)
                     Row (
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically,
@@ -100,7 +103,13 @@ fun CustomCart(
                             imageVector = ImageVector.vectorResource(R.drawable.minus),
                             contentDescription = "remove",
                             tint = _B8C1CC,
-                            modifier = Modifier.clickable { onMinusClick() }
+                            modifier = Modifier.clickable {
+                                if (patientCount >= 1){
+                                    onPatientCountChanged(patientCount - 1)
+                                }else{
+                                    deleteProcedureClick()
+                                }
+                            }
                         )
                         VerticalDivider(Modifier
                             .width(1.dp).background(_EBEBEB)
@@ -110,7 +119,9 @@ fun CustomCart(
                             imageVector = Icons.Default.Add,
                             contentDescription = "add",
                             tint = _939396,
-                            modifier = Modifier.clickable { onPlusClick() }
+                            modifier = Modifier.clickable {
+                                onPatientCountChanged(patientCount + 1)
+                            }
                         )
                     }
                 }

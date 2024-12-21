@@ -260,7 +260,7 @@ fun AnalyzesScreen(
                         .padding(bottom = 16.dp),
                     title = item.name,
                     data = item.time,
-                    price = item.price,
+                    price = item.price + " ₽",
                     isRemove = removed.value,
                     removeClick = {
                         viewModel.onEvent(AnalyzesEvent.AnalyzesRemoveClick)

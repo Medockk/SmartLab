@@ -13,17 +13,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.core.presentation.CustomButton
@@ -31,6 +34,8 @@ import com.example.smartlab.R
 import com.example.smartlab.core.presentation.CustomBackIcon
 import com.example.smartlab.core.presentation.CustomEmptyButton
 import com.example.smartlab.core.presentation.CustomTextField
+import com.example.smartlab.feature_app.domain.model.UserData
+import com.example.smartlab.feature_app.presentation.MakingOrder.components.CustomTextFieldButton
 import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF40014_939396
 import com.example.smartlab.ui.theme.SF50015Black
@@ -38,6 +43,7 @@ import com.example.smartlab.ui.theme.SF50015_939396
 import com.example.smartlab.ui.theme.SF50017Black
 import com.example.smartlab.ui.theme.SF70024Black
 import com.example.smartlab.ui.theme._B8C1CC
+import org.koin.androidx.compose.koinViewModel
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -49,7 +55,7 @@ private fun Prev() {
 @Composable
 fun MakingOrderScreen(
     navController: NavController,
-    viewModel: MakingOrderViewModel = viewModel()
+    viewModel: MakingOrderViewModel = koinViewModel()
 ) {
     val state = viewModel.state.value
     val paddingTop = LocalConfiguration.current.screenHeightDp / 15
@@ -90,21 +96,19 @@ fun MakingOrderScreen(
 
         LazyColumn (
             verticalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-                .fillMaxHeight()
+            modifier = Modifier.fillMaxSize()
                 .padding(top = 30.dp)
         ){
             item {
                 Column {
                     Text("Адрес *", style = SF40014_939396)
-                    CustomTextField(
-                        value = state.address,
-                        onValueChanged = {
-                            viewModel.onEvent(MakingOrderEvent.EnteredAddress(it))
-                        },
-                        hintText = "Введите ваш адрес",
-                        modifier = Modifier.fillParentMaxHeight(0.07f)
-                    )
+                    CustomTextFieldButton(
+                        title = "Введите ваш адрес",
+                        boxModifier = Modifier.fillParentMaxHeight(0.07f),
+                        buttonModifier = Modifier.fillMaxWidth().fillMaxHeight()
+                    ) {
+
+                    }
                 }
             }
             item {
@@ -126,14 +130,37 @@ fun MakingOrderScreen(
                     modifier = Modifier.fillParentMaxHeight(0.2f)
                 ) {
                     Text("Кто будет сдавать анализы? *", style = SF40014_939396)
-                    CustomTextField(
-                        value = state.person,
-                        onValueChanged = {
-                            viewModel.onEvent(MakingOrderEvent.EnteredPerson(it))
-                        },
-                        hintText = "Тицкий Эдуард",
-                        modifier = Modifier.fillParentMaxHeight(0.07f)
-                    )
+                    Row (
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                painter = if (state.gender == UserData.male){
+                                    painterResource(R.drawable.gender_male)
+                                }else{
+                                    painterResource(R.drawable.gender_female)
+                                },
+                                contentDescription = "gender",
+                                modifier = Modifier.size(24.dp)
+                            )
+                            CustomTextField(
+                                value = state.person,
+                                onValueChanged = {
+                                    viewModel.onEvent(MakingOrderEvent.EnteredPerson(it))
+                                },
+                                hintText = "Your surname and name",
+                                modifier = Modifier.fillParentMaxHeight(0.07f)
+                            )
+                        }
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowDown,
+                            contentDescription = null
+                        )
+                    }
                     CustomEmptyButton(
                         Modifier.fillParentMaxWidth(),
                         "Добавить еще пациента"
@@ -173,6 +200,7 @@ fun MakingOrderScreen(
                             viewModel.onEvent(MakingOrderEvent.EnteredComment(it))
                         },
                         hintText = "Можете оставить свои пожелания",
+                        singleLine = false,
                         modifier = Modifier.fillParentMaxHeight(0.15f)
                     )
                 }
@@ -203,10 +231,10 @@ fun MakingOrderScreen(
             }
             item {
                 Row {
-                    Text("1 анализ",
+                    Text("${state.proceduresCount} анализ",
                         style = SF50017Black)
                     Spacer(Modifier.weight(1f))
-                    Text("690 ₽",
+                    Text("${state.price} ₽",
                         style = SF50017Black)
                 }
             }

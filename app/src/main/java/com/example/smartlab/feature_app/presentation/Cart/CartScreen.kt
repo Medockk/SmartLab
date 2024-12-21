@@ -3,11 +3,13 @@ package com.example.smartlab.feature_app.presentation.Cart
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -48,62 +50,73 @@ fun CartScreen(
 
     val state = viewModel.state.value
     val paddingTop = LocalConfiguration.current.screenHeightDp / 15
+    val paddingBottom = LocalConfiguration.current.screenHeightDp / 20
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                top = paddingTop.dp,
+                top = paddingTop.dp, bottom = paddingBottom.dp,
                 start = 20.dp, end = 20.dp
             ),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
-            Column (
+            Column(
                 verticalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxHeight(0.09f)
-            ){
+            ) {
                 CustomBackIcon(
                     modifier = Modifier
                         .fillMaxHeight(0.4f)
                         .fillMaxWidth(0.09f)
                 ) {
-                    navController.navigate(Route.AnalyzesScreen.route){
-                        popUpTo(Route.CartScreen.route){
+                    navController.navigate(Route.AnalyzesScreen.route) {
+                        popUpTo(Route.CartScreen.route) {
                             inclusive = true
                         }
                     }
                 }
-                Row (
+                Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
-                ){
+                ) {
                     Text("Корзина", style = SF70024Black)
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.delete),
                         contentDescription = "clear cart",
-                        tint =  _B8C1CC,
+                        tint = _B8C1CC,
                         modifier = Modifier.clickable {
                             viewModel.onEvent(CartEvent.ClearCart)
                         }
                     )
                 }
             }
-            LazyColumn(Modifier.padding(top = 30.dp)){
+            LazyColumn(
+                Modifier
+                    .fillMaxHeight(0.9f)
+                    .padding(top = 30.dp)
+            ) {
                 items(state.userCart) { item ->
                     CustomCart(
                         title = item.procedure,
-                        price = item.price,
-                        {viewModel.onEvent(CartEvent.ClearCart)},
-                        {viewModel.onEvent(CartEvent.AddItem)},
-                        {viewModel.onEvent(CartEvent.RemoveItem)},
+                        price = item.price + " ₽",
+                        patientCount = state.patientCount,
+                        onPatientCountChanged = {
+                            viewModel.onEvent(CartEvent.ChangedPatientCount(it))
+                        },
+                        deleteProcedureClick = {
+                            viewModel.onEvent(CartEvent.DeleteItem(
+                                item.procedure,
+                                item.price
+                            ))
+                        },
                         Modifier
                             .fillParentMaxHeight(0.18f)
                             .fillMaxWidth()
                             .padding(bottom = 15.dp),
                         Modifier.fillMaxHeight()
                     )
-                    viewModel.onEvent(CartEvent.CalculateAmount(item.price))
                 }
                 item {
                     Row {
@@ -114,15 +127,12 @@ fun CartScreen(
                 }
             }
         }
-
-        val paddingBottom = LocalConfiguration.current.screenHeightDp / 20
-
         CustomButton(
-            "Перейти к оформлению заказа",
-            Modifier
+            title = "Перейти к оформлению заказа",
+            modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.2f)
-                .padding(bottom = paddingBottom.dp)
+                .height(55.dp),
+            enabled = state.buttonEnabled
         ) {
             navController.navigate(Route.MakingOrderScreen.route)
         }

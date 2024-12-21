@@ -45,6 +45,7 @@ fun CustomTextField(
     onValueChanged: (String) -> Unit,
     hintText: String,
     isGender: Boolean = false,
+    singleLine: Boolean = true,
     modifier: Modifier = Modifier
 ) {
 
@@ -68,7 +69,7 @@ fun CustomTextField(
             } else {
                 _EBEBEB
             }),
-        singleLine = true,
+        singleLine = singleLine,
         textStyle = SF40015Black,
         decorationBox = {
             Row(

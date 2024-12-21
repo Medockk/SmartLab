@@ -18,6 +18,7 @@ fun CustomButton(
     title: String,
     modifier: Modifier = Modifier,
     isRemove: Boolean = false,
+    enabled: Boolean = true,
     removeClick: () -> Unit = {},
     onClick: () -> Unit
 ) {
@@ -25,10 +26,12 @@ fun CustomButton(
         onClick = if (!isRemove) onClick else removeClick,
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (!isRemove) _1A6FEE else Color.White
+            containerColor = if (!isRemove) _1A6FEE else Color.White,
+            disabledContainerColor = _1A6FEE
         ),
         border = BorderStroke(1.dp, _1A6FEE),
-        modifier = modifier
+        modifier = modifier,
+        enabled = enabled
     ) {
         Text(
             text = if (!isRemove) title else {"Удалить"},

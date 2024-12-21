@@ -8,4 +8,5 @@ interface CartRepository {
     suspend fun removeItemFromCart(procedure: Cart) : Boolean
 
     suspend fun getAllUserItemFromCart() : List<Cart>
+    suspend fun removeAllItemFromCart() : Boolean
 }

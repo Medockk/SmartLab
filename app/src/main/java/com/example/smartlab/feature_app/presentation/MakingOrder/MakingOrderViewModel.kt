@@ -1,13 +1,55 @@
 package com.example.smartlab.feature_app.presentation.MakingOrder
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.smartlab.feature_app.domain.usecase.Auth.GetUserDataUseCase
+import com.example.smartlab.feature_app.domain.usecase.Cart.GetAllUserItemFromCartUseCase
+import kotlinx.coroutines.launch
 
-class MakingOrderViewModel: ViewModel() {
+class MakingOrderViewModel(
+    val getUserDataUseCase: GetUserDataUseCase,
+    val getAllUserItemFromCartUseCase: GetAllUserItemFromCartUseCase
+): ViewModel() {
 
     private val _state = mutableStateOf(MakingOrderState())
     val state: State<MakingOrderState> = _state
+
+    init {
+        viewModelScope.launch {
+            launch { getAllUserInformation() }
+            launch { getAllUserItemFromCart() }
+        }
+    }
+
+    private suspend fun getAllUserItemFromCart() {
+        val userCart = getAllUserItemFromCartUseCase()
+        userCart.forEach {
+            _state.value = state.value.copy(
+                price = if (state.value.price.isNotEmpty()){
+                    (state.value.price.toInt() + it.price.toInt()).toString()
+                }else{
+                    it.price
+                },
+            )
+        }
+    }
+
+    private suspend fun getAllUserInformation(){
+        try {
+            val userData = getUserDataUseCase()
+            userData.forEach {
+                _state.value = state.value.copy(
+                    person = it.surname + " " + it.name,
+                    gender = it.gender
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("getAllUserInformationEx", e.message.toString())
+        }
+    }
 
     fun onEvent(event: MakingOrderEvent){
         when (event){
