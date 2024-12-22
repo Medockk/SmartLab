@@ -35,3 +35,5 @@ val _97D9F0 = Color(0xFF97D9F0)
 val _CDE3FF = Color(0xFFCDE3FF)
 val _76B3FF = Color(0xFF76B3FF)
 val _7E7E9A = Color(0xFF7E7E9A)
+
+val Test = Color(0xFF03A9F4)
