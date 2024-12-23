@@ -10,14 +10,14 @@ import com.example.smartlab.feature_app.domain.usecase.Cart.AddProcedureInCartUs
 import com.example.smartlab.feature_app.domain.usecase.Cart.GetAllUserItemFromCartUseCase
 import com.example.smartlab.feature_app.domain.usecase.Cart.RemoveItemFromCartUseCase
 import com.example.smartlab.feature_app.domain.usecase.Category.GetAllCategoryUseCase
-import com.example.smartlab.feature_app.domain.usecase.Procedure.GetAllProcedure
+import com.example.smartlab.feature_app.domain.usecase.Procedure.GetAllProcedureUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AnalyzesViewModel(
     private val getAllCategoryUseCase: GetAllCategoryUseCase,
-    private val getAllProcedureUseCase: GetAllProcedure,
+    private val getAllProcedureUseCase: GetAllProcedureUseCase,
 
     private val getAllUserItemFromCartUseCase: GetAllUserItemFromCartUseCase,
 

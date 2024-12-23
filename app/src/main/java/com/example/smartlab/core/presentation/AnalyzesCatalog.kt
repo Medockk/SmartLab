@@ -46,10 +46,17 @@ fun AnalyzesCatalog(
         elevation = CardDefaults.elevatedCardElevation(1.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = BorderStroke(1.dp, _F4F4F4)
+        border = BorderStroke(1.dp, _F4F4F4),
+        onClick = {
+            val addProcedure = mutableStateOf(false)
+            val state = !addProcedure.value
+            buttonClick(state)
+        }
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(title, style = SF50016Black)

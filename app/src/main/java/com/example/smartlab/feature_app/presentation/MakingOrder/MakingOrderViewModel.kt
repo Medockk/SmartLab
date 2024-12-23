@@ -5,10 +5,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartlab.feature_app.domain.model.UserData
 import com.example.smartlab.feature_app.domain.usecase.Auth.GetUserDataUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.UpdateUserAddressUseCase
-import com.example.smartlab.feature_app.domain.usecase.Auth.UpdateUserDataUseCase
 import com.example.smartlab.feature_app.domain.usecase.Cart.GetAllUserItemFromCartUseCase
 import kotlinx.coroutines.launch
 
@@ -125,6 +123,26 @@ class MakingOrderViewModel(
             is MakingOrderEvent.SaveUserAddress -> {
                 _state.value = state.value.copy(
                     saveUserAddress = event.value
+                )
+            }
+
+            is MakingOrderEvent.SelectedDateTime -> {
+                if (event.value.isNotEmpty()){
+                    _state.value = state.value.copy(
+                        data = state.value.data + " ${event.value}"
+                    )
+                }else{
+                    _state.value = state.value.copy(
+                        data = state.value.data.dropLast(6)
+                    )
+                }
+            }
+
+            is MakingOrderEvent.CloseClick -> {
+                _state.value = state.value.copy(
+                    addressClick = event.value,
+                    dateClick = event.value,
+                    personClick = event.value
                 )
             }
         }

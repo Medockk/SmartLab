@@ -261,7 +261,9 @@ fun MakingOrderScreen(
             title = "Адрес сдачи анализов",
             value = state.address,
             onValueChanged = {viewModel.onEvent(MakingOrderEvent.EnteredAddress(it))},
-            selectClick = {}
+            closeClick = {
+                viewModel.onEvent(MakingOrderEvent.CloseClick(it))
+            }
         ) {
             viewModel.onEvent(MakingOrderEvent.AddressClick)
         }
@@ -275,7 +277,12 @@ fun MakingOrderScreen(
             title = "Дата и время",
             value = state.data,
             onValueChanged = {viewModel.onEvent(MakingOrderEvent.EnteredData(it))},
-            selectClick = {}
+            selectClick = {
+                viewModel.onEvent(MakingOrderEvent.SelectedDateTime(it))
+            },
+            closeClick = {
+                viewModel.onEvent(MakingOrderEvent.CloseClick(it))
+            }
         ) {
             viewModel.onEvent(MakingOrderEvent.DateClick)
         }
@@ -294,7 +301,9 @@ fun MakingOrderScreen(
                 surname = "", patronymic = "", birthdayData = "", gender = state.gender,
                 address = "",
             ),
-            selectClick = {}
+            closeClick = {
+                viewModel.onEvent(MakingOrderEvent.CloseClick(it))
+            }
         ) {
             viewModel.onEvent(MakingOrderEvent.AddOnMorePatient)
         }

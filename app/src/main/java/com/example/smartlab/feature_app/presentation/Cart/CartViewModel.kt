@@ -10,7 +10,6 @@ import com.example.smartlab.feature_app.domain.usecase.Cart.GetAllUserItemFromCa
 import com.example.smartlab.feature_app.domain.usecase.Cart.RemoveAllItemFromCartUseCase
 import com.example.smartlab.feature_app.domain.usecase.Cart.RemoveItemFromCartUseCase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -32,12 +31,19 @@ class CartViewModel(
         }
     }
 
-    private fun calculateAmount() {
-        val userCart = state.value.userCart
+    private suspend fun calculateAmount() {
+        val userCart = getAllUserItemFromCartUseCase()
+        _state.value = state.value.copy(
+            amount = ""
+        )
         userCart.forEach {
             try {
                 _state.value = state.value.copy(
-                    amount = state.value.amount + it.price.toInt()
+                    amount = if (state.value.amount.isNotEmpty()){
+                        (state.value.amount.toInt() + it.price.toInt()).toString()
+                    }else{
+                        it.price
+                    }
                 )
             } catch (e: Exception) {
                 Log.e("calculateAmountEx", e.message.toString())
@@ -63,7 +69,7 @@ class CartViewModel(
                     removeAllItemFromCartUseCase()
                     _state.value = state.value.copy(
                         userCart = emptyList(),
-                        amount = 0,
+                        amount = "",
                         buttonEnabled = false
                     )
                 }
@@ -77,9 +83,7 @@ class CartViewModel(
                             )
                         )
                         getAllUserItemFromCart()
-                        _state.value = state.value.copy(
-                            amount = state.value.amount - event.price.toInt()
-                        )
+                        calculateAmount()
                     } catch (e: Exception) {
                         Log.e("deleteItemEx", e.message.toString())
                     }
@@ -89,8 +93,12 @@ class CartViewModel(
             is CartEvent.CalculateAmount -> {
                 try {
                     _state.value = state.value.copy(
-                        amount = state.value.amount
-                                + event.value.toInt()
+                        amount = if (state.value.amount.isNotEmpty()){
+                            (state.value.amount.toInt()
+                                    + event.value.toInt()).toString()
+                        }else{
+                            event.value
+                        }
                     )
                 } catch (e: Exception) {
                     Log.e("calculateAmountEx", e.message.toString())

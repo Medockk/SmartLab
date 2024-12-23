@@ -11,6 +11,9 @@ sealed class MakingOrderEvent {
     data object AddressClick: MakingOrderEvent()
     data class SaveUserAddress(val value: Boolean) : MakingOrderEvent()
     data object DateClick: MakingOrderEvent()
+    data class SelectedDateTime(val value: String) : MakingOrderEvent()
+
+    data class CloseClick(val value: Boolean) : MakingOrderEvent()
 
     data object AddOnMorePatient : MakingOrderEvent()
     data object MakeOrder : MakingOrderEvent()

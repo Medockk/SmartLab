@@ -344,7 +344,7 @@ fun AnalyzesScreen(
                 .padding(bottom = paddingTop.dp)
                 .offset(y = offset),
             title = state.nameProcedure,
-            price = "Добавить за ${state.priceProcedure}",
+            price = "Добавить за ${state.priceProcedure} ₽",
             date = state.dateProcedure,
         )
     }

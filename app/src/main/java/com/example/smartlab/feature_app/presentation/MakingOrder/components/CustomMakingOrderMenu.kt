@@ -89,6 +89,7 @@ fun CustomMakingOrderMenu(
     ),
     saveAddressState: Boolean = false,
     saveAddressClick: (Boolean) -> Unit = {},
+    closeClick: (Boolean) -> Unit = {},
     selectClick: (String) -> Unit = {},
     confirmClick: () -> Unit,
 ){
@@ -112,8 +113,11 @@ fun CustomMakingOrderMenu(
                 Text(title, style = SF60020Black)
                 Icon(
                     imageVector = icon,
-                    contentDescription = "map",
-                    tint = _B8C1CC
+                    contentDescription = "closeIcon",
+                    tint = _B8C1CC,
+                    modifier = Modifier.clickable {
+                        closeClick(false)
+                    }
                 )
             }
 
@@ -316,7 +320,11 @@ fun CustomMakingOrderMenu(
                                     )
                                     .clickable {
                                         timeListClick.value = !timeListClick.value
-                                        selectClick(it)
+                                        if (timeListClick.value){
+                                            selectClick(it)
+                                        }else{
+                                            selectClick("")
+                                        }
                                     },
                                 contentAlignment = Alignment.Center
                             ){
@@ -341,7 +349,11 @@ fun CustomMakingOrderMenu(
                                     )
                                     .clickable {
                                         timeListClick.value = !timeListClick.value
-                                        selectClick(it)
+                                        if (timeListClick.value){
+                                            selectClick(it)
+                                        }else{
+                                            selectClick("")
+                                        }
                                     },
                                 contentAlignment = Alignment.Center
                             ){

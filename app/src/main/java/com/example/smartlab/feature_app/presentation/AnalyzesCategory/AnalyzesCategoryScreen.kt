@@ -1,5 +1,7 @@
 package com.example.smartlab.feature_app.presentation.AnalyzesCategory
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -22,17 +25,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.smartlab.core.presentation.AnalyzesCatalog
 import com.example.smartlab.core.presentation.AnalyzesFindTextField
 import com.example.smartlab.core.presentation.BottomNavigation
+import com.example.smartlab.core.presentation.InCart
+import com.example.smartlab.core.presentation.MoreInformationAboutProcedure
 import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF50015White
 import com.example.smartlab.ui.theme.SF50015_7E7E9A
 import com.example.smartlab.ui.theme._1A6FEE
 import com.example.smartlab.ui.theme._F5F5F9
+import org.koin.androidx.compose.koinViewModel
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -44,7 +49,7 @@ private fun Prev() {
 @Composable
 fun AnalyzesCategoryScreen(
     navController: NavController,
-    viewModel: AnalyzesCategoryViewModel = viewModel()
+    viewModel: AnalyzesCategoryViewModel = koinViewModel()
 ) {
     val state = viewModel.state.value
     val verticalPadding = LocalConfiguration.current.screenHeightDp / 15
@@ -67,13 +72,6 @@ fun AnalyzesCategoryScreen(
                 .fillMaxWidth()
                 .fillMaxHeight(0.07f)
         )
-
-        val categoryList = listOf(
-            "Популярные", "Covid", "Комплексные", "Чекапы",
-            "Биохимия", "Гормоны", "Иммунитет", "Витамины",
-            "Аллергены", "Анализ крови", "Анализ мочи",
-            "Анализ кала", "Только в клинике"
-        )
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
@@ -81,7 +79,7 @@ fun AnalyzesCategoryScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            items(categoryList) { text ->
+            items(state.categoryList) { text ->
                 val selectedCategory = remember { mutableStateOf(false) }
                 Box(
                     contentAlignment = Alignment.Center,
@@ -98,7 +96,8 @@ fun AnalyzesCategoryScreen(
                         }
                 ) {
                     Text(
-                        text, style = if (selectedCategory.value) SF50015White else SF50015_7E7E9A,
+                        text.name,
+                        style = if (selectedCategory.value) SF50015White else SF50015_7E7E9A,
                         modifier = Modifier.padding(horizontal = 20.dp)
                     )
                 }
@@ -106,92 +105,28 @@ fun AnalyzesCategoryScreen(
         }
 
         LazyColumn(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .fillMaxHeight(0.9f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item {
+            items(state.proceduresList) { item ->
                 AnalyzesCatalog(
-                    modifier = Modifier.fillParentMaxWidth()
+                    modifier = Modifier
+                        .fillParentMaxWidth()
                         .fillParentMaxHeight(0.25f)
                         .padding(bottom = 16.dp),
-                    title = "ПЦР-тест на определение РНК\nкоронавируса стандартный",
-                    data = "2 дня",
-                    price = "1800 ₽"
-                ){
-                    viewModel.onEvent(AnalyzesCategoryEvent.AddClick)
-                }
-            }
-            item {
-                AnalyzesCatalog(
-                    modifier = Modifier.fillParentMaxWidth()
-                        .fillParentMaxHeight(0.25f)
-                        .padding(bottom = 16.dp),
-                    title = "Клинический анализ крови с лейкоцитарной формулировкой",
-                    data = "1 день",
-                    price = "690 ₽"
-                ){
-
-                }
-            }
-            item {
-                AnalyzesCatalog(
-                    modifier = Modifier.fillParentMaxWidth()
-                        .fillParentMaxHeight(0.23f)
-                        .padding(bottom = 16.dp),
-                    title = "Биохимический анализ крови, базовый",
-                    data = "1 день",
-                    price = "2440 ₽"
-                ){
-
-                }
-            }
-            item {
-                AnalyzesCatalog(
-                    modifier = Modifier.fillParentMaxWidth()
-                        .fillParentMaxHeight(0.23f)
-                        .padding(bottom = 16.dp),
-                    title = "СОЭ (венозная кровь)",
-                    data = "1 день",
-                    price = "240 ₽"
-                ){
-
-                }
-            }
-            item {
-                AnalyzesCatalog(
-                    modifier = Modifier.fillParentMaxWidth()
-                        .fillParentMaxHeight(0.23f)
-                        .padding(bottom = 16.dp),
-                    title = "Общий анализ мочи",
-                    data = "1 день",
-                    price = "350 ₽"
-                ){
-
-                }
-            }
-            item {
-                AnalyzesCatalog(
-                    modifier = Modifier.fillParentMaxWidth()
-                        .fillParentMaxHeight(0.23f)
-                        .padding(bottom = 16.dp),
-                    title = "Тироксин свободный (Т4 свободный)",
-                    data = "1 день",
-                    price = "680 ₽"
-                ){
-
-                }
-            }
-            item {
-                AnalyzesCatalog(
-                    modifier = Modifier.fillParentMaxWidth()
-                        .fillParentMaxHeight(0.23f)
-                        .padding(bottom = 16.dp),
-                    title = "Группа крови + Резус-фактор",
-                    data = "1 день",
-                    price = "750 ₽"
-                ){
-
+                    title = item.name,
+                    data = item.time,
+                    price = item.price + " ₽"
+                ) {
+                    viewModel.onEvent(
+                        AnalyzesCategoryEvent.AddClick(
+                            name = item.name,
+                            time = item.time,
+                            price = item.price
+                        )
+                    )
                 }
             }
         }
@@ -204,21 +139,76 @@ fun AnalyzesCategoryScreen(
         BottomNavigation(
             Modifier.fillMaxWidth(),
             analyzesClick = {
-                navController.navigate(Route.AnalyzesScreen.route){
-                    popUpTo(Route.AnalyzesCategoryScreen.route){
+                navController.navigate(Route.AnalyzesScreen.route) {
+                    popUpTo(Route.AnalyzesCategoryScreen.route) {
                         inclusive = true
                     }
                 }
             },
-            {},{},
+            {}, {},
             profileClick = {
-                navController.navigate(Route.PatientCardScreen.route){
-                    popUpTo(Route.AnalyzesCategoryScreen.route){
+                navController.navigate(Route.PatientCardScreen.route) {
+                    popUpTo(Route.AnalyzesCategoryScreen.route) {
                         inclusive = true
                     }
                 }
             },
             selectedAnalyzes = true
+        )
+    }
+
+    if (state.amount.isNotEmpty()){
+        val paddingBottom = LocalConfiguration.current.screenHeightDp / 15
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .padding(
+                    bottom = paddingBottom.dp),
+            contentAlignment = Alignment.BottomCenter
+        ){
+            InCart(
+                price = state.amount + " ₽",
+                modifier = Modifier.fillMaxWidth()
+                    .fillMaxHeight(0.07f)
+                    .padding(start = 20.dp, end = 20.dp)
+            ) {
+                navController.navigate(Route.CartScreen.route){
+                    popUpTo(Route.AnalyzesCategoryScreen.route){
+                        inclusive = true
+                    }
+                }
+            }
+        }
+    }
+
+    if (state.isAdded) {
+        val paddingBottom = (LocalConfiguration.current.screenHeightDp / 2.3).toInt()
+        val paddingTop = (LocalConfiguration.current.screenHeightDp / 20)
+
+        val startOffset = LocalConfiguration.current.screenHeightDp
+        val endOffset = LocalConfiguration.current.screenWidthDp - paddingBottom
+
+        val boxState = remember { mutableStateOf(startOffset) }
+
+        val anim = animateDpAsState(
+            targetValue = boxState.value.dp,
+            animationSpec = tween(1500)
+        )
+
+        boxState.value = endOffset
+        MoreInformationAboutProcedure(
+            closeClick = {
+                viewModel.onEvent(AnalyzesCategoryEvent.ChangeCardState)
+            },
+            addClick = {
+                viewModel.onEvent(AnalyzesCategoryEvent.AddProcedureInCart)
+            },
+            title = state.procedureName,
+            date = state.procedureDate,
+            price = "Добавить за ${state.procedurePrice} ₽",
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = paddingTop.dp)
+                .offset(y = anim.value)
         )
     }
 }

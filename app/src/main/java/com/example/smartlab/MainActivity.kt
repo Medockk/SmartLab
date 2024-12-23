@@ -339,10 +339,6 @@ class qViewModel(
                                 address = "address",
                             )
                         )
-//                        client.auth.signUpWith(Email){
-//                            this.email = _state.value.email
-//                            this.password = _state.value.pass
-//                        }
                         _state.value = state.value.copy(
                             isLogged = true
                         )

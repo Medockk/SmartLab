@@ -5,6 +5,7 @@ import com.example.smartlab.CreatePassword.CreatePasswordViewModel
 import com.example.smartlab.MainActivityViewModel
 import com.example.smartlab.OnBoard.OnBoardViewModel
 import com.example.smartlab.feature_app.presentation.Analuzes.AnalyzesViewModel
+import com.example.smartlab.feature_app.presentation.AnalyzesCategory.AnalyzesCategoryViewModel
 import com.example.smartlab.feature_app.presentation.Cart.CartViewModel
 import com.example.smartlab.feature_app.presentation.MakingOrder.MakingOrderViewModel
 import com.example.smartlab.feature_app.presentation.PatientCard.PatientCardViewModel
@@ -65,6 +66,14 @@ val moduleViewModel = module {
     }
     viewModel<MakingOrderViewModel>{
         MakingOrderViewModel(
+            get(),
+            get(),
+            get()
+        )
+    }
+    viewModel<AnalyzesCategoryViewModel>{
+        AnalyzesCategoryViewModel(
+            get(),
             get(),
             get(),
             get()
