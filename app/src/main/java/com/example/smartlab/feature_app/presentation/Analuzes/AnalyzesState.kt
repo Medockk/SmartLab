@@ -12,9 +12,13 @@ data class AnalyzesState(
 
     val isRemoved: Boolean = false,
 
+    val inCart: Boolean = false,
+
     val nameProcedure: String = "",
     val dateProcedure: String = "",
     val priceProcedure: String = "",
+
+    val amount: String = "",
 
     val categoryList: List<CategoryData> = emptyList(),
     val procedureList: List<ListOfProcedures> = emptyList(),

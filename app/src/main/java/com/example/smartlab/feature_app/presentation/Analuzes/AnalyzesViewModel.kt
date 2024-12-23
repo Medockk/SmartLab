@@ -34,6 +34,13 @@ class AnalyzesViewModel(
                 launch { getAllCategory() }
                 launch { getAllProcedure() }
                 launch { getAllUserItemFromCart() }
+                launch {
+                    if (state.value.userCart.isNotEmpty()){
+                        _state.value = state.value.copy(
+                            inCart = true
+                        )
+                    }
+                }
             } catch (e: Exception) {
                 Log.e("initEx", e.message.toString())
             }
@@ -42,6 +49,20 @@ class AnalyzesViewModel(
 
     private suspend fun getAllUserItemFromCart(){
         val userCart = getAllUserItemFromCartUseCase()
+
+        userCart.forEach {
+            _state.value = if (state.value.amount.isNotEmpty()){
+                state.value.copy(
+                    amount = (state.value.amount.toInt() + it.price.toInt()).toString(),
+                    inCart = true
+                )
+            }else{
+                state.value.copy(
+                    amount = it.price,
+                    inCart = true
+                )
+            }
+        }
 
         withContext(Dispatchers.IO){
             _state.value = state.value.copy(
@@ -132,7 +153,13 @@ class AnalyzesViewModel(
                             )
                         )
                         _state.value = state.value.copy(
-                            isRemoved = successful
+                            isRemoved = successful,
+                            amount = if (state.value.amount.isNotEmpty()){
+                               (state.value.priceProcedure.toInt() + state.value.amount.toInt()).toString()
+                            }else{
+                                state.value.priceProcedure
+                            },
+                            inCart = true
                         )
                         Log.v("addProcedureInCart", "add")
                     } catch (e: Exception) {

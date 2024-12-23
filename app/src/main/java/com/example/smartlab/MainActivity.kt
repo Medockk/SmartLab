@@ -51,6 +51,7 @@ import com.example.smartlab.feature_app.presentation.MakingOrder.MakingOrderScre
 import com.example.smartlab.feature_app.presentation.PatientCard.PatientCardScreen
 import com.example.smartlab.feature_app.presentation.Payment.PaymentScreen
 import com.example.smartlab.navGraph.Route
+import com.example.smartlab.test_composable_func.Test
 import com.example.smartlab.ui.theme.SmartLabTheme
 import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.launch
@@ -72,6 +73,9 @@ class MainActivity : ComponentActivity() {
             }
             SmartLabTheme {
                 NavHost(navController, startDestination = Route.SplashScreen.route) {
+                    composable("Test"){
+                        Test(navController)
+                    }
                     composable("q") {
                         q(navController)
                     }

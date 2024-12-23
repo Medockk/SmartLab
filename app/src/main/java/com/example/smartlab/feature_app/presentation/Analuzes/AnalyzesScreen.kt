@@ -39,6 +39,7 @@ import com.example.smartlab.R
 import com.example.smartlab.core.presentation.AnalyzesCatalog
 import com.example.smartlab.core.presentation.AnalyzesFindTextField
 import com.example.smartlab.core.presentation.BottomNavigation
+import com.example.smartlab.core.presentation.InCart
 import com.example.smartlab.core.presentation.MoreInformationAboutProcedure
 import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF40014White
@@ -298,6 +299,24 @@ fun AnalyzesScreen(
                 },
                 selectedAnalyzes = true
             )
+        }
+    }
+
+    if (state.inCart){
+        val paddingBottom = LocalConfiguration.current.screenHeightDp / 15
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .padding(bottom = paddingBottom.dp,
+                    start = 20.dp, end = 20.dp),
+            contentAlignment = Alignment.BottomCenter
+        ){
+            InCart(
+                price = state.amount + " ₽",
+                modifier = Modifier.fillMaxWidth()
+                    .fillMaxHeight(0.05f)
+            ) {
+                navController.navigate(Route.CartScreen.route)
+            }
         }
     }
 

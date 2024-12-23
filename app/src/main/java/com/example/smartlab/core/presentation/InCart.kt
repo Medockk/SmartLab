@@ -42,10 +42,10 @@ private fun Prev() {
 fun InCart(
     price: String,
     modifier: Modifier = Modifier,
-    addClick: () -> Unit
+    inCartClick: () -> Unit
 ) {
     Card(
-        onClick = addClick,
+        onClick = inCartClick,
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = _1A6FEE),
         modifier = modifier

@@ -26,17 +26,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.smartlab.R
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun Prev() {
-Test()
+Test(navController = rememberNavController())
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Test() {
+fun Test(navController: NavController) {
     val drawerState = remember { DrawerState(DrawerValue.Closed) }
     val listNavigBar = listOf(
         NavBar.Home,
@@ -72,6 +74,7 @@ fun Test() {
                             selected = it.title == selectedIcon,
                             onClick = {
                                 selectedIcon = it.title
+                                navController.navigate(it.route)
                             },
                             icon = {
                                 Icon(
@@ -98,19 +101,27 @@ fun Test() {
 }
 
 sealed class NavBar(
+    val route: String,
     val title: String,
     val icon: Int
-){
+) {
     object Home : NavBar(
+        "Home",
         "Home",
         R.drawable.test_ic_home
     )
     object Fav : NavBar(
         "Favorite",
+        "Favorite",
         R.drawable.test_ic_fav
     )
     object Settings : NavBar(
         "Settings",
+        "Settings",
         R.drawable.test_ic_settings
     )
+}
+
+sealed class Nav(val route: String){
+
 }
