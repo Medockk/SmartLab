@@ -16,4 +16,6 @@ data class MakingOrderState(
     val proceduresCount: Int = 1,
 
     val isComplete: Boolean = false,
+
+    val saveUserAddress: Boolean = false,
 )

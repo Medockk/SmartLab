@@ -8,4 +8,5 @@ interface AuthRepository {
     suspend fun getUserData(): List<UserData>
     suspend fun signOut()
     suspend fun updateUserData(userData: UserData)
+    suspend fun updateUserAddress(newAddress: String)
 }

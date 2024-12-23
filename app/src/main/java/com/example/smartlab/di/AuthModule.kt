@@ -6,6 +6,7 @@ import com.example.smartlab.feature_app.domain.usecase.Auth.GetUserDataUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignInUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignOutUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignUpUseCase
+import com.example.smartlab.feature_app.domain.usecase.Auth.UpdateUserAddressUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.UpdateUserDataUseCase
 import org.koin.dsl.module
 
@@ -28,5 +29,8 @@ val moduleAuth = module {
     }
     factory<UpdateUserDataUseCase> {
         UpdateUserDataUseCase(get())
+    }
+    factory<UpdateUserAddressUseCase> {
+        UpdateUserAddressUseCase(get())
     }
 }

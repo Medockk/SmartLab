@@ -5,13 +5,17 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartlab.feature_app.domain.model.UserData
 import com.example.smartlab.feature_app.domain.usecase.Auth.GetUserDataUseCase
+import com.example.smartlab.feature_app.domain.usecase.Auth.UpdateUserAddressUseCase
+import com.example.smartlab.feature_app.domain.usecase.Auth.UpdateUserDataUseCase
 import com.example.smartlab.feature_app.domain.usecase.Cart.GetAllUserItemFromCartUseCase
 import kotlinx.coroutines.launch
 
 class MakingOrderViewModel(
     val getUserDataUseCase: GetUserDataUseCase,
-    val getAllUserItemFromCartUseCase: GetAllUserItemFromCartUseCase
+    val getAllUserItemFromCartUseCase: GetAllUserItemFromCartUseCase,
+    val updateUserAddressUseCase: UpdateUserAddressUseCase,
 ): ViewModel() {
 
     private val _state = mutableStateOf(MakingOrderState())
@@ -43,7 +47,8 @@ class MakingOrderViewModel(
             userData.forEach {
                 _state.value = state.value.copy(
                     person = it.surname + " " + it.name,
-                    gender = it.gender
+                    gender = it.gender,
+                    address = it.address?:""
                 )
             }
         } catch (e: Exception) {
@@ -99,10 +104,27 @@ class MakingOrderViewModel(
                 _state.value = state.value.copy(
                     addressClick = !state.value.addressClick
                 )
+                if (state.value.saveUserAddress){
+                    viewModelScope.launch {
+                        try {
+                            updateUserAddressUseCase(
+                                state.value.address
+                            )
+                        } catch (e: Exception) {
+                            Log.e("updateAddressEx", e.message.toString())
+                        }
+                    }
+                }
             }
             MakingOrderEvent.DateClick -> {
                 _state.value = state.value.copy(
                     dateClick = !state.value.dateClick
+                )
+            }
+
+            is MakingOrderEvent.SaveUserAddress -> {
+                _state.value = state.value.copy(
+                    saveUserAddress = event.value
                 )
             }
         }

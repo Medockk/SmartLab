@@ -94,18 +94,10 @@ class PatientCardViewModel(
                                 surname = state.value.surname,
                                 patronymic = state.value.patronymic,
                                 birthdayData = state.value.birthdayData,
-                                gender = state.value.gender
+                                gender = state.value.gender,
+                                address = "",
                             )
                         )
-//                        signUpUseCase(
-//                            mail = UserData.email,
-//                            pass = UserData.password,
-//                            UserData(
-//                                name = state.value.name, surname = state.value.surname,
-//                                patronymic = state.value.patronymic, birthdayData =  state.value.birthdayData,
-//                                gender = state.value.gender
-//                            )
-//                        )
                         Log.v("supa update", "update")
                     } catch (e: Exception) {
                         Log.e("saveClickEx", e.message.toString())

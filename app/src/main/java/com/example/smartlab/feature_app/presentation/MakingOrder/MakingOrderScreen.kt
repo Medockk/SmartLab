@@ -104,7 +104,8 @@ fun MakingOrderScreen(
                 Column {
                     Text("Адрес *", style = SF40014_939396)
                     CustomTextFieldButton(
-                        title = "Введите ваш адрес",
+                        title = state.address,
+                        placeholder = "Введите ваш адрес",
                         boxModifier = Modifier.fillParentMaxHeight(0.07f),
                         buttonModifier = Modifier.fillMaxWidth().fillMaxHeight()
                     ) {
@@ -116,7 +117,8 @@ fun MakingOrderScreen(
                 Column {
                     Text("Дата и время*", style = SF40014_939396)
                     CustomTextFieldButton(
-                        title = "Выберите дату и время",
+                        title = state.data,
+                        placeholder = "Выберите дату и время",
                         boxModifier = Modifier.fillParentMaxHeight(0.07f),
                         buttonModifier = Modifier.fillMaxWidth().fillMaxHeight()
                     ){
@@ -252,6 +254,10 @@ fun MakingOrderScreen(
             height = addressHeight.dp,
             icon = ImageVector.vectorResource(R.drawable.map),
             isAddress = true,
+            saveAddressState = state.saveUserAddress,
+            saveAddressClick = {
+                viewModel.onEvent(MakingOrderEvent.SaveUserAddress(it))
+            },
             title = "Адрес сдачи анализов",
             value = state.address,
             onValueChanged = {viewModel.onEvent(MakingOrderEvent.EnteredAddress(it))},
@@ -279,13 +285,14 @@ fun MakingOrderScreen(
         CustomMakingOrderMenu(
             height = personHeight.dp,
             icon = ImageVector.vectorResource(R.drawable.cross),
-            isDate = true,
+            isPerson = true,
             title = "Выбор пациента",
             value = state.person,
             onValueChanged = {viewModel.onEvent(MakingOrderEvent.EnteredPerson(it))},
             userData = UserData(
                 name = state.person,
-                surname = "", patronymic = "", birthdayData = "", gender = state.gender
+                surname = "", patronymic = "", birthdayData = "", gender = state.gender,
+                address = "",
             ),
             selectClick = {}
         ) {

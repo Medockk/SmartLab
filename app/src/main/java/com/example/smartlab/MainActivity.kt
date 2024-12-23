@@ -116,7 +116,7 @@ class MainActivity : ComponentActivity() {
                         MakingOrderScreen(navController)
                     }
                     composable(Route.PaymentScreen.route) {
-                        PaymentScreen()
+                        PaymentScreen(navController)
                     }
                 }
             }
@@ -309,7 +309,8 @@ class qViewModel(
                                     surname = "surname",
                                     patronymic = "patronymic",
                                     birthdayData = "birthdayData",
-                                    gender = "gender"
+                                    gender = "gender",
+                                    address = "address"
                                 )
                             )
                             _state.value = state.value.copy(
@@ -334,7 +335,8 @@ class qViewModel(
                                 surname = "surname",
                                 patronymic = "patronymic",
                                 birthdayData = "birthdayData",
-                                gender = "gender"
+                                gender = "gender",
+                                address = "address",
                             )
                         )
 //                        client.auth.signUpWith(Email){

@@ -313,7 +313,7 @@ fun AnalyzesScreen(
             InCart(
                 price = state.amount + " ₽",
                 modifier = Modifier.fillMaxWidth()
-                    .fillMaxHeight(0.05f)
+                    .fillMaxHeight(0.07f)
             ) {
                 navController.navigate(Route.CartScreen.route)
             }

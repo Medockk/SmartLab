@@ -11,6 +11,7 @@ data class UserData(
     val birthdayData: String,
     val gender: String,
     val userID: String = "",
+    val address: String?,
 ){
     companion object{
         val male = "Мужской"

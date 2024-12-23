@@ -9,6 +9,7 @@ sealed class MakingOrderEvent {
     data class EnteredComment(val value: String): MakingOrderEvent()
 
     data object AddressClick: MakingOrderEvent()
+    data class SaveUserAddress(val value: Boolean) : MakingOrderEvent()
     data object DateClick: MakingOrderEvent()
 
     data object AddOnMorePatient : MakingOrderEvent()

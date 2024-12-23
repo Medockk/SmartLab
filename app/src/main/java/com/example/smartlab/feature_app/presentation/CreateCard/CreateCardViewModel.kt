@@ -61,6 +61,7 @@ class CreateCardViewModel(
                                 patronymic = state.value.patronymic,
                                 birthdayData = state.value.birthdayData,
                                 gender = state.value.gender,
+                                address = "",
                             )
                         )
                         Log.v("supaUp", "sign up")

@@ -28,9 +28,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.core.presentation.CustomButton
 import com.example.smartlab.R
 import com.example.smartlab.core.presentation.CustomEmptyButton
+import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF40014_1A6FEE
 import com.example.smartlab.ui.theme.SF40014_939396
 import com.example.smartlab.ui.theme.SF40016_939396
@@ -41,11 +44,12 @@ import com.example.smartlab.ui.theme._1A6FEE
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun Prev() {
-    PaymentScreen()
+    PaymentScreen(navController = rememberNavController())
 }
 
 @Composable
 fun PaymentScreen(
+    navController: NavController,
     viewModel: PaymentViewModel = viewModel()
 ) {
     val state = viewModel.state.value
@@ -155,7 +159,11 @@ fun PaymentScreen(
                     Modifier.fillMaxWidth()
                         .fillMaxHeight(0.8f)
                 ) {
-
+                    navController.navigate(Route.AnalyzesScreen.route){
+                        popUpTo(Route.PaymentScreen.route){
+                            inclusive = true
+                        }
+                    }
                 }
             }
         }

@@ -23,6 +23,7 @@ import com.example.smartlab.ui.theme._F5F5F9
 private fun Prev() {
     CustomTextFieldButton(
         "Adfghtr",
+        "place",
         buttonModifier = Modifier.fillMaxWidth(),
         boxModifier = Modifier.fillMaxWidth()
             .padding(top = 100.dp, start = 20.dp, end = 20.dp)
@@ -35,6 +36,7 @@ private fun Prev() {
 @Composable
 fun CustomTextFieldButton(
     title: String,
+    placeholder: String,
     buttonModifier: Modifier = Modifier,
     boxModifier: Modifier = Modifier,
     onClick: () -> Unit
@@ -50,7 +52,12 @@ fun CustomTextFieldButton(
             colors = ButtonDefaults.buttonColors(containerColor = _F5F5F9),
             border = BorderStroke(1.dp, _EBEBEB)
         ){}
-        Text(title, style = SF40015Black,
-            modifier = Modifier.padding(start = 15.dp))
+        if (title.isNotEmpty()){
+            Text(title, style = SF40015Black,
+                modifier = Modifier.padding(start = 15.dp))
+        }else{
+            Text(placeholder, style = SF40015Black,
+                modifier = Modifier.padding(start = 15.dp))
+        }
     }
 }

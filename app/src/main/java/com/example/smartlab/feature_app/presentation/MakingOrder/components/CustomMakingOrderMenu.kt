@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -87,8 +85,10 @@ fun CustomMakingOrderMenu(
     isPerson: Boolean = false,
     userData: UserData = UserData(
         name = "Name", surname = "Surname",
-        patronymic = "", birthdayData = "", gender = ""
+        patronymic = "", birthdayData = "", gender = "", address = ""
     ),
+    saveAddressState: Boolean = false,
+    saveAddressClick: (Boolean) -> Unit = {},
     selectClick: (String) -> Unit = {},
     confirmClick: () -> Unit,
 ){
@@ -116,8 +116,6 @@ fun CustomMakingOrderMenu(
                     tint = _B8C1CC
                 )
             }
-
-            val checked = remember { mutableStateOf(false) }
 
             if (isAddress){
                 Column(
@@ -246,8 +244,8 @@ fun CustomMakingOrderMenu(
                 ){
                     Text("Сохранить этот адрес?", style = SF50016Black)
                     Switch(
-                        checked = checked.value,
-                        onCheckedChange = {checked.value = it},
+                        checked = saveAddressState,
+                        onCheckedChange = saveAddressClick,
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = Color.White,
                             uncheckedThumbColor = Color.White,
@@ -258,7 +256,7 @@ fun CustomMakingOrderMenu(
                         )
                     )
                 }
-                if (checked.value){
+                if (saveAddressState){
                     val saveAddressText = remember { mutableStateOf("") }
                     CustomTextField(
                         value = saveAddressText.value,

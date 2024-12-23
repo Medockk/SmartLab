@@ -58,9 +58,22 @@ class AuthRepositoryImpl : AuthRepository {
                 "surname" to userData.surname,
                 "patronymic" to userData.patronymic,
                 "birthdayData" to userData.birthdayData,
-                "gender" to userData.gender,
+                "gender" to userData.gender
             )
         ) {
+            filter {
+                eq("userID", userID?:"")
+            }
+        }
+    }
+
+    override suspend fun updateUserAddress(newAddress: String) {
+        val userID = client.auth.currentUserOrNull()?.id
+        client.postgrest["Users"].update(
+            mapOf(
+                "address" to newAddress
+            )
+        ){
             filter {
                 eq("userID", userID?:"")
             }

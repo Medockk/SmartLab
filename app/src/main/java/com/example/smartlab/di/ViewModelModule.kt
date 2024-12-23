@@ -66,6 +66,7 @@ val moduleViewModel = module {
     viewModel<MakingOrderViewModel>{
         MakingOrderViewModel(
             get(),
+            get(),
             get()
         )
     }
