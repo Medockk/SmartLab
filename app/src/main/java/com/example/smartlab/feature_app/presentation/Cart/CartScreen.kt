@@ -119,10 +119,12 @@ fun CartScreen(
                     )
                 }
                 item {
-                    Row {
-                        Text("Сумма", style = SF60020Black)
-                        Spacer(Modifier.weight(1f))
-                        Text("${state.amount} ₽", style = SF60020Black)
+                    if (state.amount.isNotEmpty()){
+                        Row {
+                            Text("Сумма", style = SF60020Black)
+                            Spacer(Modifier.weight(1f))
+                            Text("${state.amount} ₽", style = SF60020Black)
+                        }
                     }
                 }
             }

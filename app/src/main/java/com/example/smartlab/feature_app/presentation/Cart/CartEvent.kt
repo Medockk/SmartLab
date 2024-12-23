@@ -7,7 +7,9 @@ sealed class CartEvent {
         val procedure: String,
         val price: String,
     ): CartEvent()
-    data class ChangedPatientCount(val value: Int) : CartEvent()
+    data class ChangedPatientCount(
+        val count: Int,
+    ) : CartEvent()
 
     data class CalculateAmount(val value: String) : CartEvent()
 }
