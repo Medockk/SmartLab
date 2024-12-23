@@ -1,3 +1,5 @@
+@file:OptIn(SupabaseInternal::class)
+
 package com.example.smartlab
 
 import android.os.Bundle
@@ -20,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,7 +56,14 @@ import com.example.smartlab.feature_app.presentation.Payment.PaymentScreen
 import com.example.smartlab.navGraph.Route
 import com.example.smartlab.test_composable_func.Test
 import com.example.smartlab.ui.theme.SmartLabTheme
+import io.github.jan.supabase.annotations.SupabaseInternal
+import io.github.jan.supabase.auth.AuthConfig
+import io.github.jan.supabase.auth.AuthConfigDefaults
+import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.OAuthProvider
+import io.github.jan.supabase.auth.providers.builtin.OTP
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -72,7 +82,7 @@ class MainActivity : ComponentActivity() {
                 viewModel.checkRoute()
             }
             SmartLabTheme {
-                NavHost(navController, startDestination = Route.SplashScreen.route) {
+                NavHost(navController, startDestination = "q") {
                     composable("Test"){
                         Test(navController)
                     }
@@ -197,15 +207,28 @@ fun q(
                 Text("sign in", fontSize = 32.sp)
             }
 
+            val c = rememberCoroutineScope()
             Spacer(Modifier.padding(vertical = 10.dp))
             Button({
                 viewModel.onEvent(qEvent.SignUp)
+
+                c.launch {
+                    Log.e("o", client.auth.currentSessionOrNull()?.accessToken.toString())
+                    Log.e("o", client.auth.currentSessionOrNull()?.providerRefreshToken.toString())
+                    Log.e("o", client.auth.currentSessionOrNull()?.providerToken.toString())
+                    Log.e("o", client.auth.currentSessionOrNull()?.refreshToken.toString())
+                    Log.e("o", client.auth.currentSessionOrNull()?.tokenType.toString())
+                    Log.e("o", client.auth.currentSessionOrNull()?.type.toString())
+                    Log.e("o", client.auth.currentSessionOrNull()?.user.toString())
+                }
             }) {
-                Text("sign Up")
+                Text("otp")
             }
         }
     }
 }
+
+private const val mail = "andreev.arsenij2020@gmail.com"
 
 class qViewModel(
     private val signInUseCase: SignInUseCase,
@@ -248,7 +271,7 @@ class qViewModel(
                         Log.e("clicked", "clicked")
                         if (UserData.password.length == 4) {
                             val signIn = signInUseCase.invoke(
-                                mail = UserData.email,
+                                mail = mail,
                                 pass = UserData.password + "00"
                             )
                             Log.e("sign in use case", "starting sign inning")
@@ -302,7 +325,7 @@ class qViewModel(
                     } catch (e: Exception) {
                         try {
                             val signUp = signUpUseCase(
-                                mail = UserData.email,
+                                mail = mail,
                                 pass = "${UserData.password}00",
                                 userData = UserData(
                                     name = "name",
@@ -327,24 +350,12 @@ class qViewModel(
             qEvent.SignUp -> {
                 viewModelScope.launch {
                     try {
-                        signUpUseCase(
-                            mail = UserData.email,
-                            pass = UserData.password,
-                            userData = UserData(
-                                name = "name",
-                                surname = "surname",
-                                patronymic = "patronymic",
-                                birthdayData = "birthdayData",
-                                gender = "gender",
-                                address = "address",
-                            )
-                        )
-                        _state.value = state.value.copy(
-                            isLogged = true
-                        )
-                        Log.v("supaUp", "sign up")
+                        client.auth.signInWith(OTP){
+                            email = mail
+                            Log.e("token", this.captchaToken.toString())
+                        }
                     } catch (e: Exception) {
-                        Log.e("supaUp", e.message.toString())
+                        Log.e("otp", e.message.toString())
                     }
                 }
             }
@@ -392,6 +403,13 @@ fun q1(
                     viewModel.signOut()
                 }
             ) { Text("sign out") }
+            val c = rememberCoroutineScope()
+            Button({
+                c.launch {
+                    Log.e("o", client.auth.currentAccessTokenOrNull().toString())
+                    Log.e("o", client.auth.currentIdentitiesOrNull().toString())
+                }
+            }) { }
         }
     }
 }
