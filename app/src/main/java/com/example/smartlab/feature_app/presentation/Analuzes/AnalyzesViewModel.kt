@@ -5,13 +5,17 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.smartlab.data.network.SupabaseInit.client
 import com.example.smartlab.feature_app.domain.model.Cart
 import com.example.smartlab.feature_app.domain.usecase.Cart.AddProcedureInCartUseCase
 import com.example.smartlab.feature_app.domain.usecase.Cart.GetAllUserItemFromCartUseCase
 import com.example.smartlab.feature_app.domain.usecase.Cart.RemoveItemFromCartUseCase
 import com.example.smartlab.feature_app.domain.usecase.Category.GetAllCategoryUseCase
 import com.example.smartlab.feature_app.domain.usecase.Procedure.GetAllProcedureUseCase
+import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -95,12 +99,22 @@ class AnalyzesViewModel(
         }
     }
 
+    private var job: Job? = null
+
     fun onEvent(event: AnalyzesEvent){
         when (event){
             is AnalyzesEvent.EnterFindText -> {
                 _state.value = state.value.copy(
                     findText = event.value
                 )
+//                job?.cancel("")
+//                job = viewModelScope.launch {
+//                    client.postgrest[""].select {
+//                        filter {
+//                            contains("wwd", state.value.findText)
+//                        }
+//                    }
+//                }
             }
 
             is AnalyzesEvent.AnalyzesAddClick -> {

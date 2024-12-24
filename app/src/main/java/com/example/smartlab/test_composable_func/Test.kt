@@ -43,7 +43,10 @@ fun Test(navController: NavController) {
     val listNavigBar = listOf(
         NavBar.Home,
         NavBar.Fav,
-        NavBar.Settings
+        NavBar.Settings,
+        NavBar.Settings1,
+        NavBar.Settings2,
+        NavBar.Settings3,
     )
     ModalNavigationDrawer(
         modifier = Modifier.fillMaxWidth(),
@@ -74,7 +77,6 @@ fun Test(navController: NavController) {
                             selected = it.title == selectedIcon,
                             onClick = {
                                 selectedIcon = it.title
-                                navController.navigate(it.route)
                             },
                             icon = {
                                 Icon(
@@ -116,6 +118,21 @@ sealed class NavBar(
         R.drawable.test_ic_fav
     )
     object Settings : NavBar(
+        "Settings",
+        "Settings",
+        R.drawable.test_ic_settings
+    )
+    object Settings1 : NavBar(
+        "Settings",
+        "Settings",
+        R.drawable.test_ic_settings
+    )
+    object Settings2 : NavBar(
+        "Settings",
+        "Settings",
+        R.drawable.test_ic_settings
+    )
+    object Settings3 : NavBar(
         "Settings",
         "Settings",
         R.drawable.test_ic_settings
