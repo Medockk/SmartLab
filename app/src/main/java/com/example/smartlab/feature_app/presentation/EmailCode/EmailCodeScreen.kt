@@ -19,7 +19,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.smartlab.core.presentation.CustomBackIcon
@@ -27,6 +26,7 @@ import com.example.smartlab.feature_app.presentation.EmailCode.components.EmailC
 import com.example.smartlab.navGraph.Route
 import com.example.smartlab.ui.theme.SF40015_939396
 import com.example.smartlab.ui.theme.SF60017Black
+import org.koin.androidx.compose.koinViewModel
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -38,7 +38,7 @@ private fun Prev() {
 @Composable
 fun EmailCodeScreen(
     navController: NavController,
-    viewModel: EmailCodeViewModel = viewModel()
+    viewModel: EmailCodeViewModel = koinViewModel()
 ) {
 
     val state = viewModel.state.value
@@ -84,18 +84,17 @@ fun EmailCodeScreen(
         ) {
             Text("Введите код из E-mail", style = SF60017Black)
             LazyRow(
-                modifier = Modifier.fillMaxWidth(0.8f)
+                modifier = Modifier.fillMaxWidth()
                     .fillMaxHeight(0.4f),
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
-                val _state = state.code
-                items(4){
+                items(6){
                     EmailCodeTextField(
-                        value = _state,
+                        value = state.code,
                         onValueChanged = {
                             viewModel.onEvent(EmailCodeEvent.EnteredCode(it))
                         },
-                        modifier = Modifier.fillParentMaxWidth(0.2f)
+                        modifier = Modifier.fillParentMaxWidth(0.15f)
                             .fillParentMaxHeight()
                             .clip(RoundedCornerShape(10.dp))
                     )

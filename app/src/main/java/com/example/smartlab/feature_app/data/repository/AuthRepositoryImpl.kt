@@ -4,8 +4,10 @@ import android.util.Log
 import com.example.smartlab.data.network.SupabaseInit.client
 import com.example.smartlab.feature_app.domain.repository.AuthRepository
 import com.example.smartlab.feature_app.domain.model.UserData
+import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
+import io.github.jan.supabase.auth.providers.builtin.OTP
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 
@@ -34,6 +36,20 @@ class AuthRepositoryImpl : AuthRepository {
             )
         )
         return true
+    }
+
+    override suspend fun sentOTP(mail: String) {
+        client.auth.signInWith(OTP){
+            this.email = mail
+        }
+    }
+
+    override suspend fun verifyEmail(mail: String, tokenOTP: String) {
+        client.auth.verifyEmailOtp(
+            type = OtpType.Email.MAGIC_LINK,
+            email = mail,
+            token = tokenOTP
+        )
     }
 
     override suspend fun getUserData(): List<UserData> {

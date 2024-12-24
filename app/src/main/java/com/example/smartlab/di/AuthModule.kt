@@ -3,11 +3,13 @@ package com.example.smartlab.di
 import com.example.smartlab.feature_app.data.repository.AuthRepositoryImpl
 import com.example.smartlab.feature_app.domain.repository.AuthRepository
 import com.example.smartlab.feature_app.domain.usecase.Auth.GetUserDataUseCase
+import com.example.smartlab.feature_app.domain.usecase.Auth.SendOTPUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignInUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignOutUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.SignUpUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.UpdateUserAddressUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.UpdateUserDataUseCase
+import com.example.smartlab.feature_app.domain.usecase.Auth.VerifyEmailUseCase
 import org.koin.dsl.module
 
 val moduleAuth = module {
@@ -32,5 +34,11 @@ val moduleAuth = module {
     }
     factory<UpdateUserAddressUseCase> {
         UpdateUserAddressUseCase(get())
+    }
+    factory<SendOTPUseCase> {
+        SendOTPUseCase(get())
+    }
+    factory<VerifyEmailUseCase> {
+        VerifyEmailUseCase(get())
     }
 }

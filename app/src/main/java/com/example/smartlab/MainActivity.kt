@@ -1,4 +1,3 @@
-@file:OptIn(SupabaseInternal::class)
 
 package com.example.smartlab
 
@@ -57,13 +56,9 @@ import com.example.smartlab.navGraph.Route
 import com.example.smartlab.test_composable_func.Test
 import com.example.smartlab.ui.theme.SmartLabTheme
 import io.github.jan.supabase.annotations.SupabaseInternal
-import io.github.jan.supabase.auth.AuthConfig
-import io.github.jan.supabase.auth.AuthConfigDefaults
 import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.OAuthProvider
 import io.github.jan.supabase.auth.providers.builtin.OTP
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -82,7 +77,7 @@ class MainActivity : ComponentActivity() {
                 viewModel.checkRoute()
             }
             SmartLabTheme {
-                NavHost(navController, startDestination = "q") {
+                NavHost(navController, startDestination = Route.SplashScreen.route) {
                     composable("Test"){
                         Test(navController)
                     }
@@ -354,6 +349,9 @@ class qViewModel(
                             email = mail
                             Log.e("token", this.captchaToken.toString())
                         }
+                        _state.value = state.value.copy(
+                            isLogged = true
+                        )
                     } catch (e: Exception) {
                         Log.e("otp", e.message.toString())
                     }
@@ -404,12 +402,28 @@ fun q1(
                 }
             ) { Text("sign out") }
             val c = rememberCoroutineScope()
+            val token = remember { mutableStateOf("") }
+            OutlinedTextField(
+                value = token.value,
+                onValueChange = {token.value = it},
+                label = { Text("token") },
+                modifier = Modifier.fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            )
             Button({
                 c.launch {
-                    Log.e("o", client.auth.currentAccessTokenOrNull().toString())
-                    Log.e("o", client.auth.currentIdentitiesOrNull().toString())
+                    try {
+                        client.auth.verifyEmailOtp(
+                            type = OtpType.Email.MAGIC_LINK,
+                            email = mail,
+                            token = token.value
+                        )
+                        Log.v("verify", "successful")
+                    } catch (e: Exception) {
+                        Log.e("verifyEMailEx", e.message.toString())
+                    }
                 }
-            }) { }
+            }) { Text("verify your otp") }
         }
     }
 }

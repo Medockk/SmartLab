@@ -2,8 +2,10 @@ package com.example.smartlab.di
 
 import com.example.smartlab.CreateCard.CreateCardViewModel
 import com.example.smartlab.CreatePassword.CreatePasswordViewModel
+import com.example.smartlab.EmailCode.EmailCodeViewModel
 import com.example.smartlab.MainActivityViewModel
 import com.example.smartlab.OnBoard.OnBoardViewModel
+import com.example.smartlab.SignIn.SignInViewModel
 import com.example.smartlab.feature_app.presentation.Analuzes.AnalyzesViewModel
 import com.example.smartlab.feature_app.presentation.AnalyzesCategory.AnalyzesCategoryViewModel
 import com.example.smartlab.feature_app.presentation.Cart.CartViewModel
@@ -30,6 +32,15 @@ val moduleViewModel = module {
     }
     viewModel<OnBoardViewModel>{
         OnBoardViewModel(
+            get()
+        )
+    }
+    viewModel<SignInViewModel> {
+        SignInViewModel(get())
+    }
+    factory<EmailCodeViewModel> {
+        EmailCodeViewModel(
+            get(),
             get()
         )
     }
