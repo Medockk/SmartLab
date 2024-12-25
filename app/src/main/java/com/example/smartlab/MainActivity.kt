@@ -1,14 +1,13 @@
-
 package com.example.smartlab
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -28,6 +28,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,6 +39,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.smartlab.CreateCard.CreateCardScreen
 import com.example.smartlab.CreatePassword.CreatePasswordScreen
 import com.example.smartlab.EmailCode.EmailCodeScreen
@@ -58,17 +60,17 @@ import com.example.smartlab.feature_app.presentation.Payment.PaymentScreen
 import com.example.smartlab.navGraph.Route
 import com.example.smartlab.test_composable_func.Test
 import com.example.smartlab.ui.theme.SmartLabTheme
-import io.github.jan.supabase.annotations.SupabaseInternal
-import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.OTP
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.filter.TextSearchType
 import io.github.jan.supabase.storage.storage
-import io.github.jan.supabase.storage.upload
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
+import java.io.ByteArrayOutputStream
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -410,6 +412,7 @@ fun q1(
                 onValueChange = {bucket.value = it},
                 label = { Text("bucket") }
             )
+            var url = remember { mutableStateOf("") }
             Row {
                 Button(
                     {
@@ -429,17 +432,51 @@ fun q1(
                 Button({
                     cor.launch {
                         try {
-                            val image = R.drawable.man
                             val id = client.auth.currentUserOrNull()?.id.toString()
                             val buc = client.storage.from(id)
-                            buc.upload("myIcon.png", byteArrayOf(image.toByte()))
+                            url.value = buc.createSignedUrl(
+                                path = "myIcon.png",
+                                expiresIn = 5.minutes
+                            )
                         } catch (e: Exception) {
                             Log.e("ex", e.message.toString())
                         }
 
                     }
                 }) { Text("download img") }
+                val context = LocalContext.current
+                Button({
+                    cor.launch {
+                        try {
+                            val image = R.drawable.man
+
+                            val bitmap = BitmapFactory.decodeResource(context.resources, image)
+                            val baos = ByteArrayOutputStream()
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 60, baos)
+                            val id = client.auth.currentUserOrNull()?.id.toString()
+                            val buc = client.storage.from(id).createSignedUploadUrl(
+                                path = "myIcon.png",
+                                upsert = true
+                            )
+                            client.storage.from(id).uploadToSignedUrl(
+                                path = "myIcon.png",
+                                token = buc.token,
+                                data = baos.toByteArray()
+                            ){
+                                upsert = true
+                            }
+                        } catch (e: Exception) {
+                            Log.e("ex", e.message.toString())
+                        }
+
+                    }
+                }) { Text("upload img") }
             }
+            AsyncImage(
+                model = url.value,
+                contentDescription = null,
+                modifier = Modifier.size(250.dp)
+            )
             Text("You are logged")
             Button(
                 {
@@ -452,7 +489,8 @@ fun q1(
                 value = token.value,
                 onValueChange = {token.value = it},
                 label = { Text("filter") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             )
             Button({
