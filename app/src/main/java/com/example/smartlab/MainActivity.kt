@@ -7,8 +7,11 @@ import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -59,7 +62,12 @@ import io.github.jan.supabase.annotations.SupabaseInternal
 import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.OTP
+import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.filter.TextSearchType
+import io.github.jan.supabase.storage.storage
+import io.github.jan.supabase.storage.upload
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
@@ -266,7 +274,7 @@ class qViewModel(
                         Log.e("clicked", "clicked")
                         if (UserData.password.length == 4) {
                             val signIn = signInUseCase.invoke(
-                                mail = mail,
+                                mail = state.value.email,
                                 pass = UserData.password + "00"
                             )
                             Log.e("sign in use case", "starting sign inning")
@@ -320,7 +328,7 @@ class qViewModel(
                     } catch (e: Exception) {
                         try {
                             val signUp = signUpUseCase(
-                                mail = mail,
+                                mail = state.value.email,
                                 pass = "${UserData.password}00",
                                 userData = UserData(
                                     name = "name",
@@ -394,7 +402,44 @@ fun q1(
     }
 
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        val cor = rememberCoroutineScope()
         Column {
+            val bucket = remember { mutableStateOf("") }
+            OutlinedTextField(
+                value = bucket.value,
+                onValueChange = {bucket.value = it},
+                label = { Text("bucket") }
+            )
+            Row {
+                Button(
+                    {
+                        cor.launch {
+                            try {
+                                val id = client.auth.currentUserOrNull()?.id.toString()
+                                Log.v("id", id)
+                                client.storage.createBucket(id = id){
+                                    this.public = true
+                                }
+                            } catch (e: Exception) {
+                                Log.e("ex", e.message.toString())
+                            }
+                        }
+                    }
+                ) { Text("create bucket") }
+                Button({
+                    cor.launch {
+                        try {
+                            val image = R.drawable.man
+                            val id = client.auth.currentUserOrNull()?.id.toString()
+                            val buc = client.storage.from(id)
+                            buc.upload("myIcon.png", byteArrayOf(image.toByte()))
+                        } catch (e: Exception) {
+                            Log.e("ex", e.message.toString())
+                        }
+
+                    }
+                }) { Text("download img") }
+            }
             Text("You are logged")
             Button(
                 {
@@ -406,19 +451,23 @@ fun q1(
             OutlinedTextField(
                 value = token.value,
                 onValueChange = {token.value = it},
-                label = { Text("token") },
+                label = { Text("filter") },
                 modifier = Modifier.fillMaxWidth()
                     .padding(horizontal = 20.dp)
             )
             Button({
                 c.launch {
+                    Log.e("s", "start")
                     try {
-                        client.auth.verifyEmailOtp(
-                            type = OtpType.Email.MAGIC_LINK,
-                            email = mail,
-                            token = token.value
-                        )
-                        Log.v("verify", "successful")
+                        val list = client.postgrest["ListOfProcedures"].select{
+                            filter {
+                                textSearch("name", "'анализ'", TextSearchType.NONE)
+                            }
+                        }.decodeList<ListOfProcedures>()
+                        Log.e("s", "$list")
+                        list.forEach {
+                            Log.v("ilike", it.name)
+                        }
                     } catch (e: Exception) {
                         Log.e("verifyEMailEx", e.message.toString())
                     }
@@ -427,6 +476,14 @@ fun q1(
         }
     }
 }
+
+@Serializable
+data class ListOfProcedures(
+    val id: Int = 0,
+    val name: String = "",
+    val time: String = "",
+    val price: String = "",
+)
 
 class q1ViewModel : ViewModel() {
 

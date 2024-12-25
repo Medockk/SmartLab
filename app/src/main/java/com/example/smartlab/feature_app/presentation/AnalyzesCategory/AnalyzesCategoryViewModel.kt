@@ -10,7 +10,10 @@ import com.example.smartlab.feature_app.domain.usecase.Cart.AddProcedureInCartUs
 import com.example.smartlab.feature_app.domain.usecase.Cart.GetAllUserItemFromCartUseCase
 import com.example.smartlab.feature_app.domain.usecase.Category.GetAllCategoryUseCase
 import com.example.smartlab.feature_app.domain.usecase.Procedure.GetAllProcedureUseCase
+import com.example.smartlab.feature_app.domain.usecase.Search.SearchAnalyzesUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -18,7 +21,9 @@ class AnalyzesCategoryViewModel(
     private val getAllCategoryUseCase: GetAllCategoryUseCase,
     private val getAllProcedureUseCase: GetAllProcedureUseCase,
     private val addProcedureInCartUseCase: AddProcedureInCartUseCase,
-    private val getAllUserItemFromCartUseCase: GetAllUserItemFromCartUseCase
+    private val getAllUserItemFromCartUseCase: GetAllUserItemFromCartUseCase,
+
+    private val searchAnalyzesUseCase: SearchAnalyzesUseCase,
 ): ViewModel() {
 
     private val _state = mutableStateOf(AnalyzesCategoryState())
@@ -83,12 +88,29 @@ class AnalyzesCategoryViewModel(
         }
     }
 
+    private var job: Job? = null
+
     fun onEvent(event: AnalyzesCategoryEvent){
         when (event){
             is AnalyzesCategoryEvent.FindText -> {
                 _state.value = state.value.copy(
                     findText = event.value
                 )
+
+                if (state.value.findText.isNotEmpty() && state.value.findText.isNotBlank()){
+                    job?.cancel("")
+                    job = viewModelScope.launch {
+                        val list = searchAnalyzesUseCase(state.value.findText)
+
+                        _state.value = state.value.copy(
+                            proceduresList = list
+                        )
+                    }
+                }else{
+                    viewModelScope.launch {
+                        getAllProcedures()
+                    }
+                }
             }
 
             is AnalyzesCategoryEvent.AnalyzesCatalogClick -> {

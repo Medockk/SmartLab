@@ -65,6 +65,7 @@ val moduleViewModel = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         )
     }
@@ -84,6 +85,7 @@ val moduleViewModel = module {
     }
     viewModel<AnalyzesCategoryViewModel>{
         AnalyzesCategoryViewModel(
+            get(),
             get(),
             get(),
             get(),

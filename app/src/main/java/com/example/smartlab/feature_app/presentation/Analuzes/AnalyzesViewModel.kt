@@ -12,6 +12,7 @@ import com.example.smartlab.feature_app.domain.usecase.Cart.GetAllUserItemFromCa
 import com.example.smartlab.feature_app.domain.usecase.Cart.RemoveItemFromCartUseCase
 import com.example.smartlab.feature_app.domain.usecase.Category.GetAllCategoryUseCase
 import com.example.smartlab.feature_app.domain.usecase.Procedure.GetAllProcedureUseCase
+import com.example.smartlab.feature_app.domain.usecase.Search.SearchAnalyzesUseCase
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,7 +27,9 @@ class AnalyzesViewModel(
     private val getAllUserItemFromCartUseCase: GetAllUserItemFromCartUseCase,
 
     private val addItemInCartUseCase: AddProcedureInCartUseCase,
-    private val removeItemFromCartUseCase: RemoveItemFromCartUseCase
+    private val removeItemFromCartUseCase: RemoveItemFromCartUseCase,
+
+    private val searchAnalyzesUseCase: SearchAnalyzesUseCase,
 ) : ViewModel() {
 
     private val _state = mutableStateOf(AnalyzesState())
@@ -107,14 +110,14 @@ class AnalyzesViewModel(
                 _state.value = state.value.copy(
                     findText = event.value
                 )
-//                job?.cancel("")
-//                job = viewModelScope.launch {
-//                    client.postgrest[""].select {
-//                        filter {
-//                            contains("wwd", state.value.findText)
-//                        }
-//                    }
-//                }
+                job?.cancel("")
+                job = viewModelScope.launch {
+                    val list = searchAnalyzesUseCase(state.value.findText)
+                    Log.e("f", "$list")
+                    list.forEach {
+                        Log.e("result", it.name)
+                    }
+                }
             }
 
             is AnalyzesEvent.AnalyzesAddClick -> {
