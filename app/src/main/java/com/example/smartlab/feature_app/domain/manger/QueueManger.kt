@@ -8,4 +8,6 @@ interface QueueManger {
     suspend fun getQueue() : LinkedList<OnBoardItem>?
 
     suspend fun saveQueue(queue: LinkedList<OnBoardItem>)
+
+    suspend fun saveStateInQueue(page: Int?)
 }

@@ -18,29 +18,40 @@ class OnBoardViewModel(
 
     fun onEvent(event: OnBoardEvent){
         when (event){
-            is OnBoardEvent.NextPage -> {
+            is OnBoardEvent.SkipClick -> {
                 viewModelScope.launch{
-                    val page = useCase.getItemFromQueue()
+//                    val page = useCase.getItemFromQueue()
+//
+//                    if (state.value.currentPage == 2){
+//                        _state.value = state.value.copy(
+//                            isComplete = true,
+//                            page = OnBoardItem(0, "","")
+//                        )
+//                    }
+//
+//                    if (page != null){
+//                        _state.value = state.value.copy(
+//                            page = page
+//                        )
+//                    }
+//
+//
+//
+//                    _state.value = state.value.copy(
+//                        currentPage = if (state.value.currentPage != 3) {
+//                            state.value.currentPage + 1
+//                        } else {3}
+//                    )
 
-                    if (state.value.currentPage == 2){
-                        _state.value = state.value.copy(
-                            isComplete = true,
-                            page = OnBoardItem(0, "","")
-                        )
-                    }
-
-                    if (page != null){
-                        _state.value = state.value.copy(
-                            page = page
-                        )
-                    }
-                    _state.value = state.value.copy(
-                        currentPage = if (state.value.currentPage != 3) {
-                            state.value.currentPage + 1
-                        } else {3}
-                    )
+                    useCase.saveStateInQueue(state.value.currentPage)
                 }
             }
         }
+    }
+
+    fun currentPage(page: Int){
+        _state.value = state.value.copy(
+            currentPage = page
+        )
     }
 }

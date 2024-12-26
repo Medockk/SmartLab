@@ -322,6 +322,7 @@ fun AnalyzesScreen(
 
     if (state.addProcedure) {
         val paddingBottom = (LocalConfiguration.current.screenHeightDp / 2.3).toInt()
+        val paddingVertical = (LocalConfiguration.current.screenHeightDp / 30)
 
         val startOffset = (LocalConfiguration.current.screenHeightDp)
         val endOffset = LocalConfiguration.current.screenWidthDp - paddingBottom
@@ -341,7 +342,7 @@ fun AnalyzesScreen(
                 viewModel.onEvent(AnalyzesEvent.AnalyzesAddClick(false))
                 viewModel.onEvent(AnalyzesEvent.AddProcedureInCart)
             }, modifier = Modifier
-                .padding(bottom = paddingTop.dp)
+                .padding(vertical = paddingVertical.dp)
                 .offset(y = offset),
             title = state.nameProcedure,
             price = "Добавить за ${state.priceProcedure} ₽",

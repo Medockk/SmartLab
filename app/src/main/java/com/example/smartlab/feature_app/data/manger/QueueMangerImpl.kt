@@ -28,4 +28,12 @@ class QueueMangerImpl(
                 .apply()
         }
     }
+
+    override suspend fun saveStateInQueue(page: Int?) {
+        if (page != null) {
+            sharedPreferences.edit().putInt(key, page).apply()
+        } else {
+            sharedPreferences.edit().putBoolean(key, true).apply()
+        }
+    }
 }

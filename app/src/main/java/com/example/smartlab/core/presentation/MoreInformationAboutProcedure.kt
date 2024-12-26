@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,9 +47,36 @@ import com.example.smartlab.ui.theme._818C99
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun Prev() {
-    MoreInformationAboutProcedure({},{},
-        "Клинический анализ крови\nс лейкоцитарной формулой",
-        "Добавить за 690 ₽", "")
+    val paddingBottom = (LocalConfiguration.current.screenHeightDp / 2.3).toInt()
+    val paddingTop = (LocalConfiguration.current.screenHeightDp / 20)
+
+    val startOffset = LocalConfiguration.current.screenHeightDp
+    val endOffset = LocalConfiguration.current.screenWidthDp - paddingBottom
+
+    val boxState = remember { mutableStateOf(startOffset) }
+
+    val anim = animateDpAsState(
+        targetValue = boxState.value.dp,
+        animationSpec = tween(1500)
+    )
+
+    boxState.value = endOffset
+
+    val s = remember { mutableStateOf(false) }
+    Button(
+        {
+            s.value = !s.value
+        }
+    ) { }
+    if (s.value){
+        MoreInformationAboutProcedure(
+            {s.value = it},{s.value = false},
+            "Клинический анализ крови\nс лейкоцитарной формулой",
+            "Добавить за 690 ₽", "",
+            modifier = Modifier.padding(top = paddingTop.dp, bottom = paddingTop.dp)
+                .offset(y = anim.value)
+        )
+    }
 }
 
 @Composable
