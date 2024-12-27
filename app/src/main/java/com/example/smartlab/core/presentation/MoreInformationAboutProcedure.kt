@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.core.presentation.CustomButton
 import com.example.smartlab.ui.theme.SF40015Black
@@ -87,6 +88,7 @@ fun MoreInformationAboutProcedure(
     date: String,
     price: String,
     modifier: Modifier = Modifier,
+    bottomPadding: Dp = 0.dp,
 ) {
 
     val paddingTop = LocalConfiguration.current.screenHeightDp / 4
@@ -109,7 +111,8 @@ fun MoreInformationAboutProcedure(
             .fillMaxSize()
             .padding(top = paddingTop.dp)
             .offset(y = offset)
-            .background(Color.White, RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)),
+            .background(Color.White, RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+            .padding(bottom = bottomPadding),
         contentAlignment = Alignment.BottomCenter
     ){
         Column (

@@ -16,7 +16,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -43,11 +45,12 @@ fun EmailCodeScreen(
 
     val state = viewModel.state.value
     val paddingTop = LocalConfiguration.current.screenHeightDp / 15
+    val focusManger = LocalFocusManager.current
 
     LaunchedEffect(key1 = !state.isComplete) {
-        if (state.isComplete){
-            navController.navigate(Route.CreatePasswordScreen.route){
-                popUpTo(Route.EmailCodeScreen.route){
+        if (state.isComplete) {
+            navController.navigate(Route.CreatePasswordScreen.route) {
+                popUpTo(Route.EmailCodeScreen.route) {
                     inclusive = true
                 }
             }
@@ -55,13 +58,17 @@ fun EmailCodeScreen(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize()
-            .padding(top = paddingTop.dp,
-                start = 20.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                top = paddingTop.dp,
+                start = 20.dp
+            ),
         contentAlignment = Alignment.TopStart
-    ){
+    ) {
         CustomBackIcon(
-            Modifier.fillMaxWidth(0.1f)
+            Modifier
+                .fillMaxWidth(0.1f)
                 .fillMaxHeight(0.05f)
         ) {
             navController.navigate(Route.SignInScreen.route)
@@ -71,49 +78,142 @@ fun EmailCodeScreen(
     val paddingBottom = LocalConfiguration.current.screenHeightDp / 15
 
     Box(
-        modifier = Modifier.fillMaxSize()
-            .padding(start = 20.dp, end = 20.dp,
-                bottom = paddingBottom.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                start = 20.dp, end = 20.dp,
+                bottom = paddingBottom.dp
+            ),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .fillMaxHeight(0.2f),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text("Введите код из E-mail", style = SF60017Black)
             LazyRow(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .fillMaxHeight(0.4f),
                 horizontalArrangement = Arrangement.SpaceBetween
-            ){
-                items(6){
+            ) {
+                item {
                     EmailCodeTextField(
-                        value = state.code,
+                        value = state.code1,
                         onValueChanged = {
-                            viewModel.onEvent(EmailCodeEvent.EnteredCode(it))
+                            viewModel.onEvent(EmailCodeEvent.EnteredCode1(it))
+                            try {
+                                focusManger.moveFocus(FocusDirection.Next)
+                            } catch (_: Exception) {
+
+                            }
                         },
-                        modifier = Modifier.fillParentMaxWidth(0.15f)
+                        modifier = Modifier
+                            .fillParentMaxWidth(0.15f)
+                            .fillParentMaxHeight()
+                            .clip(RoundedCornerShape(10.dp))
+                    )
+                }
+                item {
+                    EmailCodeTextField(
+                        value = state.code2,
+                        onValueChanged = {
+                            viewModel.onEvent(EmailCodeEvent.EnteredCode2(it))
+                            try {
+                                focusManger.moveFocus(FocusDirection.Next)
+                            } catch (_: Exception) {
+
+                            }
+                        },
+                        modifier = Modifier
+                            .fillParentMaxWidth(0.15f)
+                            .fillParentMaxHeight()
+                            .clip(RoundedCornerShape(10.dp))
+                    )
+                }
+                item {
+                    EmailCodeTextField(
+                        value = state.code3,
+                        onValueChanged = {
+                            viewModel.onEvent(EmailCodeEvent.EnteredCode3(it))
+                            try {
+                                focusManger.moveFocus(FocusDirection.Next)
+                            } catch (_: Exception) {
+
+                            }
+                        },
+                        modifier = Modifier
+                            .fillParentMaxWidth(0.15f)
+                            .fillParentMaxHeight()
+                            .clip(RoundedCornerShape(10.dp))
+                    )
+                }
+                item {
+                    EmailCodeTextField(
+                        value = state.code4,
+                        onValueChanged = {
+                            viewModel.onEvent(EmailCodeEvent.EnteredCode4(it))
+                            try {
+                                focusManger.moveFocus(FocusDirection.Next)
+                            } catch (_: Exception) {
+
+                            }
+                        },
+                        modifier = Modifier
+                            .fillParentMaxWidth(0.15f)
+                            .fillParentMaxHeight()
+                            .clip(RoundedCornerShape(10.dp))
+                    )
+                }
+                item {
+                    EmailCodeTextField(
+                        value = state.code5,
+                        onValueChanged = {
+                            viewModel.onEvent(EmailCodeEvent.EnteredCode5(it))
+                            try {
+                                focusManger.moveFocus(FocusDirection.Next)
+                            } catch (_: Exception) {
+
+                            }
+                        },
+                        modifier = Modifier
+                            .fillParentMaxWidth(0.15f)
+                            .fillParentMaxHeight()
+                            .clip(RoundedCornerShape(10.dp))
+                    )
+                }
+                item {
+                    EmailCodeTextField(
+                        value = state.code6,
+                        onValueChanged = {
+                            viewModel.onEvent(EmailCodeEvent.EnteredCode6(it))
+                        },
+                        modifier = Modifier
+                            .fillParentMaxWidth(0.15f)
                             .fillParentMaxHeight()
                             .clip(RoundedCornerShape(10.dp))
                     )
                 }
             }
-            Column (
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
-                if (state.timer.equals("0")){
+            ) {
+                if (state.timer.equals("0")) {
                     Text(
                         "Отправить код заново",
                         style = SF40015_939396,
-                        modifier = Modifier.clickable{
+                        modifier = Modifier.clickable {
                             viewModel.onEvent(EmailCodeEvent.ResetTimer)
                         }
                     )
-                }else{
-                    Text("Отправить код повторно можно",
-                        style = SF40015_939396)
+                } else {
+                    Text(
+                        "Отправить код повторно можно",
+                        style = SF40015_939396
+                    )
                     Text(
                         text = "будет через ${state.timer} секунд",
                         style = SF40015_939396

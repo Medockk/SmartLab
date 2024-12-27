@@ -15,4 +15,12 @@ class TestQueueMangerImpl: QueueManger {
     override suspend fun saveQueue(queue: LinkedList<OnBoardItem>) {
         this.queue = queue
     }
+
+    override suspend fun saveStateInQueue(isSkipped: Boolean) {
+
+    }
+
+    override suspend fun getStateInQueue(): Boolean {
+        return true
+    }
 }

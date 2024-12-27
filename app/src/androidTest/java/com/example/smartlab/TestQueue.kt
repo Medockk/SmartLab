@@ -15,7 +15,10 @@ import com.example.smartlab.feature_app.domain.usecase.Queue.ClearQueue
 import com.example.smartlab.feature_app.domain.usecase.Queue.CreateQueue
 import com.example.smartlab.feature_app.domain.usecase.Queue.GetItemFromQueue
 import com.example.smartlab.feature_app.domain.usecase.Queue.GetQueue
+import com.example.smartlab.feature_app.domain.usecase.Queue.GetStateInQueue
 import com.example.smartlab.feature_app.domain.usecase.Queue.QueueUseCase
+import com.example.smartlab.feature_app.domain.usecase.Queue.SaveQueue
+import com.example.smartlab.feature_app.domain.usecase.Queue.SaveStateInQueue
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -40,7 +43,10 @@ class TestQueue {
             getItemFromQueue = GetItemFromQueue(manger),
             getQueue = GetQueue(manger),
             createQueue = CreateQueue(manger),
-            clearQueue = ClearQueue(manger)
+            clearQueue = ClearQueue(manger),
+            saveQueue = SaveQueue(manger),
+            saveStateInQueue = SaveStateInQueue(manger),
+            getStateInQueue = GetStateInQueue(manger)
         )
         viewModel = OnBoardViewModel(useCase)
         Log.v("client", "init complete")

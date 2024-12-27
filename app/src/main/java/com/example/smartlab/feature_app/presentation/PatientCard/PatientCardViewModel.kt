@@ -7,16 +7,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smartlab.feature_app.domain.model.UserData
 import com.example.smartlab.feature_app.domain.usecase.Auth.GetUserDataUseCase
-import com.example.smartlab.feature_app.domain.usecase.Auth.SignUpUseCase
 import com.example.smartlab.feature_app.domain.usecase.Auth.UpdateUserDataUseCase
+import com.example.smartlab.feature_app.domain.usecase.Storage.GetImageUrlUseCase
+import com.example.smartlab.feature_app.domain.usecase.Storage.SetImageUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class PatientCardViewModel(
-    private val signUpUseCase: SignUpUseCase,
     private val getUserDataUseCase: GetUserDataUseCase,
-    private val updateUserDataUseCase: UpdateUserDataUseCase
+    private val updateUserDataUseCase: UpdateUserDataUseCase,
+
+    private val getImageUrlUseCase: GetImageUrlUseCase,
+    private val setImageUseCase: SetImageUseCase,
 ) : ViewModel() {
 
     private val _state = mutableStateOf(PatientCardState())
@@ -26,9 +29,20 @@ class PatientCardViewModel(
         viewModelScope.launch {
             try {
                 getAllUserData()
+                getImageUrl()
             } catch (e: Exception) {
                 Log.e("initEx", e.message.toString())
             }
+        }
+    }
+
+    private suspend fun getImageUrl() {
+        val imageUrl = getImageUrlUseCase()
+
+        withContext(Dispatchers.IO){
+            _state.value = state.value.copy(
+                image = imageUrl
+            )
         }
     }
 

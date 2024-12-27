@@ -7,6 +7,7 @@ import com.example.smartlab.feature_app.domain.usecase.Queue.ClearQueue
 import com.example.smartlab.feature_app.domain.usecase.Queue.CreateQueue
 import com.example.smartlab.feature_app.domain.usecase.Queue.GetItemFromQueue
 import com.example.smartlab.feature_app.domain.usecase.Queue.GetQueue
+import com.example.smartlab.feature_app.domain.usecase.Queue.GetStateInQueue
 import com.example.smartlab.feature_app.domain.usecase.Queue.QueueUseCase
 import com.example.smartlab.feature_app.domain.usecase.Queue.SaveQueue
 import com.example.smartlab.feature_app.domain.usecase.Queue.SaveStateInQueue
@@ -25,7 +26,8 @@ val moduleQueue = module {
             CreateQueue(get()),
             ClearQueue(get()),
             SaveQueue(get()),
-            SaveStateInQueue(get())
+            SaveStateInQueue(get()),
+            GetStateInQueue(get())
         )
     }
 }

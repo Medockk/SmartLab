@@ -25,10 +25,8 @@ class CartRepositoryImpl : CartRepository {
         val userID = client.auth.currentUserOrNull()?.id
         client.postgrest["Cart"].delete {
             filter {
-                and {
-                    eq("userID", userID?:"")
-                    eq("procedure", procedure.procedure)
-                }
+                eq("userID", userID ?: "")
+                eq("procedure", procedure.procedure)
             }
         }
         return true
@@ -36,9 +34,9 @@ class CartRepositoryImpl : CartRepository {
 
     override suspend fun getAllUserItemFromCart(): List<Cart> {
         val userID = client.auth.currentUserOrNull()?.id
-        return client.postgrest["Cart"].select{
+        return client.postgrest["Cart"].select {
             filter {
-                eq("userID", userID?:"")
+                eq("userID", userID ?: "")
             }
         }.decodeList<Cart>()
     }
@@ -46,9 +44,9 @@ class CartRepositoryImpl : CartRepository {
     override suspend fun removeAllItemFromCart(): Boolean {
         val userID = client.auth.currentUserOrNull()?.id
 
-        client.postgrest["Cart"].delete{
+        client.postgrest["Cart"].delete {
             filter {
-                eq("userID", userID?:"")
+                eq("userID", userID ?: "")
             }
         }
 

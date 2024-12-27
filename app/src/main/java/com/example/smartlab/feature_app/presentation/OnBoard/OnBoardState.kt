@@ -7,5 +7,5 @@ data class OnBoardState(
         "Экспресс сбор и получение проб"),
     val countOfPage: Int = 3,
     val isComplete: Boolean = false,
-    val currentPage: Int = 0,
+    val currentPage: Int? = 0,
 )

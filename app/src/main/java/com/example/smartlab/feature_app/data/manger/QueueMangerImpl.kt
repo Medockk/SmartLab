@@ -2,6 +2,7 @@
 package com.example.smartlab.feature_app.data.manger
 
 import android.content.Context
+import android.util.Log
 import com.example.smartlab.OnBoard.OnBoardItem
 import com.example.smartlab.feature_app.domain.manger.QueueManger
 import com.google.gson.Gson
@@ -13,6 +14,8 @@ class QueueMangerImpl(
 ): QueueManger {
 
     private val key = "queue"
+    private val stateKey = "stateKey"
+    val sharedPreferencesState = context.getSharedPreferences(stateKey, Context.MODE_PRIVATE)
     val sharedPreferences = context.getSharedPreferences(key, Context.MODE_PRIVATE)
 
     override suspend fun getQueue(): LinkedList<OnBoardItem>? {
@@ -29,11 +32,14 @@ class QueueMangerImpl(
         }
     }
 
-    override suspend fun saveStateInQueue(page: Int?) {
-        if (page != null) {
-            sharedPreferences.edit().putInt(key, page).apply()
-        } else {
-            sharedPreferences.edit().putBoolean(key, true).apply()
-        }
+    override suspend fun saveStateInQueue(isSkipped: Boolean) {
+        sharedPreferencesState.edit().clear().putBoolean(stateKey, isSkipped).apply()
+        Log.e("save", isSkipped.toString())
+    }
+
+    override suspend fun getStateInQueue(): Boolean {
+        Log.e("get", sharedPreferencesState.getBoolean(stateKey, false).toString())
+        val stateQueue = sharedPreferencesState.getBoolean(stateKey, false)
+        return stateQueue
     }
 }

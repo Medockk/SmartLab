@@ -9,5 +9,7 @@ interface QueueManger {
 
     suspend fun saveQueue(queue: LinkedList<OnBoardItem>)
 
-    suspend fun saveStateInQueue(page: Int?)
+    suspend fun saveStateInQueue(isSkipped: Boolean = false)
+
+    suspend fun getStateInQueue() : Boolean
 }

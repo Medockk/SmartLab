@@ -5,7 +5,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.smartlab.data.network.SupabaseInit.client
 import com.example.smartlab.feature_app.domain.model.Cart
 import com.example.smartlab.feature_app.domain.usecase.Cart.AddProcedureInCartUseCase
 import com.example.smartlab.feature_app.domain.usecase.Cart.GetAllUserItemFromCartUseCase
@@ -13,7 +12,6 @@ import com.example.smartlab.feature_app.domain.usecase.Cart.RemoveItemFromCartUs
 import com.example.smartlab.feature_app.domain.usecase.Category.GetAllCategoryUseCase
 import com.example.smartlab.feature_app.domain.usecase.Procedure.GetAllProcedureUseCase
 import com.example.smartlab.feature_app.domain.usecase.Search.SearchAnalyzesUseCase
-import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -110,12 +108,19 @@ class AnalyzesViewModel(
                 _state.value = state.value.copy(
                     findText = event.value
                 )
-                job?.cancel("")
-                job = viewModelScope.launch {
-                    val list = searchAnalyzesUseCase(state.value.findText)
-                    Log.e("f", "$list")
-                    list.forEach {
-                        Log.e("result", it.name)
+                if (state.value.findText.isNotEmpty() && state.value.findText.isNotBlank()){
+                    job?.cancel("")
+
+                    job = viewModelScope.launch {
+                        val list = searchAnalyzesUseCase(state.value.findText)
+
+                        _state.value = state.value.copy(
+                            procedureList = list
+                        )
+                    }
+                }else{
+                    viewModelScope.launch {
+                        getAllProcedure()
                     }
                 }
             }

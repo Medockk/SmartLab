@@ -182,7 +182,7 @@ fun AnalyzesCategoryScreen(
 
     if (state.isAdded) {
         val paddingBottom = (LocalConfiguration.current.screenHeightDp / 2.3).toInt()
-        val paddingVertical = (LocalConfiguration.current.screenHeightDp / 30)
+        val paddingVertical = (LocalConfiguration.current.screenHeightDp / 15)
 
         val startOffset = LocalConfiguration.current.screenHeightDp
         val endOffset = LocalConfiguration.current.screenWidthDp - paddingBottom
@@ -207,8 +207,9 @@ fun AnalyzesCategoryScreen(
             price = "Добавить за ${state.procedurePrice} ₽",
             modifier = Modifier
                 .fillMaxSize()
-                .padding(vertical = paddingVertical.dp)
-                .offset(y = anim.value)
+                .padding(bottom = verticalPadding.dp)
+                .offset(y = anim.value),
+            bottomPadding = paddingVertical.dp
         )
     }
 }

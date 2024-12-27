@@ -8,4 +8,5 @@ data class QueueUseCase(
     val clearQueue: ClearQueue,
     val saveQueue: SaveQueue,
     val saveStateInQueue: SaveStateInQueue,
+    val getStateInQueue: GetStateInQueue,
 )
